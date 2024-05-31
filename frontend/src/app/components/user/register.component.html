@@ -1,0 +1,80 @@
+<div class="container">
+    <h3>Register Account</h3>
+</div>
+
+<div class="container" style="margin-top: 30px;">
+  <form [formGroup]="registerForm" (submit)="processRegistration()">
+
+    <div>
+        <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username">
+        </mat-form-field>
+    </div>
+
+    <div>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password">
+        </mat-form-field>
+    </div>
+
+    <div>
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+        </mat-form-field>
+    </div>
+
+    <div>
+        <mat-form-field class="half-form">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstname">
+        </mat-form-field>
+
+        <mat-form-field class="half-form" style="margin-left: 20px;">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastname">
+        </mat-form-field>
+    </div>
+
+    <button mat-flat-button color="primary" type="submit" class="form-button">Create Account</button>
+  </form>
+</div>
+
+<div class="container">
+    <div class="wrapper">
+        <div class="side-by-side">
+            <a [routerLink]="['/reset']">Forgot password?</a>
+        </div>
+        <div class="side-by-side">
+            <a [routerLink]="['/login']">Back to login</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="wrapper" style="margin-top: 20px;">
+
+        <div class="horizontal-line"></div>
+        <span>OR SIGN UP WITH</span>
+        <div class="horizontal-line"></div>
+
+        <div style="margin-top: 10px;">
+
+            <button mat-icon-button color="primary">
+                <mat-icon>facebook</mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary">
+                <mat-icon>facebook</mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary">
+                <mat-icon>facebook</mat-icon>
+            </button>
+
+        </div>
+    </div>
+</div>

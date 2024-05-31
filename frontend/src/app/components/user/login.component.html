@@ -1,0 +1,63 @@
+<div class="container">
+    <h3>Login</h3>
+</div>
+
+<div class="container" style="margin-top: 30px;">
+  <form [formGroup]="loginForm" (submit)="processLogin()">
+
+    <div>
+        <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username">
+        </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label>Enter your password</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+        <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <button mat-flat-button color="primary" type="submit" class="form-button">Login</button>
+  </form>
+</div>
+
+<div class="container">
+    <div class="wrapper">
+        <div class="side-by-side">
+            <a [routerLink]="['/reset']">Forgot password?</a>
+        </div>
+        <div class="side-by-side">
+            <a [routerLink]="['/register']">Register an account</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="wrapper" style="margin-top: 20px;">
+
+        <div class="horizontal-line"></div>
+        <span>OR</span>
+        <div class="horizontal-line"></div>
+
+        <div style="margin-top: 20px;">
+
+            <button mat-icon-button color="primary">
+                <mat-icon>facebook</mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary">
+                <mat-icon>facebook</mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary">
+                <mat-icon>facebook</mat-icon>
+            </button>
+
+        </div>
+    </div>
+</div>

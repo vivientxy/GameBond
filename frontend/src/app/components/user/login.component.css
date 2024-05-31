@@ -1,0 +1,53 @@
+.container {
+    align-items: center;
+    text-align: center;
+}
+
+mat-form-field,
+.form-button,
+.wrapper {
+    width: 80%;
+    max-width: 500px;
+}
+
+.wrapper {
+    margin-top: 10px;
+    text-align: center;
+    display: inline-block;
+}
+
+.side-by-side {
+    width: 50%;
+    display: inline-block;
+}
+
+span {
+    color: grey;
+}
+
+/* hyperlinks */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:visited {
+    color: inherit;
+}
+
+a:hover,
+a:focus,
+a:active {
+    text-decoration: underline;
+    color: inherit;
+}
+
+/* horizontal lines */
+.horizontal-line {
+    width: calc((80% - 2rem) / 2);
+    display: inline-block;
+    content: "";
+    border-top: 1px solid grey;
+    vertical-align: middle;
+    margin: 1rem;
+}
