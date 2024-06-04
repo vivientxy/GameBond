@@ -9,6 +9,7 @@
         <mat-form-field>
             <mat-label>Username</mat-label>
             <input matInput formControlName="username">
+            <mat-error *ngIf="loginForm.get('username')?.hasError('required')">Username is required</mat-error>
         </mat-form-field>
     </div>
 
@@ -19,10 +20,11 @@
         <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Password is required</mat-error>
       </mat-form-field>
     </div>
 
-    <button mat-flat-button color="primary" type="submit" class="form-button">Login</button>
+    <button mat-flat-button color="primary" type="submit" class="form-button" [disabled]="loginForm.invalid">Login</button>
   </form>
 </div>
 

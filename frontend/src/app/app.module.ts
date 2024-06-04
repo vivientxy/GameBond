@@ -7,12 +7,13 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { RouterModule, Routes } from '@angular/router';
 import { SelectorComponent } from './components/main/selector.component';
 import { LoginComponent } from './components/user/login.component';
 import { RegisterComponent } from './components/user/register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgotPasswordComponent } from './components/user/forgot-password.component';
+import { UserService } from './components/user/user.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -27,10 +28,12 @@ import { ForgotPasswordComponent } from './components/user/forgot-password.compo
     AppRoutingModule,
     NgbModule,
     NgMaterialsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    UserService
   ],
   bootstrap: [AppComponent]
 })
