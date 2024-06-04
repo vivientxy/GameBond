@@ -1,18 +1,22 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from './user.model';
 import { UserService } from './user.service';
+import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 
   private readonly fb = inject(FormBuilder)
-  private userSvc = inject(UserService)
+  private readonly router = inject(Router)
+  private readonly userSvc = inject(UserService)
   registerForm!: FormGroup;
+  registerUser$!: Subscription
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -22,6 +26,10 @@ export class RegisterComponent implements OnInit {
       firstname: this.fb.control<string>('', [Validators.maxLength(32)]),
       lastname: this.fb.control<string>('', [Validators.maxLength(32)]),
     })
+  }
+
+  ngOnDestroy(): void {
+    this.registerUser$.unsubscribe()
   }
 
   processRegistration() {
@@ -35,10 +43,28 @@ export class RegisterComponent implements OnInit {
       firstName: this.registerForm.value['firstname'],
       lastName: this.registerForm.value['lastname']
     }
-    console.log('>>> user object:', user)
-    this.userSvc.registerUser(user)
-      .then(response => {console.log('>>> register component: ', response)})
-    this.registerForm.reset()
+    this.registerUser$ = this.userSvc.registerUser(user)
+      .subscribe({
+        next: registerSuccess => {this.router.navigate(['/login'])},
+        error: err => {
+          if (err.status == 200)
+            this.router.navigate(['/login'])
+          this.registerForm.patchValue(user)
+          if (err.error == "Username already in use")
+            this.registerForm.get('username')?.setErrors({ usernameExists: true });
+          if (err.error == "Email already in use")
+            this.registerForm.get('email')?.setErrors({ emailExists: true });
+          this.markFormControlsAsTouched(this.registerForm)
+          return
+        }
+      })
+  }
+
+  private markFormControlsAsTouched(form: FormGroup) {
+    Object.values(form.controls).forEach(control => {
+      control.markAsTouched();
+      control.markAsDirty();
+    });
   }
 
   // password:

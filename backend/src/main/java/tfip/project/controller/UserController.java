@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api")
@@ -27,28 +27,50 @@ public class UserController {
     UserService userSvc;
 
     @PostMapping(path = {"/register"})
-    public ResponseEntity<Boolean> registerNewUser(@RequestBody String json) {
-        JsonReader jsonReader = Json.createReader(new StringReader(json));
+    public ResponseEntity<String> registerNewUser(@RequestBody String json) {
+        User user = jsonToUser(json);
+        try {
+            userSvc.registerUser(user);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            if (userSvc.doesUserExistByUsername(user.getUsername()))
+                return new ResponseEntity<String>("Username already in use", HttpStatus.CONFLICT);
+            if (userSvc.doesUserExistByEmail(user.getEmail()))
+                return new ResponseEntity<String>("Email already in use", HttpStatus.CONFLICT);
+            return new ResponseEntity<String>("Error unrelated to username and email", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(path = {"/login"})
+    public ResponseEntity<String> verifyLogin(@RequestBody String json) {
+        User formUser = jsonToUser(json);
+        User retrievedUser = userSvc.getUserByUsername(formUser.getUsername());
+        if (retrievedUser.getPassword() == null)
+            return new ResponseEntity<String>("Username not found", HttpStatus.NOT_FOUND);
+        if (formUser.getPassword().equals(retrievedUser.getPassword()))
+            return new ResponseEntity<String>(HttpStatus.OK);
+        return new ResponseEntity<String>("Wrong password", HttpStatus.UNAUTHORIZED);
+    }
+    
+    
+    private User jsonToUser(String jsonString) {
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
         JsonObject object = jsonReader.readObject();
         jsonReader.close();
 
         User user = new User();
-        user.setUsername(object.getString("username"));
-        user.setPassword(object.getString("password"));
-        user.setEmail(object.getString("email"));
-        user.setActive(true);
+        if (!object.isNull("username"))
+            user.setUsername(object.getString("username"));
+        if (!object.isNull("password"))
+            user.setPassword(object.getString("password"));
+        if (!object.isNull("email"))
+            user.setEmail(object.getString("email"));
         if (!object.isNull("firstName"))
             user.setFirstName(object.getString("firstName"));
         if (!object.isNull("lastName"))
             user.setLastName(object.getString("lastName"));
-
-        try {
-            boolean registered = userSvc.registerUser(user);
-            return new ResponseEntity<Boolean>(registered, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<Boolean>(false, HttpStatus.CONFLICT);
-        }
+        user.setActive(true);
+        return user;
     }
-    
     
 }

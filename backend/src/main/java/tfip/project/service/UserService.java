@@ -13,8 +13,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepo;
 
-    public boolean doesUserExist(String username) {
+    public boolean doesUserExistByUsername(String username) {
         return userRepo.getUserByUsername(username) != null;
+    }
+
+    public boolean doesUserExistByEmail(String email) {
+        return userRepo.getUserByEmail(email) != null;
     }
 
     @Transactional
@@ -26,7 +30,9 @@ public class UserService {
         return true;
     }
 
-    
+    public User getUserByUsername(String username) {
+        return userRepo.getUserByUsername(username);
+    }
 
 
 }
