@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router)
   private readonly userSvc = inject(UserService)
   registerForm!: FormGroup;
-  registerUser$!: Subscription
+  private unsubscribe$ = new Subject();
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -29,7 +29,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.registerUser$.unsubscribe()
+    this.unsubscribe$.next(null);
+    this.unsubscribe$.complete();
   }
 
   processRegistration() {
@@ -43,7 +44,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
       firstName: this.registerForm.value['firstname'],
       lastName: this.registerForm.value['lastname']
     }
-    this.registerUser$ = this.userSvc.registerUser(user)
+    this.userSvc.registerUser(user)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: registerSuccess => {this.router.navigate(['/login'])},
         error: err => {
