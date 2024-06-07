@@ -35,6 +35,10 @@ public class UserService {
         return userRepo.getUserByEmail(email) != null;
     }
 
+    public boolean updateUser(User user) {
+        return userRepo.updateUser(user);
+    }
+
     @Transactional
     public boolean registerUser(User user) {
         boolean userCreated = userRepo.createUser(user);
@@ -48,6 +52,13 @@ public class UserService {
         String resetId = UUID.randomUUID().toString().substring(0,18);
         userRepo.saveResetLink(resetId, user.getUsername());
         return projectUrl + "reset/" + resetId;
+    }
+
+    public User validateResetLink(String resetId) {
+        String username = userRepo.validateResetLink(resetId);
+        if (username == null)
+            return null;
+        return getUserByUsername(username);
     }
 
 }

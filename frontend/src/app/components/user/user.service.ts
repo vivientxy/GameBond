@@ -23,4 +23,14 @@ export class UserService {
         .pipe(result => {return result})
   }
 
+  validateResetId(resetId: string): Observable<any> {
+    return this.http.get<any>(`/api/reset/${resetId}`)
+        .pipe(result => {return result})
+  }
+
+  updatePassword(user: User): Observable<any> {
+    return this.http.put<any>('/api/reset', user)
+        .pipe(result => {return result})
+  }
+
 }

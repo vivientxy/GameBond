@@ -16,7 +16,10 @@ import tfip.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -58,7 +61,7 @@ public class UserController {
     }
 
     @PostMapping(path = {"/reset"})
-    public ResponseEntity<String> resetPassword(@RequestBody String json) {
+    public ResponseEntity<String> generateResetPasswordEmail(@RequestBody String json) {
         User formUser = jsonToUser(json);
         User retrievedUser = null;
 
@@ -71,6 +74,23 @@ public class UserController {
             String resetLink = userSvc.generateResetLink(retrievedUser);
             mailSvc.sendPasswordResetMail(retrievedUser.getEmail(), retrievedUser.getFirstName(), resetLink);
         }
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @GetMapping(path = {"/reset/{resetId}"})
+    public ResponseEntity<String> validateResetId(@PathVariable String resetId) {
+        User user = userSvc.validateResetLink(resetId);
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<String>(user.toJson().toString(), HttpStatus.OK);
+    }
+
+    @PutMapping(path = {"/reset"})
+    public ResponseEntity<String> setNewPassword(@RequestBody String json) {
+        User formUser = jsonToUser(json);
+        boolean updateSuccess = userSvc.updateUser(formUser);
+        if (!updateSuccess)
+            return new ResponseEntity<String>(HttpStatus.NOT_MODIFIED);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
     
