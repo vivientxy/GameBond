@@ -18,4 +18,9 @@ export class UserService {
         .pipe(result => {return result})
   }
 
+  resetPassword(user: User): Observable<any> {
+    return this.http.post<any>('/api/reset', user)
+        .pipe(result => {return result})
+  }
+
 }

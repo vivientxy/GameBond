@@ -1,9 +1,12 @@
 package tfip.project.repo;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,6 +19,9 @@ public class UserRepository implements SqlQueries {
 
     @Autowired
     JdbcTemplate template;
+
+    @Autowired
+    RedisTemplate<String,String> redisTemplate;
 
     // USERS
 
@@ -95,6 +101,18 @@ public class UserRepository implements SqlQueries {
 
     public boolean deleteMembership(String username) {
         return template.update(SQL_UPDATE_MEMBERSHIP, 0, new Date(), username) > 0 ? true : false;
+    }
+
+    // REDIS RESET LINK
+
+    public void saveResetLink(String resetId, String username) {
+        ValueOperations<String,String> valueOps = redisTemplate.opsForValue();
+        valueOps.set(resetId, username, 30, TimeUnit.MINUTES);
+    }
+
+    public String validateResetLink(String resetId) {
+        ValueOperations<String,String> valueOps = redisTemplate.opsForValue();
+        return valueOps.get(resetId).toString();
     }
 
 }

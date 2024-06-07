@@ -1,6 +1,9 @@
 package tfip.project.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +15,17 @@ public class UserService {
     
     @Autowired
     private UserRepository userRepo;
+
+    @Value("${project.url}")
+    private String projectUrl;
+
+    public User getUserByUsername(String username) {
+        return userRepo.getUserByUsername(username);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepo.getUserByEmail(email);
+    }
 
     public boolean doesUserExistByUsername(String username) {
         return userRepo.getUserByUsername(username) != null;
@@ -30,9 +44,10 @@ public class UserService {
         return true;
     }
 
-    public User getUserByUsername(String username) {
-        return userRepo.getUserByUsername(username);
+    public String generateResetLink(User user) {
+        String resetId = UUID.randomUUID().toString().substring(0,18);
+        userRepo.saveResetLink(resetId, user.getUsername());
+        return projectUrl + "reset/" + resetId;
     }
-
 
 }

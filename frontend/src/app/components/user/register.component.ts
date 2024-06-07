@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -44,13 +44,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
       firstName: this.registerForm.value['firstname'],
       lastName: this.registerForm.value['lastname']
     }
+
     this.userSvc.registerUser(user)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: registerSuccess => {this.router.navigate(['/login'])},
         error: err => {
-          if (err.status == 200)
-            this.router.navigate(['/login'])
           this.registerForm.patchValue(user)
           if (err.error == "Username already in use")
             this.registerForm.get('username')?.setErrors({ usernameExists: true });

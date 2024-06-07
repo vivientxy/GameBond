@@ -10,6 +10,7 @@ import jakarta.json.JsonReader;
 import java.io.StringReader;
 
 import tfip.project.model.User;
+import tfip.project.service.MailService;
 import tfip.project.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api")
@@ -25,6 +25,9 @@ public class UserController {
 
     @Autowired
     UserService userSvc;
+
+    @Autowired
+	MailService mailSvc;
 
     @PostMapping(path = {"/register"})
     public ResponseEntity<String> registerNewUser(@RequestBody String json) {
@@ -45,11 +48,30 @@ public class UserController {
     public ResponseEntity<String> verifyLogin(@RequestBody String json) {
         User formUser = jsonToUser(json);
         User retrievedUser = userSvc.getUserByUsername(formUser.getUsername());
-        if (retrievedUser.getPassword() == null)
+        try {
+            if (formUser.getPassword().equals(retrievedUser.getPassword()))
+                return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (NullPointerException e) {
             return new ResponseEntity<String>("Username not found", HttpStatus.NOT_FOUND);
-        if (formUser.getPassword().equals(retrievedUser.getPassword()))
-            return new ResponseEntity<String>(HttpStatus.OK);
+        }
         return new ResponseEntity<String>("Wrong password", HttpStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping(path = {"/reset"})
+    public ResponseEntity<String> resetPassword(@RequestBody String json) {
+        User formUser = jsonToUser(json);
+        User retrievedUser = null;
+
+        if (!formUser.getUsername().isBlank())
+            retrievedUser = userSvc.getUserByUsername(formUser.getUsername());
+        if (!formUser.getEmail().isBlank())
+            retrievedUser = userSvc.getUserByEmail(formUser.getEmail());
+
+        if (retrievedUser != null) {
+            String resetLink = userSvc.generateResetLink(retrievedUser);
+            mailSvc.sendPasswordResetMail(retrievedUser.getEmail(), retrievedUser.getFirstName(), resetLink);
+        }
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
     
     
@@ -57,7 +79,6 @@ public class UserController {
         JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
         JsonObject object = jsonReader.readObject();
         jsonReader.close();
-
         User user = new User();
         if (!object.isNull("username"))
             user.setUsername(object.getString("username"));

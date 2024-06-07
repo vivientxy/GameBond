@@ -14,7 +14,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE membership (
-    username VARCHAR(32) NOT NULL,
+    username VARCHAR(32) NOT NULL UNIQUE,
     membership INT NOT NULL DEFAULT 0,
     membership_date DATETIME DEFAULT current_timestamp,
 
