@@ -1,3 +1,5 @@
-<app-main></app-main>
+<!-- with top banner -->
+<app-main *ngIf="!isLoggedIn || !isGameStarted"></app-main>
 
-<!-- <app-main-game *ngIf="isLoggedIn"> logged in </app-main-game> -->
+<!-- without top banner -->
+<app-main-game *ngIf="isLoggedIn && isGameStarted"></app-main-game>

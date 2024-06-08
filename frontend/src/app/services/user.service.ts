@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { User } from './user.model';
-import { Observable, firstValueFrom, map } from 'rxjs';
+import { Observable } from 'rxjs';
+import { User } from '../models/user.model';
 
 @Injectable()
 export class UserService {
@@ -31,6 +31,12 @@ export class UserService {
   updatePassword(user: User): Observable<any> {
     return this.http.put<any>('/api/reset', user)
         .pipe(result => {return result})
+  }
+
+  validateLoggedIn(): boolean {
+    if (localStorage.getItem("isLoggedIn") == "true")
+      return true;
+    return false;
   }
 
 }

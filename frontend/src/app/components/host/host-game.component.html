@@ -1,1 +1,76 @@
-<p>host-game works!</p>
+<div class="container">
+
+    <h3 style="margin-bottom: 10px;">Host a Game</h3>
+
+    <form [formGroup]="hostForm" (submit)="processHostGame()">
+        <div class="banner">
+            Select number of teams:
+        </div>
+
+        <div class="buttons-holder">
+            <mat-button-toggle-group formControlName="numOfTeams">
+                <mat-button-toggle value="1" class="teams-button">1</mat-button-toggle>
+                <mat-button-toggle value="2" class="teams-button">2</mat-button-toggle>
+                <mat-button-toggle value="3" class="teams-button">3</mat-button-toggle>
+                <mat-button-toggle value="4" class="teams-button">4</mat-button-toggle>
+            </mat-button-toggle-group>    
+        </div>
+
+        <div class="banner">
+            Select game:
+        </div>
+
+        <div>
+            <mat-button-toggle-group formControlName="game" class="game-selection-area">
+
+                <mat-card class="game-card">
+                    <img mat-card-image src="assets/pokemon-emerald.jpg">
+                    <mat-card-actions>
+                        <mat-button-toggle value="Game A" class="game-button">Game A</mat-button-toggle>
+                    </mat-card-actions>
+                </mat-card>
+
+                <mat-card class="game-card">
+                    <img mat-card-image src="assets/pokemon-emerald.jpg">
+                    <mat-card-actions>
+                        <mat-button-toggle value="Game B" class="game-button">Game B</mat-button-toggle>
+                    </mat-card-actions>
+                </mat-card>
+
+                <mat-card class="game-card">
+                    <img mat-card-image src="assets/pokemon-emerald.jpg">
+                    <mat-card-actions>
+                        <mat-button-toggle value="Game C" class="game-button">Game C</mat-button-toggle>
+                    </mat-card-actions>
+                </mat-card>
+
+                <mat-card class="game-card">
+                    <img mat-card-image src="assets/pokemon-emerald.jpg">
+                    <mat-card-actions>
+                        <mat-button-toggle value="Game D" class="game-button">Game D</mat-button-toggle>
+                    </mat-card-actions>
+                </mat-card>
+
+                <mat-card class="game-card">
+                    <img mat-card-image src="assets/pokemon-emerald.jpg">
+                    <mat-card-actions>
+                        <mat-button-toggle value="Game E" class="game-button">Game E</mat-button-toggle>
+                    </mat-card-actions>
+                </mat-card>
+
+                <mat-card class="game-card">
+                    <img mat-card-image src="assets/pokemon-emerald.jpg">
+                    <mat-card-actions>
+                        <mat-button-toggle value="Game F" class="game-button">Game F</mat-button-toggle>
+                    </mat-card-actions>
+                </mat-card>
+
+            </mat-button-toggle-group>
+        </div>
+
+        <div class="banner">
+            <button type="submit" mat-flat-button color="primary" [disabled]="hostForm.invalid">Host Game!</button>
+        </div>
+
+    </form>
+</div>

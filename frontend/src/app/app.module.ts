@@ -12,7 +12,6 @@ import { LoginComponent } from './components/user/login.component';
 import { RegisterComponent } from './components/user/register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgotPasswordComponent } from './components/user/forgot-password.component';
-import { UserService } from './components/user/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ResetPasswordComponent } from './components/user/reset-password.component';
 import { GameScreenComponent } from './components/game/game-screen.component';
@@ -20,6 +19,8 @@ import { MainComponent } from './components/main/main.component';
 import { ChatboxComponent } from './components/game/chatbox.component';
 import { MainGameComponent } from './components/game/main-game.component';
 import { HostGameComponent } from './components/host/host-game.component';
+import { UserService } from './services/user.service';
+import { GameService } from './services/game.service';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { HostGameComponent } from './components/host/host-game.component';
   ],
   providers: [
     provideAnimationsAsync(),
-    UserService
+    UserService,
+    GameService
   ],
   bootstrap: [AppComponent]
 })

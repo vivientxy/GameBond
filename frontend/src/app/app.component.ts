@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -7,11 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
+  private readonly svc = inject(UserService)
   isLoggedIn = false;
+  isGameStarted = false;
 
   ngOnInit(): void {
-    if (localStorage.getItem("isLoggedIn") == "true")
-      this.isLoggedIn = true;
+    this.isLoggedIn = this.svc.validateLoggedIn();
   }
   
 }

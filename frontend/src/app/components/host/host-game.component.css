@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.container {
+    margin-top: 10px;
+    flex-flow: row wrap;
+    max-width: 100%;
+    min-width: 100%;
+    align-content: center;
+    text-align: center;
+
+    /* background-color: aqua; */
+}
+
+.banner {
+    padding: 10px;
+    font-size: larger;
+    font-weight: 300;
+    /* background-color: lightcyan; */
+}
+
+.buttons-holder {
+    display: flex;
+    margin: 10px;
+    justify-content: space-evenly;
+}
+
+.mat-button-toggle.teams-button {
+    width: 100px;
+}
+
+/* game cards */
+
+.mat-button-toggle-group.game-selection-area {
+    border: none;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.game-card {
+    display: inline flex;
+    max-width: 200px;
+    margin: 10px;
+}
+
+.mat-button-toggle.game-button {
+    flex-wrap: nowrap;
+    width: 100%;
+}

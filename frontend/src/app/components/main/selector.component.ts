@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-selector',
@@ -7,18 +9,20 @@ import { Component } from '@angular/core';
 })
 export class SelectorComponent {
 
-
+  private readonly svc = inject(UserService)
+  private readonly router = inject(Router)
+  isLoggedIn!: boolean;
 
   joinGame() {
 
   }
 
   hostGame() {
-
-  }
-
-  isLoggedIn() {
-    
+    this.isLoggedIn = this.svc.validateLoggedIn();
+    if (this.isLoggedIn)
+      this.router.navigate(['/host'])
+    else
+      this.router.navigate(['/login'])
   }
 
 }

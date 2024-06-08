@@ -2,9 +2,15 @@
     <h1>
       <a [routerLink]="['/']" class="unstyled-link">{{ title }}</a>
     </h1>
-    <button id="login" mat-icon-button [routerLink]="['/login']">
+    <button id="login" mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>person</mat-icon>
     </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item [routerLink]="['/login']">Login</button>
+      <button mat-menu-item [routerLink]="['/reset']">Forgot Password</button>
+      <button mat-menu-item [routerLink]="['/register']">Register Account</button>
+      <button mat-menu-item [routerLink]="['/login']">Logout</button>
+    </mat-menu>
   </div>
   
   <div id="window">

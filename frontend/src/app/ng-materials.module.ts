@@ -9,6 +9,9 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCardModule } from '@angular/material/card';
 
 const MATERIAL = [
   MatFormFieldModule,
@@ -17,7 +20,10 @@ const MATERIAL = [
   MatDatepickerModule,
   MatButtonModule,
   MatCheckboxModule,
-  MatIconModule
+  MatIconModule,
+  MatButtonToggleModule,
+  MatMenuModule,
+  MatCardModule
 ];
 
 @NgModule({
