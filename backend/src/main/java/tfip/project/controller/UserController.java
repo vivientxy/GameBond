@@ -35,6 +35,7 @@ public class UserController {
     @PostMapping(path = {"/register"})
     public ResponseEntity<String> registerNewUser(@RequestBody String json) {
         User user = jsonToUser(json);
+        System.out.println(">>> register user:" + user);
         try {
             userSvc.registerUser(user);
             return new ResponseEntity<String>(HttpStatus.OK);
@@ -49,14 +50,16 @@ public class UserController {
 
     @PostMapping(path = {"/login"})
     public ResponseEntity<String> verifyLogin(@RequestBody String json) {
+        System.out.println(">>> triggered login controller");
+
         User formUser = jsonToUser(json);
-        User retrievedUser = userSvc.getUserByUsername(formUser.getUsername());
-        try {
-            if (formUser.getPassword().equals(retrievedUser.getPassword()))
-                return new ResponseEntity<String>(HttpStatus.OK);
-        } catch (NullPointerException e) {
+        Boolean isLoginSuccess = userSvc.validateLogin(formUser.getUsername(), formUser.getPassword());
+        System.out.println(">>> isLoginSuccess:" + isLoginSuccess);
+
+        if (isLoginSuccess == null)
             return new ResponseEntity<String>("Username not found", HttpStatus.NOT_FOUND);
-        }
+        if (isLoginSuccess)
+            return new ResponseEntity<String>(HttpStatus.OK);
         return new ResponseEntity<String>("Wrong password", HttpStatus.UNAUTHORIZED);
     }
 

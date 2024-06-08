@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+/* layer 1 */
+
+.container {
+    flex-flow: row wrap;
+    height: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+/* layer 2 */
+
+.info {
+    display: flex;
+    height: 8%;
+    max-height: 8%;
+    width: 100vw;
+    max-width: 100%;
+    min-width: 100%;
+
+    background-color: #e0e0e0;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-area {
+    flex-flow: row wrap;
+    height: 92%;
+    max-height: 92%;
+    width: 100vw;
+    max-width: 100%;
+    min-width: 100%;
+
+    background-color: aqua;
+}
+
+/* layer 3 */
+
+.game-instance {
+    display: inline-flex;
+    height: 46vh;
+    max-height: 46vh;
+    width: 50vw;
+    max-width: 50%;
+    min-width: 50%;
+
+    border: 1px red solid;
+}
+
+.game-display {
+    display: flex;
+    width: 80%;
+
+    background-color: #282c34;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-box {
+    display: flex;
+    width: 20%;
+
+    background-color: #f0f0f0;
+    justify-content: center;
+    align-items: center;
+}

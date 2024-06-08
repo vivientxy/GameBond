@@ -7,4 +7,18 @@ import { Component } from '@angular/core';
 })
 export class SelectorComponent {
 
+
+
+  joinGame() {
+
+  }
+
+  hostGame() {
+
+  }
+
+  isLoggedIn() {
+    
+  }
+
 }

@@ -6,7 +6,7 @@ USE gamebond;
 
 CREATE TABLE users (
     username VARCHAR(32) PRIMARY KEY,
-    password VARCHAR(32) NOT NULL,
+    password VARCHAR(128) NOT NULL,
     email VARCHAR(64) NOT NULL UNIQUE,
     firstname VARCHAR(32),
     lastname VARCHAR(32),

@@ -18,6 +18,8 @@ import { ResetPasswordComponent } from './components/user/reset-password.compone
 import { GameScreenComponent } from './components/game/game-screen.component';
 import { MainComponent } from './components/main/main.component';
 import { ChatboxComponent } from './components/game/chatbox.component';
+import { MainGameComponent } from './components/game/main-game.component';
+import { HostGameComponent } from './components/host/host-game.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +30,10 @@ import { ChatboxComponent } from './components/game/chatbox.component';
     ForgotPasswordComponent,
     ResetPasswordComponent,
     GameScreenComponent,
+    MainGameComponent,
     MainComponent,
-    ChatboxComponent
+    ChatboxComponent,
+    HostGameComponent
   ],
   imports: [
     BrowserModule,

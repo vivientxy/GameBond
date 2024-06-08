@@ -42,10 +42,7 @@ export class ResetPasswordComponent implements OnInit {
 
     const p1 = this.resetForm.controls['password'].value
     const p2 = this.resetForm.controls['passwordConfirm'].value
-    if (p1 == this.user.password) {
-      this.resetForm.get('password')?.setErrors({ passwordReused: true });
-      return
-    }
+    
     if (p1 !== p2) {
       this.resetForm.get('passwordConfirm')?.setErrors({ passwordNotMatch: true });
       return

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,9 @@ public class UserService {
     
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Value("${project.url}")
     private String projectUrl;
@@ -36,16 +40,28 @@ public class UserService {
     }
 
     public boolean updateUser(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         return userRepo.updateUser(user);
     }
 
     @Transactional
     public boolean registerUser(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        System.out.println(">>> service: register user:" + user);
         boolean userCreated = userRepo.createUser(user);
         boolean membershipCreated = userRepo.createUserMembership(user.getUsername(), 0);
         if (!userCreated || !membershipCreated)
             throw new RuntimeException("Rolling back transaction - User/Membership creation failed");
         return true;
+    }
+
+    public Boolean validateLogin(String username, String rawPassword) {
+        User user = userRepo.getUserByUsername(username);
+        if (user == null)
+            return null;
+        return passwordEncoder.matches(rawPassword, user.getPassword());
     }
 
     public String generateResetLink(User user) {

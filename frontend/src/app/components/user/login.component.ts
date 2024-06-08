@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: loginSuccess => {
           // TODO: add cookie/auth token to parent to indicate user is logged in
+          localStorage.setItem("isLoggedIn", "true")
           this.router.navigate(['/'])
         },
         error: err => {
