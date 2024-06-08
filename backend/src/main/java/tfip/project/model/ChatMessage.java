@@ -1,18 +1,18 @@
 package tfip.project.model;
 
+import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ChatMessage {
-    private String content;
+    private String gameId;
     private String sender;
-    private MessageType type;
+    private String team;
+    private String content;
+    private ChatMessageType type;
 }

@@ -9,7 +9,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tfip.project.model.ChatMessage;
-import tfip.project.model.MessageType;
+import tfip.project.model.ChatMessageType;
 
 @Component
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class WebSocketEventListener {
         if (username != null) {
             log.info("User disconnected: {}", username);
             var chatMessage = ChatMessage.builder()
-                .type(MessageType.LEAVE)
+                .type(ChatMessageType.LEAVE)
                 .sender(username)
                 .build();
             messageTemplate.convertAndSend("/topic/public", chatMessage);

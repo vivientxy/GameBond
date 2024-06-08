@@ -1,6 +1,6 @@
 package tfip.project.model;
 
-public enum MessageType {
+public enum ChatMessageType {
     CHAT,
     JOIN,
     LEAVE
