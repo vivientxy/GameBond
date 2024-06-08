@@ -39,4 +39,8 @@ export class UserService {
     return false;
   }
 
+  logout() {
+    localStorage.removeItem("isLoggedIn")
+  }
+
 }

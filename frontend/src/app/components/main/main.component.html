@@ -9,7 +9,7 @@
       <button mat-menu-item [routerLink]="['/login']">Login</button>
       <button mat-menu-item [routerLink]="['/reset']">Forgot Password</button>
       <button mat-menu-item [routerLink]="['/register']">Register Account</button>
-      <button mat-menu-item [routerLink]="['/login']">Logout</button>
+      <button mat-menu-item (click)="logout()">Logout</button>
     </mat-menu>
   </div>
   
