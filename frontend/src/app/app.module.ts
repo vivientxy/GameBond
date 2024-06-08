@@ -15,6 +15,9 @@ import { ForgotPasswordComponent } from './components/user/forgot-password.compo
 import { UserService } from './components/user/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ResetPasswordComponent } from './components/user/reset-password.component';
+import { GameScreenComponent } from './components/game/game-screen.component';
+import { MainComponent } from './components/main/main.component';
+import { ChatboxComponent } from './components/game/chatbox.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,10 @@ import { ResetPasswordComponent } from './components/user/reset-password.compone
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    GameScreenComponent,
+    MainComponent,
+    ChatboxComponent
   ],
   imports: [
     BrowserModule,

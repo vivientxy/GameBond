@@ -1,0 +1,13 @@
+<div id="main">
+    <h1>
+      <a [routerLink]="['/']" class="unstyled-link">{{ title }}</a>
+    </h1>
+    <button id="login" mat-icon-button [routerLink]="['/login']">
+      <mat-icon>person</mat-icon>
+    </button>
+  </div>
+  
+  <div id="window">
+    <router-outlet></router-outlet>
+  </div>
+  
