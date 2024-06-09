@@ -22,49 +22,12 @@
 
         <div>
             <mat-button-toggle-group formControlName="game" class="game-selection-area">
-
-                <mat-card class="game-card">
-                    <img mat-card-image src="assets/pokemon-emerald.jpg">
+                <mat-card class="game-card" *ngFor="let game of gameList">
+                    <img mat-card-image [src]="game.pictureUrl">
                     <mat-card-actions>
-                        <mat-button-toggle value="Game A" class="game-button">Game A</mat-button-toggle>
+                        <mat-button-toggle [value]="game.gameId" class="game-button">{{game.gameTitle}}</mat-button-toggle>
                     </mat-card-actions>
                 </mat-card>
-
-                <mat-card class="game-card">
-                    <img mat-card-image src="assets/pokemon-emerald.jpg">
-                    <mat-card-actions>
-                        <mat-button-toggle value="Game B" class="game-button">Game B</mat-button-toggle>
-                    </mat-card-actions>
-                </mat-card>
-
-                <mat-card class="game-card">
-                    <img mat-card-image src="assets/pokemon-emerald.jpg">
-                    <mat-card-actions>
-                        <mat-button-toggle value="Game C" class="game-button">Game C</mat-button-toggle>
-                    </mat-card-actions>
-                </mat-card>
-
-                <mat-card class="game-card">
-                    <img mat-card-image src="assets/pokemon-emerald.jpg">
-                    <mat-card-actions>
-                        <mat-button-toggle value="Game D" class="game-button">Game D</mat-button-toggle>
-                    </mat-card-actions>
-                </mat-card>
-
-                <mat-card class="game-card">
-                    <img mat-card-image src="assets/pokemon-emerald.jpg">
-                    <mat-card-actions>
-                        <mat-button-toggle value="Game E" class="game-button">Game E</mat-button-toggle>
-                    </mat-card-actions>
-                </mat-card>
-
-                <mat-card class="game-card">
-                    <img mat-card-image src="assets/pokemon-emerald.jpg">
-                    <mat-card-actions>
-                        <mat-button-toggle value="Game F" class="game-button">Game F</mat-button-toggle>
-                    </mat-card-actions>
-                </mat-card>
-
             </mat-button-toggle-group>
         </div>
 

@@ -49,4 +49,20 @@ public interface SqlQueries {
         WHERE username=?;
         """;
 
+    // GAMES
+    public static final String SQL_GET_ALL_GAMES = """
+        SELECT *
+        FROM gamebond.games
+        """;
+    public static final String SQL_GET_GAME_BY_ID = """
+        SELECT *
+        FROM gamebond.games
+        WHERE game_id = ?
+        """;
+    public static final String SQL_GET_GAME_BY_TITLE = """
+        SELECT *
+        FROM gamebond.games
+        WHERE game_title = ?
+        """;
+
 }

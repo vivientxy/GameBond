@@ -20,11 +20,12 @@ export class HostGameComponent implements OnInit {
       numOfTeams: this.fb.control(null,[Validators.required]),
       game: this.fb.control(null,[Validators.required])
     })
-    // this.gameList = this.gameSvc.getAllGameDetails()
+    this.gameSvc.getAllGameDetails()
+      .subscribe(response => {this.gameList =  response})
   }
 
   processHostGame() {
-    this.gameSvc.startHostedGame(this.hostForm.controls['numOfTeams'].value, this.hostForm.controls['numOfTeams'].value)
+    this.gameSvc.startHostedGame(this.hostForm.controls['numOfTeams'].value, this.hostForm.controls['game'].value)
   }
 
 }
