@@ -15,9 +15,11 @@ export class GameService {
 
     startHostedGame(numOfTeam: number, gameId: string) {
         // generate game host ID
-
+        let hostId = this.generateHostId()
+        
         // use game host ID to generate QR code --> http call to springboot --> external API call (to protect API key)
-        // QR code needs to launch telegram bot --> how to configure this??
+        // QR code needs to launch telegram bot
+        this.generateQrCode(hostId)
 
         // generate chatboxes x numOfTeam
 
@@ -35,13 +37,11 @@ export class GameService {
     }
 
     generateQrCode(hostId: string) {
-        // form telegram URL with host ID as query string
-        // hostId=a1b2c3d4 = https://t.me/gamebond_bot?start=aG9zdElkPWExYjJjM2Q0
         let queryString = `hostId=${hostId}`
         let base64QueryString = btoa(queryString)
         let telegramUrl = `https://t.me/gamebond_bot?start=${base64QueryString}`
-
-        // QR code API call
+        return this.http.post<any>('/api/get-QR', telegramUrl)
+            .pipe(result => {return result})
     }
 
 }
