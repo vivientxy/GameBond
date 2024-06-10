@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import tfip.project.model.User;
+import tfip.project.repo.RedisRepository;
 import tfip.project.repo.UserRepository;
 
 @Service
@@ -16,6 +17,9 @@ public class UserService {
     
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private RedisRepository redisRepo;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -66,12 +70,12 @@ public class UserService {
 
     public String generateResetLink(User user) {
         String resetId = UUID.randomUUID().toString().substring(0,18);
-        userRepo.saveResetLink(resetId, user.getUsername());
+        redisRepo.saveResetLink(resetId, user.getUsername());
         return projectUrl + "reset/" + resetId;
     }
 
     public User validateResetLink(String resetId) {
-        String username = userRepo.validateResetLink(resetId);
+        String username = redisRepo.validateResetLink(resetId);
         if (username == null)
             return null;
         return getUserByUsername(username);

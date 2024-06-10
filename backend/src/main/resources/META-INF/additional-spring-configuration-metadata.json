@@ -13,5 +13,25 @@
     "name": "project.url",
     "type": "java.lang.String",
     "description": "A description for 'project.url'"
+  },
+  {
+    "name": "telegram.webhook-url",
+    "type": "java.lang.String",
+    "description": "A description for 'telegram.webhook-url'"
+  },
+  {
+    "name": "rapidapi.api.key",
+    "type": "java.lang.String",
+    "description": "A description for 'rapidapi.api.key'"
+  },
+  {
+    "name": "qr.api.key",
+    "type": "java.lang.String",
+    "description": "A description for 'qr.api.key'"
+  },
+  {
+    "name": "qr.workspace.id",
+    "type": "java.lang.String",
+    "description": "A description for 'qr.workspace.id'"
   }
 ]}

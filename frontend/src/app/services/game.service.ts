@@ -35,6 +35,12 @@ export class GameService {
     }
 
     generateQrCode(hostId: string) {
+        // form telegram URL with host ID as query string
+        // hostId=a1b2c3d4 = https://t.me/gamebond_bot?start=aG9zdElkPWExYjJjM2Q0
+        let queryString = `hostId=${hostId}`
+        let base64QueryString = btoa(queryString)
+        let telegramUrl = `https://t.me/gamebond_bot?start=${base64QueryString}`
+
         // QR code API call
     }
 

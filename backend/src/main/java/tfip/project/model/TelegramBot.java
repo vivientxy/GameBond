@@ -1,18 +1,25 @@
 package tfip.project.model;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import jakarta.annotation.PostConstruct;
 
 @SuppressWarnings("deprecation")
 @Component
@@ -23,6 +30,21 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Value("${telegram.token}")
     private String token;
+
+    @Value("${telegram.webhook-url}")
+    private String webhookUrl;
+
+    @PostConstruct
+    public void init() {
+        SetWebhook setWebhook = SetWebhook.builder()
+                .url(webhookUrl)
+                .build();
+        try {
+            this.execute(setWebhook);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String getBotUsername() {
@@ -38,7 +60,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         var msg = update.getMessage();
         var user = msg.getFrom();
-        // var id = user.getId();
+        var chatId = msg.getChatId();
+        String messageText = msg.getText();
+
+        // Handle /start command with payload
+        if (messageText.startsWith("/start")) {
+            handleStartCommand(chatId, messageText);
+            return;
+        }
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboardRowList = new LinkedList<>();
@@ -120,6 +149,43 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
                 throw new RuntimeException(e);      //Any error will be printed here
         }
+    }
+
+    private void sendMessage(Long chatId, String text) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId.toString());
+        message.setText(text);
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleStartCommand(Long chatId, String messageText) {
+        String payload = "";
+        if (messageText.length() > 6)
+            payload = messageText.substring(7);
+        if (!payload.isEmpty()) {
+            String decodedUrl = new String(Base64.getDecoder().decode(payload), StandardCharsets.UTF_8);
+            Map<String, String> params = getQueryParams(decodedUrl);
+            System.out.println(params); // {hostId=a1b2c3d4}
+            sendMessage(chatId, "Parsed parameters: " + params.toString());
+        } else {
+            sendMessage(chatId, "Welcome to the bot! No payload received.");
+        }
+    }
+
+    private Map<String, String> getQueryParams(String url) {
+        Map<String, String> params = new HashMap<>();
+        String[] pairs = url.split("&");
+        for (String pair : pairs) {
+            String[] keyValue = pair.split("=");
+            if (keyValue.length > 1) {
+                params.put(keyValue[0], keyValue[1]);
+            }
+        }
+        return params;
     }
     
 }

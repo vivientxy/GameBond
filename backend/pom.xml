@@ -80,11 +80,17 @@
 		</dependency>
 
 		<!-- telegram -->
-		<!-- https://mvnrepository.com/artifact/org.telegram/telegrambots -->
 		<dependency>
 			<groupId>org.telegram</groupId>
 			<artifactId>telegrambots</artifactId>
 			<version>6.9.7.1</version>
+		</dependency>
+
+		<!-- HTTP request -->
+		<dependency>
+			<groupId>com.mashape.unirest</groupId>
+			<artifactId>unirest-java</artifactId>
+			<version>1.4.9</version>
 		</dependency>
 
 		<!-- mail -->
