@@ -15,16 +15,21 @@ body, html {
     min-width: 100%;
     align-content: center;
     text-align: center;
-
-    /* background-color: aqua; */
 }
 
 .banner {
     padding: 10px;
     font-size: larger;
     font-weight: 300;
-    /* background-color: lightcyan; */
 }
+
+.game-selection-area {
+    border: none;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+/* teams buttons */
 
 .buttons-holder {
     display: flex;
@@ -32,25 +37,39 @@ body, html {
     justify-content: space-evenly;
 }
 
-.mat-button-toggle.teams-button {
+.teams-button {
     width: 100px;
 }
 
 /* game cards */
 
-.mat-button-toggle-group.game-selection-area {
-    border: none;
-    flex-flow: row wrap;
-    justify-content: center;
+.game-button {
+    display: inline flex;
+    max-width: 220px;
+    margin: 5px;
+    border-radius: 20px;
 }
 
 .game-card {
     display: inline flex;
-    max-width: 200px;
-    margin: 10px;
+    margin: 5px;
+    max-width: 300px;
+    border-radius: 20px;
 }
 
-.mat-button-toggle.game-button {
-    flex-wrap: nowrap;
+img {
+    height: 100%;
     width: 100%;
+    min-height: 180px;
+    min-width: 180px;
+}
+
+.mat-card-actions {
+    display: flex;
+}
+
+p {
+    display: flex;
+    text-wrap: wrap;
+    line-height: 1em;
 }

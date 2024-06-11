@@ -21,18 +21,30 @@
         </div>
 
         <div>
-            <mat-button-toggle-group formControlName="game" class="game-selection-area">
-                <mat-card class="game-card" *ngFor="let game of gameList">
+            <mat-button-toggle-group formControlName="game" class="game-selection-area" [hideSingleSelectionIndicator]="true">
+
+                <mat-button-toggle *ngFor="let game of gameList"  [value]="game.gameId" class="game-button">
+                    <mat-card class="game-card">
+                        <img mat-card-image [src]="game.pictureUrl">
+                        <mat-card-actions>
+                            <p>{{game.gameTitle}}</p>
+                        </mat-card-actions>
+                    </mat-card>
+                </mat-button-toggle>
+
+
+                <!-- <mat-card class="game-card" *ngFor="let game of gameList">
                     <img mat-card-image [src]="game.pictureUrl">
                     <mat-card-actions>
-                        <mat-button-toggle [value]="game.gameId" class="game-button">{{game.gameTitle}}</mat-button-toggle>
+                        <mat-button-toggle [value]="game.gameId" class="game-button"><p>{{game.gameTitle}}</p></mat-button-toggle>
                     </mat-card-actions>
-                </mat-card>
+                </mat-card> -->
+
             </mat-button-toggle-group>
         </div>
 
         <div class="banner">
-            <button type="submit" mat-flat-button color="primary" [disabled]="hostForm.invalid">Host Game!</button>
+            <button type="submit" mat-flat-button color="primary" [disabled]="hostForm.invalid" style="padding: 10px;">Host Game!</button>
         </div>
 
     </form>

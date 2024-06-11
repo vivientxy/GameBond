@@ -25,7 +25,9 @@ export class HostGameComponent implements OnInit {
   }
 
   processHostGame() {
-    this.gameSvc.startHostedGame(this.hostForm.controls['numOfTeams'].value, this.hostForm.controls['game'].value)
+    this.gameSvc.startLobby(this.hostForm.controls['numOfTeams'].value, this.hostForm.controls['game'].value)
+
+    // save hostId into localStorage? in case accidentally navigate away from game page, they can easily return to game
   }
 
 }

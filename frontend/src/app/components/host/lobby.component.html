@@ -1,0 +1,47 @@
+<div class="container">
+
+    <div class="teams" style="border-top-right-radius: 20px;">
+        <h5 class="team-label">Team A</h5>
+        <div class="team-box">
+            <p class="player-label" *ngFor="let player of teamA, let idx = index">
+                <button style="all: unset;" (click)="remove('teamA', idx)">{{player}}</button>
+            </p>
+        </div>
+        <h5 class="team-label">Team C</h5>
+        <div class="team-box">
+            <p class="player-label" *ngFor="let player of teamC, let idx = index">
+                <button style="all: unset;" (click)="remove('teamC', idx)">{{player}}</button>
+            </p>
+        </div>
+    </div>
+
+    <div class="qr">
+        <div class="qr-components">
+            <h3>Choose your team!</h3>
+            <br>
+            <h4>Room ID: {{hostId}}</h4>
+        </div>
+        <div class="qr-components">
+            <img [src]="qr" alt="qr-code">
+        </div>
+        <div class="qr-components">
+            <button mat-flat-button color="primary" style="font-size: larger; width: 100%; height: auto;" (click)="startGame()">Start Game!</button>
+        </div>
+    </div>
+    
+    <div class="teams" style="border-top-left-radius: 20px;">
+        <h5 class="team-label">Team B</h5>
+        <div class="team-box">
+            <p class="player-label" *ngFor="let player of teamB, let idx = index">
+                <button style="all: unset;" (click)="remove('teamB', idx)">{{player}}</button>
+            </p>
+        </div>
+        <h5 class="team-label">Team D</h5>
+        <div class="team-box">
+            <p class="player-label" *ngFor="let player of teamD, let idx = index">
+                <button style="all: unset;" (click)="remove('teamD', idx)">{{player}}</button>
+            </p>
+        </div>
+    </div>
+
+</div>

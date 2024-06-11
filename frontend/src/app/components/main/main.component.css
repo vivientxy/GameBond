@@ -4,8 +4,9 @@ html, body {
     overflow: hidden
 }
 
-#main {
+#navbar {
     display: flex;
+    height: 10%;
     padding: 10px;
     align-items: center;
     justify-content: space-between;

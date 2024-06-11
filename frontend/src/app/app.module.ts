@@ -21,6 +21,7 @@ import { MainGameComponent } from './components/game/main-game.component';
 import { HostGameComponent } from './components/host/host-game.component';
 import { UserService } from './services/user.service';
 import { GameService } from './services/game.service';
+import { LobbyComponent } from './components/host/lobby.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { GameService } from './services/game.service';
     MainGameComponent,
     MainComponent,
     ChatboxComponent,
-    HostGameComponent
+    HostGameComponent,
+    LobbyComponent
   ],
   imports: [
     BrowserModule,

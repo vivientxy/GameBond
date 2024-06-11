@@ -8,19 +8,32 @@ export class GameService {
 
     private http = inject(HttpClient);
 
+    checkLogin() {
+        
+    }
+
     getAllGameDetails(): Observable<any> {
         return this.http.get<any>('/api/get-all-games')
             .pipe(result => {return result})
     }
 
-    startHostedGame(numOfTeam: number, gameId: string) {
+    startLobby(numOfTeam: number, gameId: string) {
         // generate game host ID
         let hostId = this.generateHostId()
         
         // use game host ID to generate QR code --> http call to springboot --> external API call (to protect API key)
         // QR code needs to launch telegram bot
-        this.generateQrCode(hostId)
+        let qrCode;
+        this.generateQrCode(hostId).subscribe(QR => {qrCode = QR})
 
+
+
+        // route to lobby screen
+1
+        console.log('>>> selected:', numOfTeam, gameId)
+    }
+
+    startHostedGame(numOfTeam: number, gameId: string) {
         // generate chatboxes x numOfTeam
 
         // generate game emulator x numOfTeam
@@ -28,8 +41,6 @@ export class GameService {
         // retrieve game ROM using gameId --> http call to springboot --> mySQL/S3
 
         // load all game emulators with game ROM
-
-        console.log('>>> selected:', numOfTeam, gameId)
     }
 
     generateHostId(): string {
