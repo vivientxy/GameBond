@@ -9,7 +9,7 @@ export class GameService {
     private http = inject(HttpClient);
 
     checkLogin() {
-        
+
     }
 
     getAllGameDetails(): Observable<any> {
@@ -19,12 +19,12 @@ export class GameService {
 
     startLobby(numOfTeam: number, gameId: string) {
         // generate game host ID
-        let hostId = this.generateHostId()
+        // let hostId = this.generateHostId()
         
         // use game host ID to generate QR code --> http call to springboot --> external API call (to protect API key)
         // QR code needs to launch telegram bot
-        let qrCode;
-        this.generateQrCode(hostId).subscribe(QR => {qrCode = QR})
+        // let qrCode;
+        // this.generateQrCode(hostId).subscribe(QR => {qrCode = QR})
 
 
 

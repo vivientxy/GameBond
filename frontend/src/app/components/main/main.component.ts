@@ -15,7 +15,8 @@ export class MainComponent {
 
   logout() {
     this.userSvc.logout()
-    this.router.navigate(['/'])
+    alert("Logout successful")
+    this.router.navigate(['/login'])
   }
 
 }

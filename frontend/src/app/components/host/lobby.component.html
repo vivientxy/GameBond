@@ -1,18 +1,21 @@
 <div class="container">
 
     <div class="teams" style="border-top-right-radius: 20px;">
+
         <h5 class="team-label">Team A</h5>
-        <div class="team-box">
+        <div class="players-box">
             <p class="player-label" *ngFor="let player of teamA, let idx = index">
                 <button style="all: unset;" (click)="remove('teamA', idx)">{{player}}</button>
             </p>
-        </div>
-        <h5 class="team-label">Team C</h5>
-        <div class="team-box">
+        </div>    
+
+        <h5 class="team-label" *ngIf="numOfTeams > 2">Team C</h5>
+        <div class="players-box"  *ngIf="numOfTeams > 2">
             <p class="player-label" *ngFor="let player of teamC, let idx = index">
                 <button style="all: unset;" (click)="remove('teamC', idx)">{{player}}</button>
             </p>
         </div>
+
     </div>
 
     <div class="qr">
@@ -30,14 +33,14 @@
     </div>
     
     <div class="teams" style="border-top-left-radius: 20px;">
-        <h5 class="team-label">Team B</h5>
-        <div class="team-box">
+        <h5 class="team-label" *ngIf="numOfTeams > 1">Team B</h5>
+        <div class="players-box" *ngIf="numOfTeams > 1">
             <p class="player-label" *ngFor="let player of teamB, let idx = index">
                 <button style="all: unset;" (click)="remove('teamB', idx)">{{player}}</button>
             </p>
         </div>
-        <h5 class="team-label">Team D</h5>
-        <div class="team-box">
+        <h5 class="team-label" *ngIf="numOfTeams > 3">Team D</h5>
+        <div class="players-box" *ngIf="numOfTeams > 3">
             <p class="player-label" *ngFor="let player of teamD, let idx = index">
                 <button style="all: unset;" (click)="remove('teamD', idx)">{{player}}</button>
             </p>
