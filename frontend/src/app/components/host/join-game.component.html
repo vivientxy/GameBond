@@ -1,0 +1,23 @@
+<div class="container" >
+    <h3>Join a Game</h3>
+</div>
+
+<div class="container" >
+  <form [formGroup]="form" (submit)="processJoinGame()">
+
+    <div>
+        <div style="margin: 15px;">
+            <mat-label>
+                <h5>Game ID:</h5>
+            </mat-label>
+        </div>
+        
+        <mat-form-field>
+            <input matInput formControlName="hostId" maxlength="8">
+            <mat-error *ngIf="this.form.controls['hostId'].hasError">Please enter a valid Game ID</mat-error>
+        </mat-form-field>
+    </div>
+
+    <button mat-flat-button color="primary" type="submit" class="form-button">Join Game!</button>
+  </form>
+</div>

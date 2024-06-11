@@ -14,7 +14,7 @@ export class SelectorComponent {
   isLoggedIn!: boolean;
 
   joinGame() {
-
+    this.router.navigate(['/join'])
   }
 
   hostGame() {

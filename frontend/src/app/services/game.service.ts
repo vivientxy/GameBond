@@ -47,10 +47,14 @@ export class GameService {
         return uuidv4().replaceAll('-','').substring(24,32);
     }
 
-    generateQrCode(hostId: string) {
+    generateTelegramLink(hostId: string): string {
         let queryString = `hostId=${hostId}`
         let base64QueryString = btoa(queryString)
-        let telegramUrl = `https://t.me/gamebond_bot?start=${base64QueryString}`
+        return `https://t.me/gamebond_bot?start=${base64QueryString}`;
+    }
+
+    generateQrCode(hostId: string) {
+        let telegramUrl = this.generateTelegramLink(hostId);
         return this.http.post<any>('/api/get-QR', telegramUrl)
             .pipe(result => {return result})
     }

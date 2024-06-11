@@ -7,6 +7,7 @@ import { ForgotPasswordComponent } from './components/user/forgot-password.compo
 import { ResetPasswordComponent } from './components/user/reset-password.component';
 import { HostGameComponent } from './components/host/host-game.component';
 import { LobbyComponent } from './components/host/lobby.component';
+import { JoinGameComponent } from './components/host/join-game.component';
 
 const routes: Routes = [
   { path: '', component: SelectorComponent },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'reset/:resetId', component: ResetPasswordComponent },
   { path: 'reset', component: ForgotPasswordComponent },
+  { path: 'join', component: JoinGameComponent },
   { path: 'host', component: HostGameComponent },
   { path: 'lobby', component: LobbyComponent },
   { path: '**', redirectTo: '/', pathMatch: 'full' }

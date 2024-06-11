@@ -1,0 +1,17 @@
+.container {
+    margin-top: 30px;
+    align-items: center;
+    text-align: center;
+}
+
+mat-form-field,
+.form-button {
+    width: 50%;
+    max-width: 300px;
+    text-align: center;
+    justify-content: center;
+}
+
+input {
+    text-align: center; 
+}
