@@ -95,15 +95,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
             if (message.startsWith("/start")) {
                 sendMessage = handleStartCommand(chatId, message);
             } else {
-
-                // *** START GAME *** //
-                // don't check le -- ignore below. dump all to kafka queue. if no kafka with hostId present, dump the msg
-                // // ensure chatId have corresponding hostId + teamId
-                // //     IF HAVE, proceed to start game
-                // //     IF DON'T HAVE, send a msg saying not in game, click here to join game -->
-                // //     REDIRECT TO THE /start COMMAND CODE!
-
-
                 // replace message symbols with Strings --> these should correspond with emulator input
                 switch (message) {
                     case "⬆":
@@ -121,10 +112,12 @@ public class TelegramBotService extends TelegramLongPollingBot {
                     default:
                         break;
                 }
-
-                String responseText = user.getFirstName() + " wrote " + message;
+                String responseText = "Input received from " + user.getFirstName() + ": " + message;
                 ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
                 sendMessage = createMessage(chatId, responseText, replyKeyboardMarkup);
+
+                // TODO: if msg == input command --> send to kafka queue
+
             }
         } else if (update.hasCallbackQuery()) {
             // USER JUST SELECTED TEAM
@@ -176,9 +169,11 @@ public class TelegramBotService extends TelegramLongPollingBot {
         String firstname = msg.getChat().getFirstName();
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
 
+        if (redisRepo.playerExists(chatId))
+            redisRepo.deletePlayer(chatId);
         redisRepo.savePlayerInfo(chatId, hostId, teamId);
 
-        String responseText = "Welcome to " + teamId + ", " + firstname + "! Please hang on while others join the game...";
+        String responseText = "Welcome to " + teamId + ", " + firstname + "! Please check the game screen and wait for the game to start :)";
         ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
         return createMessage(chatId, responseText, replyKeyboardMarkup);
     }

@@ -64,16 +64,20 @@ public class RedisRepository {
         return hashOps.get(chatIdString, hostId);
     }
 
+    public boolean playerExists(Long chatId) {
+        String chatIdString = String.valueOf(chatId);
+        return redisTemplate.hasKey(chatIdString);
+    }
+
     // public List<String> getPlayersInHost(String hostId) {
     //     ListOperations<String,String> listOps = redisTemplate.opsForList();
     //     return listOps.range(hostId, 0, listOps.size(hostId));
     // }
 
-    public void deletePlayer(Long chatId, String hostId) {
+    public void deletePlayer(Long chatId) {
         String chatIdString = String.valueOf(chatId);
         redisTemplate.delete(chatIdString);
-        ListOperations<String,String> listOps = redisTemplate.opsForList();
-        listOps.remove(hostId, 1, chatIdString);
+        // intentionally not deleting player from host list -- no point. fine to have dupes.
     }
 
     public void deleteGame(String hostId) {
