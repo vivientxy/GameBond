@@ -13,12 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.bots.TelegramWebhookBot;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -27,9 +22,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import jakarta.annotation.PostConstruct;
 import tfip.project.repo.RedisRepository;
 
 @SuppressWarnings("deprecation")
@@ -101,21 +94,17 @@ public class TelegramBotService extends TelegramLongPollingBot {
             // get host ID and team ID
             if (message.startsWith("/start")) {
                 sendMessage = handleStartCommand(chatId, message);
-
             } else {
 
                 // *** START GAME *** //
-                // ensure chatId have corresponding hostId + teamId
-                    // IF HAVE, proceed to start game
-                    // IF DON'T HAVE, send a msg saying not in game, click here to join game -->
-                    // REDIRECT TO THE /start COMMAND CODE!
+                // don't check le -- ignore below. dump all to kafka queue. if no kafka with hostId present, dump the msg
+                // // ensure chatId have corresponding hostId + teamId
+                // //     IF HAVE, proceed to start game
+                // //     IF DON'T HAVE, send a msg saying not in game, click here to join game -->
+                // //     REDIRECT TO THE /start COMMAND CODE!
 
 
-                ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
-                sendMessage = createMessage(chatId, message);
-
-                // replace message symbols with Strings --> these should correspond with
-                // emulator input
+                // replace message symbols with Strings --> these should correspond with emulator input
                 switch (message) {
                     case "⬆":
                         message = "UP";
@@ -133,8 +122,10 @@ public class TelegramBotService extends TelegramLongPollingBot {
                         break;
                 }
 
+                String responseText = user.getFirstName() + " wrote " + message;
+                ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
+                sendMessage = createMessage(chatId, responseText, replyKeyboardMarkup);
             }
-
         } else if (update.hasCallbackQuery()) {
             // USER JUST SELECTED TEAM
             sendMessage = selectedTeam(update);
@@ -187,9 +178,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
         redisRepo.savePlayerInfo(chatId, hostId, teamId);
 
-        String responseText = "Welcome to " + teamId + ", " + firstname
-                + "! Please hang on while others join the game...";
-        return createMessage(chatId, responseText);
+        String responseText = "Welcome to " + teamId + ", " + firstname + "! Please hang on while others join the game...";
+        ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
+        return createMessage(chatId, responseText, replyKeyboardMarkup);
     }
 
     /* KEYBOARD MARKUPS */
@@ -278,13 +269,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
         return queryParams;
     }
 
-    private SendMessage createMessage(Long chatId, String text) {
-        SendMessage msg = new SendMessage();
-        msg.setChatId(chatId);
-        msg.setText(text);
-        return msg;
-    }
-
     private SendMessage createMessage(Long chatId, String text, ReplyKeyboard keyboardMarkup) {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
@@ -292,5 +276,23 @@ public class TelegramBotService extends TelegramLongPollingBot {
         msg.setReplyMarkup(keyboardMarkup);
         return msg;
     }
+
+
+    // // UNUSABLE CODE -- telegram limitations (30 msges per sec)
+    // public void broadcastMessage(String hostId, String text) {
+    //     List<String> playerList = redisRepo.getPlayersInHost(hostId);
+    //     for (String chatIdString : playerList) {
+    //         Long chatId = Long.valueOf(chatIdString);
+    //         SendMessage msg = new SendMessage();
+    //         msg.setChatId(chatId);
+    //         msg.setText(text);
+
+    //         try {
+    //             execute(msg);
+    //         } catch (Exception e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    // }
 
 }

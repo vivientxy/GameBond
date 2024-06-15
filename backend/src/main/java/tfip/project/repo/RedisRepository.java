@@ -64,6 +64,11 @@ public class RedisRepository {
         return hashOps.get(chatIdString, hostId);
     }
 
+    // public List<String> getPlayersInHost(String hostId) {
+    //     ListOperations<String,String> listOps = redisTemplate.opsForList();
+    //     return listOps.range(hostId, 0, listOps.size(hostId));
+    // }
+
     public void deletePlayer(Long chatId, String hostId) {
         String chatIdString = String.valueOf(chatId);
         redisTemplate.delete(chatIdString);
