@@ -34,9 +34,7 @@ export class UserService {
   }
 
   validateLoggedIn(): boolean {
-    if (localStorage.getItem("isLoggedIn") == "true")
-      return true;
-    return false;
+    return (localStorage.getItem("isLoggedIn") == "true") ? true : false;
   }
 
   logout() {

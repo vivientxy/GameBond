@@ -15,10 +15,10 @@ export class LobbyComponent implements OnInit {
   hostId!: string;
   gameId!: string;
   numOfTeams!: number;
-  teamA: string[] = ['bongo2008','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu']
-  teamB: string[] = ['powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','leslietangweejie','cinnamoroll','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1']
-  teamC: string[] = ['xmm12345','xXfrostmanXx','vivientxy','bendevon','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','ilovesingsong','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','username3','username3','ilovesingsong','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','username3','username3','username3','username3','username3','username3','username3']
-  teamD: string[] = ['username4','username4','username4','username4','username4','username4','username4','username4']
+  // teamA: string[] = ['bongo2008','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu']
+  // teamB: string[] = ['powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','leslietangweejie','cinnamoroll','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1']
+  // teamC: string[] = ['xmm12345','xXfrostmanXx','vivientxy','bendevon','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','ilovesingsong','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','username3','username3','ilovesingsong','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','username3','username3','username3','username3','username3','username3','username3']
+  // teamD: string[] = ['username4','username4','username4','username4','username4','username4','username4','username4']
   teams: Map<string,string[]> = new Map();
 
   ngOnInit(): void {
@@ -34,7 +34,6 @@ export class LobbyComponent implements OnInit {
     this.numOfTeams = Number(numOfTeams as string);
     this.gameId = gameId as string;
     this.qr = qr as string;
-    // this.qr = 'https://api.dub.co/qr?url=https://dub.sh/8hCblH0?qr=1';
 
     const alphabetList = ['A', 'B', 'C', 'D'];
     for (let index = 0; index < this.numOfTeams; index++) {
@@ -51,26 +50,11 @@ export class LobbyComponent implements OnInit {
   }
 
   startGame() {
-
+    localStorage.setItem("gameStarted", "true")
   }
 
   remove(team: string, idx: number) {
-    switch (team) {
-      case 'teamA':
-        this.teamA.splice(idx,1);
-        break;
-      case 'teamB':
-        this.teamB.splice(idx,1);
-        break;
-      case 'teamC':
-        this.teamC.splice(idx,1);
-        break;
-      case 'teamD':
-        this.teamD.splice(idx,1);
-        break;
-      default:
-        break;
-    }
+      this.teams.get(team)?.splice(idx,1);
   }
 
 }

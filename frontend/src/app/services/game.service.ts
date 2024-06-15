@@ -8,6 +8,10 @@ export class GameService {
 
     private http = inject(HttpClient);
 
+    isGameStarted(): boolean {
+        return (localStorage.getItem("gameStarted") == "true") ? true : false;
+    }
+
     checkLogin() {
 
     }

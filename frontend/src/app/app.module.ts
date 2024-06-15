@@ -23,6 +23,7 @@ import { UserService } from './services/user.service';
 import { GameService } from './services/game.service';
 import { LobbyComponent } from './components/host/lobby.component';
 import { JoinGameComponent } from './components/host/join-game.component';
+import { WebSocketService } from './services/websocket.service';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { JoinGameComponent } from './components/host/join-game.component';
   providers: [
     provideAnimationsAsync(),
     UserService,
-    GameService
+    GameService,
+    WebSocketService
   ],
   bootstrap: [AppComponent]
 })

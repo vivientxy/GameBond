@@ -23,7 +23,7 @@ COPY giphy/pom.xml .
 COPY giphy/.mvn .mvn
 COPY giphy/src src
 
-COPY --from=ng-builder /ngapp/dist/frontend/browser /src/main/resources/static
+COPY --from=ng-builder /ngapp/dist/frontend/browser/ /src/main/resources/static
 
 RUN mvn package -Dmaven.test.skip=true
 

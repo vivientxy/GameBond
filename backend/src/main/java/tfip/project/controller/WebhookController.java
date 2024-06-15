@@ -2,15 +2,16 @@ package tfip.project.controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import tfip.project.model.TelegramBot;
+
+import tfip.project.service.TelegramBotService;
 
 @RestController
 @RequestMapping("/webhook")
 public class WebhookController {
 
-    private final TelegramBot telegramBot;
+    private final TelegramBotService telegramBot;
 
-    public WebhookController(TelegramBot telegramBot) {
+    public WebhookController(TelegramBotService telegramBot) {
         this.telegramBot = telegramBot;
     }
 

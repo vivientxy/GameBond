@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { UserService } from './services/user.service';
+import { GameService } from './services/game.service';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +9,16 @@ import { UserService } from './services/user.service';
 })
 export class AppComponent implements OnInit {
 
-  private readonly svc = inject(UserService)
+  private readonly userSvc = inject(UserService)
+  private readonly gameSvc = inject(GameService)
   isLoggedIn = false;
   isGameStarted = false;
 
   ngOnInit(): void {
-    this.isLoggedIn = this.svc.validateLoggedIn();
+    // problem -- this page only init once. need change to redirect
+    this.isLoggedIn = this.userSvc.validateLoggedIn();
+    this.isGameStarted = this.gameSvc.isGameStarted();
+
   }
   
 }
