@@ -96,6 +96,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
             Long chatId = receivedMessage.getChatId();
             String message = receivedMessage.getText();
 
+            System.out.println(">>> msg: " + message);
+
             // get host ID and team ID
             if (message.startsWith("/start")) {
                 sendMessage = handleStartCommand(chatId, message);
@@ -110,6 +112,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
 
                 ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
+                sendMessage = createMessage(chatId, message);
 
                 // replace message symbols with Strings --> these should correspond with
                 // emulator input
@@ -182,7 +185,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
         String firstname = msg.getChat().getFirstName();
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
 
-        redisRepo.savePlayerTeam(hostId, chatId, teamId);
+        redisRepo.savePlayerInfo(chatId, hostId, teamId);
 
         String responseText = "Welcome to " + teamId + ", " + firstname
                 + "! Please hang on while others join the game...";
@@ -228,7 +231,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
         keyboardRowList.add(row3);
 
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
-        replyKeyboardMarkup.setIsPersistent(true);
         return replyKeyboardMarkup;
     }
 
