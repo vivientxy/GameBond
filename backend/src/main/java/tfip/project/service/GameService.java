@@ -1,7 +1,9 @@
 package tfip.project.service;
 
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,6 +66,51 @@ public class GameService {
             }
         }
         return qrCode;
+    }
+
+
+
+
+    public void createNewHost(String hostId, Integer numOfTeams) {
+        if (redisRepo.hostExists(hostId))
+            redisRepo.deleteHost(hostId);
+        List<String> teams = Arrays.asList("Team A", "Team B", "Team C", "Team D");
+        for (int i = 0; i < numOfTeams; i++)
+            redisRepo.savePlayerByHostId(hostId, teams.get(i), "");
+        System.out.println(">>> createNewHost completed... pls check");
+    }
+
+    public void savePlayerInfo(String username, String hostId, String teamId) {
+        if (redisRepo.playerExists(username))
+            redisRepo.deletePlayerByUsername(username);
+        redisRepo.savePlayerByUsername(username, hostId, teamId);
+
+        String oldTeamId = redisRepo.userTeamInHost(hostId, username);
+        if (oldTeamId != null)
+            redisRepo.deletePlayerInHost(hostId, oldTeamId, username);
+        redisRepo.savePlayerByHostId(hostId, teamId, username);
+    }
+
+    public Map<String,List<String>> getPlayersInTeams(String hostId) {
+        return redisRepo.getPlayersInTeams(hostId);
+    }
+    
+    public void deletePlayer(String username) {
+        if (redisRepo.playerExists(username)) {
+            redisRepo.deletePlayerByUsername(username);
+            String hostId = redisRepo.getPlayerHostId(username);
+            String oldTeamId = redisRepo.userTeamInHost(hostId, username);
+            if (oldTeamId != null)
+                redisRepo.deletePlayerInHost(hostId, oldTeamId, username);
+        }
+    }
+
+    public void deleteGame(String hostId) {
+        Map<String, List<String>> teamsMap = redisRepo.getPlayersInTeams(hostId);
+        for (List<String> playersList : teamsMap.values()) {
+            redisRepo.deletePlayerByUsername(playersList);
+        }                    
+        redisRepo.deleteHost(hostId);
     }
 
 }

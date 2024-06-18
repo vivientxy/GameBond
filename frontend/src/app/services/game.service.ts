@@ -22,15 +22,13 @@ export class GameService {
     }
 
     startLobby(numOfTeams: number, gameId: string) {
-
         // let hostId = this.generateHostId(numOfTeams);
         let hostId = 'e0133494';
 
         localStorage.setItem("hostId", hostId);
         localStorage.setItem("numOfTeams", ''+numOfTeams);
         localStorage.setItem("gameId", gameId);
-1
-    }
+1    }
 
     startHostedGame(numOfTeams: number, gameId: string) {
         // generate chatboxes x numOfTeams

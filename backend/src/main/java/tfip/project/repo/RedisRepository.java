@@ -1,11 +1,14 @@
 package tfip.project.repo;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
@@ -40,52 +43,124 @@ public class RedisRepository {
         return valueOps.get(telegramUrl);
     }
 
-    // CHAT DATA -- CHAT ID (Long) / HOST ID (8 char UUID) / TEAM ID
+    // CHAT DATA -- USERNAME / HOST ID (8 char UUID) / TEAM ID
 
-    public void savePlayerInfo(Long chatId, String hostId, String teamId) {
-        String chatIdString = String.valueOf(chatId);
-        savePlayerTeam(chatIdString, hostId, teamId);
-        savePlayersInHost(hostId, chatIdString);
-    }
-
-    private void savePlayerTeam(String chatIdString, String hostId, String teamId) {
+    public void savePlayerByUsername(String username, String hostId, String teamId) {
         HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
-        hashOps.put(chatIdString, hostId, teamId);
+        hashOps.put(username, hostId, teamId);
     }
 
-    private void savePlayersInHost(String hostId, String chatId) {
-        ListOperations<String,String> listOps = redisTemplate.opsForList();
-        listOps.leftPush(hostId, chatId);
-    }
-
-    public String getPlayerTeam(Long chatId, String hostId) {
-        String chatIdString = String.valueOf(chatId);
+    public String getPlayerHostId(String username) {
         HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
-        return hashOps.get(chatIdString, hostId);
+        if (hashOps.keys(username).size() == 1)
+            return hashOps.randomKey(username);
+        return null;
     }
 
-    public boolean playerExists(Long chatId) {
-        String chatIdString = String.valueOf(chatId);
-        return redisTemplate.hasKey(chatIdString);
+    public String getPlayerTeam(String username) {
+        HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
+        String hostId = getPlayerHostId(username);
+        if (hostId != null)
+            return hashOps.get(username, hostId);
+        return null;
     }
 
-    // public List<String> getPlayersInHost(String hostId) {
-    //     ListOperations<String,String> listOps = redisTemplate.opsForList();
-    //     return listOps.range(hostId, 0, listOps.size(hostId));
-    // }
-
-    public void deletePlayer(Long chatId) {
-        String chatIdString = String.valueOf(chatId);
-        redisTemplate.delete(chatIdString);
-        // intentionally not deleting player from host list -- no point. fine to have dupes.
+    public void deletePlayerByUsername(String username) {
+        redisTemplate.delete(username);
     }
 
-    public void deleteGame(String hostId) {
-        ListOperations<String,String> listOps = redisTemplate.opsForList();
-        List<String> playerList = listOps.rightPop(hostId, listOps.size(hostId));
-        redisTemplate.delete(playerList);
+    public void deletePlayerByUsername(List<String> usernames) {
+        redisTemplate.delete(usernames);
+    }
+
+    public boolean playerExists(String username) {
+        return redisTemplate.hasKey(username);
+    }
+
+    // CHAT DATA -- HOST ID (8 char UUID) / TEAM ID / USERNAMES IN CSV FORMAT
+
+    public void savePlayerByHostId(String hostId, String teamId, String username) {
+        HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
+        List<String> playersList = new LinkedList<>();
+        String playersInTeamString = hashOps.get(hostId, teamId);
+        if (playersInTeamString != null)
+            playersList = stringToList(playersInTeamString);
+        playersList.add(username);
+        hashOps.put(hostId, teamId, listToString(playersList));
+    }
+
+    public List<String> getPlayersInTeam(String hostId, String teamId) {
+        HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
+        return stringToList(hashOps.get(hostId, teamId));
+    }
+
+    public Map<String,List<String>> getPlayersInTeams(String hostId) {
+        HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
+        return hashOps.entries(hostId).entrySet().stream()
+                    .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> stringToList(entry.getValue())
+                    ));
+    }
+
+    public void deleteHost(String hostId) {
         redisTemplate.delete(hostId);
     }
 
+    public void deletePlayerInHost(String hostId, String oldTeamId, String username) {
+        HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
+        List<String> playersList = new LinkedList<>();
+        String playersInTeamString = hashOps.get(hostId, oldTeamId);
+        if (playersInTeamString != null) {
+            playersList = stringToList(playersInTeamString);
+            playersList.remove(username);
+        }
+        String newListString = listToString(playersList);
+        hashOps.put(hostId, oldTeamId, newListString);
+    }
+
+    public boolean hostExists(String hostId) {
+        return redisTemplate.hasKey(hostId);
+    }
+
+    public String userTeamInHost(String hostId, String username) {
+        HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
+        Map<String, String> teamsMap = hashOps.entries(hostId);
+        for (Entry<String, String> teamEntry : teamsMap.entrySet()) {
+            List<String> usersList = stringToList(teamEntry.getValue());
+            for (String user : usersList) {
+                if (user.equals(username))
+                    return teamEntry.getKey();
+            }
+        }
+        return null;
+    }
+
+    /* HELPER METHODS */
+
+    private String listToString(List<String> list) {
+        if (list.isEmpty())
+            return "";
+        StringBuilder strBuilder = new StringBuilder();
+        for (String string : list)
+            strBuilder.append(string).append(",");
+        strBuilder.deleteCharAt(strBuilder.length() - 1);
+        System.out.println(">>>> listToString: " + strBuilder.toString());
+        return strBuilder.toString();
+    }
+
+    private List<String> stringToList(String string) {
+        List<String> list = new LinkedList<>();
+        if ("".equals(string) || string == null)
+            return list;
+        if (!string.contains(",")) {
+            list.add(string);
+        } else {
+            String[] strArray = string.split(",");
+            for (String str : strArray)
+                list.add(str);
+        }
+        return list;
+    }
 
 }

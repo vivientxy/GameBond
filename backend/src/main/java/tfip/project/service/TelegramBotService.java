@@ -23,8 +23,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
-import tfip.project.repo.RedisRepository;
-
 @SuppressWarnings("deprecation")
 @Component
 public class TelegramBotService extends TelegramLongPollingBot {
@@ -42,7 +40,10 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private String projectUrl;
 
     @Autowired
-    private RedisRepository redisRepo;
+    private GameService gameSvc;
+
+    @Autowired
+    private WebSocketService webSocketSvc;
 
     // @PostConstruct
     // public void init() {
@@ -112,7 +113,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                     default:
                         break;
                 }
-                String responseText = "Input received from " + user.getFirstName() + ": " + message;
+                String responseText = "Input received from " + user.getUserName() + ": " + message;
                 ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
                 sendMessage = createMessage(chatId, responseText, replyKeyboardMarkup);
 
@@ -166,14 +167,15 @@ public class TelegramBotService extends TelegramLongPollingBot {
         var msg = (Message) update.getCallbackQuery().getMessage();
         String hostId = data.split(",")[0];
         String teamId = data.split(",")[1];
-        String firstname = msg.getChat().getFirstName();
+        String username = msg.getChat().getUserName();
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
 
-        if (redisRepo.playerExists(chatId))
-            redisRepo.deletePlayer(chatId);
-        redisRepo.savePlayerInfo(chatId, hostId, teamId);
+        gameSvc.savePlayerInfo(username, hostId, teamId);
 
-        String responseText = "Welcome to " + teamId + ", " + firstname + "! Please check the game screen and wait for the game to start :)";
+        // WEBSOCKET: send prompt to websocket
+        webSocketSvc.sendMessagePlayerAdded(hostId);
+
+        String responseText = "Welcome to " + teamId + ", " + username + "! Please check the game screen and wait for the game to start :)";
         ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
         return createMessage(chatId, responseText, replyKeyboardMarkup);
     }
@@ -271,23 +273,5 @@ public class TelegramBotService extends TelegramLongPollingBot {
         msg.setReplyMarkup(keyboardMarkup);
         return msg;
     }
-
-
-    // // UNUSABLE CODE -- telegram limitations (30 msges per sec)
-    // public void broadcastMessage(String hostId, String text) {
-    //     List<String> playerList = redisRepo.getPlayersInHost(hostId);
-    //     for (String chatIdString : playerList) {
-    //         Long chatId = Long.valueOf(chatIdString);
-    //         SendMessage msg = new SendMessage();
-    //         msg.setChatId(chatId);
-    //         msg.setText(text);
-
-    //         try {
-    //             execute(msg);
-    //         } catch (Exception e) {
-    //             e.printStackTrace();
-    //         }
-    //     }
-    // }
 
 }

@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { WebSocketService } from '../../services/websocket.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-lobby',
@@ -11,16 +13,16 @@ import { Observable } from 'rxjs';
 export class LobbyComponent implements OnInit {
 
   private readonly gameSvc = inject(GameService)
+  private readonly webSocketSvc = inject(WebSocketService)
+  private readonly http = inject(HttpClient)
   private readonly router = inject(Router)
   qr$!: Observable<any>;
   hostId!: string;
   gameId!: string;
   numOfTeams!: number;
-  // teamA: string[] = ['bongo2008','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu']
-  // teamB: string[] = ['powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','leslietangweejie','cinnamoroll','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1','ilovesingsong','lalaa-poo','muggermax','poopoopikachu','xmm12345','xXfrostmanXx','vivientxy','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bendevon','leslietangweejie','cinnamoroll','japantraveller1']
-  // teamC: string[] = ['xmm12345','xXfrostmanXx','vivientxy','bendevon','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','ilovesingsong','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','username3','username3','ilovesingsong','powerpuff-xoxo','987chinadoll','meowmi-xx0','kitkiat','bongo2008','xmm12345','xXfrostmanXx','vivientxy','bendevon','ilovesingsong','username3','username3','username3','username3','username3','username3','username3']
-  // teamD: string[] = ['username4','username4','username4','username4','username4','username4','username4','username4']
   teams: Map<string,string[]> = new Map();
+  // console.log('>>> teamA:', this.teams.get('A'))
+
 
   ngOnInit(): void {
     let hostId = localStorage.getItem("hostId");
@@ -43,8 +45,15 @@ export class LobbyComponent implements OnInit {
       this.teams.set(alphabetList[index], teamList)
     }
 
-    // console.log('>>> teams:', this.teams)
-    // console.log('>>> teamA:', this.teams.get('A'))
+    // WEBSOCKET - subscribe to one websocket topic ("hostid") here
+    this.webSocketSvc.subscribe(`/topic/${hostId}`, (): any => {
+      this.http.post("/api/get-team-members", hostId).subscribe(
+        resp => {
+          console.log('>>> WEBSOCKET RESP:', resp);
+          this.teams = resp as Map<string,string[]>;
+        }
+      )
+    })
   }
 
   startGame() {

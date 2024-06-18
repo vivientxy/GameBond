@@ -1,6 +1,9 @@
 package tfip.project.controller;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,11 +44,26 @@ public class GameController {
         try {
             String qrCode = gameSvc.getQRCode(telegramUrl);
             JsonObject jsonObject = Json.createObjectBuilder().add("qr", qrCode).build();
+
+            String payload = telegramUrl.substring(32);
+            String decodedPayload = new String(Base64.getDecoder().decode(payload), StandardCharsets.UTF_8);
+            String hostId = decodedPayload.substring(7);
+            Integer numOfTeams = Integer.parseInt(hostId.substring(7));
+            gameSvc.createNewHost(hostId, numOfTeams);
+
             return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
         } catch (UnirestException e) {
             e.printStackTrace();
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/get-team-members")
+    public ResponseEntity<String> getTeamMembers(@RequestBody String hostId) {
+        System.out.println(">>> /api/get-team-members called: " + hostId);
+        Map<String, List<String>> teamMap = gameSvc.getPlayersInTeams(hostId);
+        JsonObject json = mapToJsonObject(teamMap);
+        return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
     }
 
 
@@ -60,6 +78,17 @@ public class GameController {
             arrBuilder.add(jBuilder);
         }
         return arrBuilder.build();
+    }
+    
+    private JsonObject mapToJsonObject(Map<String,List<String>> teamMap) {
+        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+        for (Map.Entry<String, List<String>> entry : teamMap.entrySet()) {
+            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+            for (String value : entry.getValue())
+                arrayBuilder.add(value);
+            objectBuilder.add(entry.getKey(), arrayBuilder);
+        }
+        return objectBuilder.build();
     }
     
     

@@ -1,19 +1,30 @@
 import { Injectable } from '@angular/core';
-import { WebSocketSubject } from 'rxjs/webSocket';
+import SockJS from 'sockjs-client';
+import * as Stomp from 'stompjs';
 
 @Injectable()
 export class WebSocketService {
-  private socket$: WebSocketSubject<any>;
 
-  constructor() {
-    this.socket$ = new WebSocketSubject('ws://localhost:8080/ws');
+  socket = new SockJS('http:localhost:8080/sba-websocket');
+  stompClient = Stomp.over(this.socket);
+
+  subscribe(topic: string, callback: any): void {
+    const connected: boolean = this.stompClient.connected;
+    if (connected) {
+      this.subscribeToTopic(topic, callback);
+      return;
+    }
+
+    // if stomp client is not connected - connect and subscribe to topic
+    this.stompClient.connect({}, (): any => {
+      this.subscribeToTopic(topic, callback)
+    })
   }
 
-  sendMessage(msg: any) {
-    this.socket$.next(msg);
+  private subscribeToTopic(topic: string, callback: any): void {
+    this.stompClient.subscribe(topic, (): any => {
+      callback();
+    })
   }
 
-  getMessages() {
-    return this.socket$.asObservable();
-  }
 }

@@ -14,14 +14,14 @@ export class ChatboxComponent implements OnInit {
   constructor(private wsService: WebSocketService) {}
 
   ngOnInit() {
-    this.wsService.getMessages().subscribe((msg) => {
-      this.messages.push(msg);
-    });
+    // this.wsService.getMessages().subscribe((msg) => {
+    //   this.messages.push(msg);
+    // });
   }
 
   sendMessage() {
-    this.wsService.sendMessage(this.message);
-    this.message = '';
+    // this.wsService.sendMessage(this.message);
+    // this.message = '';
   }
 
 }

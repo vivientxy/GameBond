@@ -39,7 +39,7 @@ import { WebSocketService } from './services/websocket.service';
     ChatboxComponent,
     HostGameComponent,
     LobbyComponent,
-    JoinGameComponent
+    JoinGameComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,13 +47,14 @@ import { WebSocketService } from './services/websocket.service';
     NgbModule,
     NgMaterialsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    
   ],
   providers: [
     provideAnimationsAsync(),
     UserService,
     GameService,
-    WebSocketService
+    WebSocketService,
   ],
   bootstrap: [AppComponent]
 })
