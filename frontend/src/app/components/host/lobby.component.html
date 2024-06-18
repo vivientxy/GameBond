@@ -4,15 +4,15 @@
 
         <h5 class="team-label">Team A</h5>
         <div class="players-box">
-            <p class="player-label" *ngFor="let player of this.teams.get('A'), let idx = index">
-                <button style="all: unset;" (click)="remove('A', idx)">{{player}}</button>
+            <p class="player-label" *ngFor="let player of teams.get('Team A'), let idx = index">
+                <button style="all: unset;" (click)="remove('Team A', idx)">{{player}}</button>
             </p>
         </div>    
 
         <h5 class="team-label" *ngIf="numOfTeams > 2">Team C</h5>
         <div class="players-box"  *ngIf="numOfTeams > 2">
-            <p class="player-label" *ngFor="let player of this.teams.get('C'), let idx = index">
-                <button style="all: unset;" (click)="remove('C', idx)">{{player}}</button>
+            <p class="player-label" *ngFor="let player of teams.get('Team C'), let idx = index">
+                <button style="all: unset;" (click)="remove('Team C', idx)">{{player}}</button>
             </p>
         </div>
 
@@ -37,14 +37,14 @@
     <div class="teams" style="border-top-left-radius: 20px;">
         <h5 class="team-label" *ngIf="numOfTeams > 1">Team B</h5>
         <div class="players-box" *ngIf="numOfTeams > 1">
-            <p class="player-label" *ngFor="let player of this.teams.get('B'), let idx = index">
-                <button style="all: unset;" (click)="remove('B', idx)">{{player}}</button>
+            <p class="player-label" *ngFor="let player of teams.get('Team B'), let idx = index">
+                <button style="all: unset;" (click)="remove('Team B', idx)">{{player}}</button>
             </p>
         </div>
         <h5 class="team-label" *ngIf="numOfTeams > 3">Team D</h5>
         <div class="players-box" *ngIf="numOfTeams > 3">
-            <p class="player-label" *ngFor="let player of this.teams.get('D'), let idx = index">
-                <button style="all: unset;" (click)="remove('D', idx)">{{player}}</button>
+            <p class="player-label" *ngFor="let player of teams.get('Team D'), let idx = index">
+                <button style="all: unset;" (click)="remove('Team D', idx)">{{player}}</button>
             </p>
         </div>
     </div>

@@ -39,18 +39,20 @@ export class LobbyComponent implements OnInit {
 
     this.qr$ = this.gameSvc.generateQrCode(this.hostId);
 
-    const alphabetList = ['A', 'B', 'C', 'D'];
+    const teamsList = ['Team A', 'Team B', 'Team C', 'Team D'];
     for (let index = 0; index < this.numOfTeams; index++) {
       const teamList: string[] = []
-      this.teams.set(alphabetList[index], teamList)
+      this.teams.set(teamsList[index], teamList)
     }
 
     // WEBSOCKET - subscribe to one websocket topic ("hostid") here
     this.webSocketSvc.subscribe(`/topic/${hostId}`, (): any => {
       this.http.post("/api/get-team-members", hostId).subscribe(
         resp => {
-          console.log('>>> WEBSOCKET RESP:', resp);
-          this.teams = resp as Map<string,string[]>;
+          this.teams = this.convertToMap(resp as {[key: string]: string[]});
+          console.log('>>> this.teams:', this.teams);
+          console.log('>>> this.teams:', this.teams.get('Team A'));
+
         }
       )
     })
@@ -63,6 +65,15 @@ export class LobbyComponent implements OnInit {
 
   remove(team: string, idx: number) {
       this.teams.get(team)?.splice(idx,1);
+      // SEND TO SPRINGBOOT TOO
+  }
+
+  convertToMap(response: {[key: string]: string[]}): Map<string, string[]> {
+    const map = new Map<string, string[]>();
+    Object.keys(response).forEach(key => {
+      map.set(key, response[key]);
+    });
+    return map;
   }
 
 }
