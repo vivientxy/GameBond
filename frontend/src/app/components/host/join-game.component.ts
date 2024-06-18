@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GameService } from '../../services/game.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-join-game',
@@ -12,7 +11,6 @@ export class JoinGameComponent implements OnInit {
 
   private readonly fb = inject(FormBuilder)
   private readonly gameSvc = inject(GameService)
-  private readonly router = inject(Router)
   form!: FormGroup
 
   ngOnInit(): void {
@@ -24,15 +22,12 @@ export class JoinGameComponent implements OnInit {
   processJoinGame() {
     let hostId: string = this.form.controls['hostId'].value
     hostId = hostId.toLowerCase()
-    console.log('>>> host ID:', hostId)
 
     // generate URL and redirect
     const telegramLink = this.gameSvc.generateTelegramLink(hostId);
     console.log('>>> telegram link:', telegramLink)
 
     window.location.href = telegramLink;
-
-
   }
 
 }

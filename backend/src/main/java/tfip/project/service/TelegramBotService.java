@@ -142,8 +142,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
             String payload = messageText.substring(7);
             String decodedUrl = new String(Base64.getDecoder().decode(payload), StandardCharsets.UTF_8);
             Map<String, String> params = getQueryParams(decodedUrl);
-            Integer numOfTeams = Integer.parseInt(params.get("numOfTeams"));
             String hostId = params.get("hostId");
+            Integer numOfTeams = Integer.parseInt(hostId.substring(7));
 
             // hostId + numOfTeams obtained -- prompt team selection
             // TODO: IF numOfTeams == 1, DON'T NEED INLINE KEYBOARD. ASSIGN TEAM VALUE TO A

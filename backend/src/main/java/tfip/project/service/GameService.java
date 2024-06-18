@@ -46,6 +46,8 @@ public class GameService {
 
     public String getQRCode(String telegramUrl) throws UnirestException {
         String qrCode = redisRepo.getQRLink(telegramUrl);
+        System.out.println(">>> getting QR link...");
+
         if (qrCode == null) {
             System.out.println(">>> QR link not found in Redis... calling external API...");
             JsonObject body = Json.createObjectBuilder().add("url", telegramUrl).build();

@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-lobby',
@@ -9,9 +10,9 @@ import { Router } from '@angular/router';
 })
 export class LobbyComponent implements OnInit {
 
-  private readonly svc = inject(GameService)
+  private readonly gameSvc = inject(GameService)
   private readonly router = inject(Router)
-  qr!: string;
+  qr$!: Observable<any>;
   hostId!: string;
   gameId!: string;
   numOfTeams!: number;
@@ -25,15 +26,16 @@ export class LobbyComponent implements OnInit {
     let hostId = localStorage.getItem("hostId");
     let numOfTeams = localStorage.getItem("numOfTeams");
     let gameId = localStorage.getItem("gameId");
-    let qr = localStorage.getItem("qr");
-    if (!hostId || !numOfTeams || !gameId || !qr) {
-      this.router.navigate(['/'])
-      return;
-    }
     this.hostId = hostId as string;
     this.numOfTeams = Number(numOfTeams as string);
     this.gameId = gameId as string;
-    this.qr = qr as string;
+
+    if (!hostId || !numOfTeams || !gameId ) {
+      this.router.navigate(['/'])
+      return;
+    }
+
+    this.qr$ = this.gameSvc.generateQrCode(this.hostId);
 
     const alphabetList = ['A', 'B', 'C', 'D'];
     for (let index = 0; index < this.numOfTeams; index++) {
@@ -41,16 +43,13 @@ export class LobbyComponent implements OnInit {
       this.teams.set(alphabetList[index], teamList)
     }
 
-    console.log('>>> teams:', this.teams)
-    console.log('>>> teamA:', this.teams.get('A'))
-    console.log('>>> teamB:', this.teams.get('B'))
-    console.log('>>> teamC:', this.teams.get('C'))
-    console.log('>>> teamD:', this.teams.get('D'))
-
+    // console.log('>>> teams:', this.teams)
+    // console.log('>>> teamA:', this.teams.get('A'))
   }
 
   startGame() {
     localStorage.setItem("gameStarted", "true")
+    this.router.navigate(['/game'])
   }
 
   remove(team: string, idx: number) {

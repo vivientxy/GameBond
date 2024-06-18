@@ -27,15 +27,11 @@ export class HostGameComponent implements OnInit {
   }
 
   processHostGame() {
-    this.gameSvc.startLobby(this.hostForm.controls['numOfTeams'].value, this.hostForm.controls['game'].value);
-    let hostId = this.gameSvc.generateHostId();
-    localStorage.setItem("hostId", hostId);
-    localStorage.setItem("numOfTeams", this.hostForm.controls['numOfTeams'].value);
-    localStorage.setItem("gameId", this.hostForm.controls['game'].value);
-    // this.gameSvc.generateQrCode(hostId).subscribe(
-    //   QR => {localStorage.setItem("qr", QR)}
-    // )
+    let numOfTeams = this.hostForm.controls['numOfTeams'].value;
+    let gameId = this.hostForm.controls['game'].value;
 
+    this.gameSvc.startLobby(numOfTeams, gameId);
+    
     this.router.navigate(['/lobby'])
   }
 

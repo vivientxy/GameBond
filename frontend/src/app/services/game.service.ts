@@ -21,34 +21,32 @@ export class GameService {
             .pipe(result => {return result})
     }
 
-    startLobby(numOfTeam: number, gameId: string) {
-        // generate game host ID
-        // let hostId = this.generateHostId()
-        
-        // use game host ID to generate QR code --> http call to springboot --> external API call (to protect API key)
-        // QR code needs to launch telegram bot
-        // let qrCode;
-        // this.generateQrCode(hostId).subscribe(QR => {qrCode = QR})
+    startLobby(numOfTeams: number, gameId: string) {
 
+        // let hostId = this.generateHostId(numOfTeams);
+        let hostId = 'e0133494';
 
-
-        // route to lobby screen
+        localStorage.setItem("hostId", hostId);
+        localStorage.setItem("numOfTeams", ''+numOfTeams);
+        localStorage.setItem("gameId", gameId);
 1
-        console.log('>>> selected:', numOfTeam, gameId)
     }
 
-    startHostedGame(numOfTeam: number, gameId: string) {
-        // generate chatboxes x numOfTeam
+    startHostedGame(numOfTeams: number, gameId: string) {
+        // generate chatboxes x numOfTeams
 
-        // generate game emulator x numOfTeam
+        // generate game emulator x numOfTeams
 
         // retrieve game ROM using gameId --> http call to springboot --> mySQL/S3
 
         // load all game emulators with game ROM
     }
 
-    generateHostId(): string {
-        return uuidv4().replaceAll('-','').substring(24,32);
+    generateHostId(numOfTeams: number): string {
+        // inject numOfTeams as part of hostId so players can manually key in hostId to join game
+        let uuid : string = uuidv4().replaceAll('-','').substring(25,32);
+        uuid += numOfTeams
+        return uuid
     }
 
     generateTelegramLink(hostId: string): string {

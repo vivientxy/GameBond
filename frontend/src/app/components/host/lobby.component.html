@@ -25,7 +25,9 @@
             <h4>Room ID: {{hostId}}</h4>
         </div>
         <div class="qr-components">
-            <img [src]="qr" alt="qr-code">
+            <div *ngIf="qr$ | async as qr">
+                <img [src]="qr.qr" alt="qr-code">
+            </div>
         </div>
         <div class="qr-components">
             <button mat-flat-button color="primary" style="font-size: larger; width: 100%; height: auto;" (click)="startGame()">Start Game!</button>
