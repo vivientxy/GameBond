@@ -14,7 +14,7 @@ export class ChatboxComponent implements OnInit {
                         "bendevon: UP",
                         "leslietangweejie: UP",
                         "kitkiat: SELECT",
-                        "vivtxy: B",
+                        "User217857321: B",
                         "bendevon: START",
                         "leslietangweejie: L",
                         "kitkiat: A",

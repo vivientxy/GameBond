@@ -142,6 +142,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
         String username = msg.getChat().getUserName();
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
 
+        if (username == null || "".equals(username))
+            username = "User" + chatId;
+
         gameSvc.savePlayerInfo(username, hostId, teamId);
 
         // WEBSOCKET: send prompt to websocket
