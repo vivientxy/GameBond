@@ -48,8 +48,6 @@ public class GameService {
 
     public String getQRCode(String telegramUrl) throws UnirestException {
         String qrCode = redisRepo.getQRLink(telegramUrl);
-        System.out.println(">>> getting QR link...");
-
         if (qrCode == null) {
             System.out.println(">>> QR link not found in Redis... calling external API...");
             JsonObject body = Json.createObjectBuilder().add("url", telegramUrl).build();
@@ -77,7 +75,7 @@ public class GameService {
         List<String> teams = Arrays.asList("Team A", "Team B", "Team C", "Team D");
         for (int i = 0; i < numOfTeams; i++)
             redisRepo.savePlayerByHostId(hostId, teams.get(i), "");
-        System.out.println(">>> createNewHost completed... pls check");
+        System.out.println(">>> creating new host. existing players in teams will be wiped.");
     }
 
     public void savePlayerInfo(String username, String hostId, String teamId) {

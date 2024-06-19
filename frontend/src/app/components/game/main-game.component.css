@@ -54,17 +54,19 @@ body, html {
     max-width: 50%;
     min-width: 50%;
 
+    background-color: pink;
     border: 1px red solid;
 }
 
 .game-display {
     display: flex;
     width: 80%;
+    align-items: stretch;
+    padding: 5px;
 
     background-color: #282c34;
     color: white;
     justify-content: center;
-    align-items: center;
 }
 
 .chat-box {

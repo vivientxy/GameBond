@@ -43,12 +43,12 @@ INSERT INTO membership(username) VALUES ('betty');
 INSERT INTO membership(username) VALUES ('hoseh');
 INSERT INTO membership(username) VALUES ('kiat');
 INSERT INTO membership(username) VALUES ('ryo');
-INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('8a6e0804','Bomberman','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Bomberman.gb','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Bomberman.jpg');
-INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('4fc803sb','Motocross Maniacs','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Motocross%20Maniacs.gb','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Motocross%20Maniacs.jpg');
-INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('ib218tr3','Pokemon - Emerald Version','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Pokemon%20-%20Emerald%20Version.gba','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Pokemon%20-%20Emerald%20Version.jpg');
-INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('n5e3d12f','Pokemon Red','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Pokemon%20Red.gb','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Pokemon%20Red.jpg');
-INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('1vd6r80s','Super Mario Advance 4 - Super Mario Bros. 3','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Super%20Mario%20Advance%204%20-%20Super%20Mario%20Bros.%203.gba','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Super%20Mario%20Advance%204%20-%20Super%20Mario%20Bros.%203.jpg');
-INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('8er6d4as','Tetris','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Tetris.gb','https://gamebond.sgp1.cdn.digitaloceanspaces.com/Tetris.jpg');
+INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('8a6e0804','Bomberman','https://gamebond.sgp1.digitaloceanspaces.com/Bomberman.gb','https://gamebond.sgp1.digitaloceanspaces.com/Bomberman.jpg');
+INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('4fc803sb','Motocross Maniacs','https://gamebond.sgp1.digitaloceanspaces.com/Motocross%20Maniacs.gb','https://gamebond.sgp1.digitaloceanspaces.com/Motocross%20Maniacs.jpg');
+INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('ib218tr3','Pokemon - Emerald Version','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20-%20Emerald%20Version.gba','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20-%20Emerald%20Version.jpg');
+INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('n5e3d12f','Pokemon Red','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Red.gb','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Red.jpg');
+INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('1vd6r80s','Super Mario Advance 4 - Super Mario Bros. 3','https://gamebond.sgp1.digitaloceanspaces.com/Super%20Mario%20Advance%204%20-%20Super%20Mario%20Bros.%203.gba','https://gamebond.sgp1.digitaloceanspaces.com/Super%20Mario%20Advance%204%20-%20Super%20Mario%20Bros.%203.jpg');
+INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('8er6d4as','Tetris','https://gamebond.sgp1.digitaloceanspaces.com/Tetris.gb','https://gamebond.sgp1.digitaloceanspaces.com/Tetris.jpg');
 
 GRANT ALL PRIVILEGES ON gamebond.* TO 'betty'@'%';
 FLUSH PRIVILEGES;

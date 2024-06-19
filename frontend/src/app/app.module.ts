@@ -14,7 +14,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ForgotPasswordComponent } from './components/user/forgot-password.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ResetPasswordComponent } from './components/user/reset-password.component';
-import { GameScreenComponent } from './components/game/game-screen.component';
 import { MainComponent } from './components/main/main.component';
 import { ChatboxComponent } from './components/game/chatbox.component';
 import { MainGameComponent } from './components/game/main-game.component';
@@ -24,6 +23,10 @@ import { GameService } from './services/game.service';
 import { LobbyComponent } from './components/host/lobby.component';
 import { JoinGameComponent } from './components/host/join-game.component';
 import { WebSocketService } from './services/websocket.service';
+import { GameScreenComponent } from './components/game/game-screens/game-screen.component';
+import { GameScreenBComponent } from './components/game/game-screens/game-screen-b.component';
+import { GameScreenCComponent } from './components/game/game-screens/game-screen-c.component';
+import { GameScreenDComponent } from './components/game/game-screens/game-screen-d.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,9 @@ import { WebSocketService } from './services/websocket.service';
     ForgotPasswordComponent,
     ResetPasswordComponent,
     GameScreenComponent,
+    GameScreenBComponent,
+    GameScreenCComponent,
+    GameScreenDComponent,
     MainGameComponent,
     MainComponent,
     ChatboxComponent,

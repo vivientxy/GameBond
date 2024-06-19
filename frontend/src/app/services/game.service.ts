@@ -59,4 +59,9 @@ export class GameService {
             .pipe(result => {return result})
     }
 
+    getGameROM(gameId: string) {
+        return this.http.post<any>('/api/get-rom', gameId)
+            .pipe(result => {return result})
+    }
+
 }

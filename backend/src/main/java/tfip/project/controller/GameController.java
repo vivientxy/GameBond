@@ -39,18 +39,20 @@ public class GameController {
         return new ResponseEntity<String>(gameArray.toString(), HttpStatus.OK);
     }
 
+    @PostMapping("/get-rom")
+    public ResponseEntity<String> getRom(@RequestBody String gameId) {
+        GameDetails game = gameSvc.getGameDetailsByGameId(gameId);
+        String romUrl = game.getRomFile();
+        JsonObject json = Json.createObjectBuilder().add("romUrl", romUrl).build();
+        return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
+    }
+
     @PostMapping("/get-QR")
     public ResponseEntity<String> getQRCode(@RequestBody String telegramUrl) {
         try {
             String qrCode = gameSvc.getQRCode(telegramUrl);
             JsonObject jsonObject = Json.createObjectBuilder().add("qr", qrCode).build();
-
-            String payload = telegramUrl.substring(32);
-            String decodedPayload = new String(Base64.getDecoder().decode(payload), StandardCharsets.UTF_8);
-            String hostId = decodedPayload.substring(7);
-            Integer numOfTeams = Integer.parseInt(hostId.substring(7));
-            gameSvc.createNewHost(hostId, numOfTeams);
-
+            createNewHostInRedis(telegramUrl);
             return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -65,7 +67,17 @@ public class GameController {
         JsonObject json = mapToJsonObject(teamMap);
         return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
     }
+    
 
+    /* HELPER METHODS */
+
+    private void createNewHostInRedis(String telegramUrl) {
+        String payload = telegramUrl.substring(32);
+        String decodedPayload = new String(Base64.getDecoder().decode(payload), StandardCharsets.UTF_8);
+        String hostId = decodedPayload.substring(7);
+        Integer numOfTeams = Integer.parseInt(hostId.substring(7));
+        gameSvc.createNewHost(hostId, numOfTeams);
+    }
 
     private JsonArray listToJsonArray(List<GameDetails> gameList) {
         JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
