@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-main',
@@ -9,6 +10,10 @@ import { Router } from '@angular/router';
 })
 export class MainComponent {
   title = '👾 GameBond 🎮';
+
+  constructor(private titleService:Title) {
+    this.titleService.setTitle("GameBond");
+  }
 
   private readonly userSvc = inject(UserService)
   private readonly router = inject(Router)

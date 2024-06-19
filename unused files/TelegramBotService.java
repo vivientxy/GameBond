@@ -1,5 +1,3 @@
-package tfip.project.service;
-
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +31,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Value("${telegram.token}")
     private String token;
 
+    // @Value("${telegram.webhook-url}")
+    // private String webhookUrl;
+
     @Value("${project.url}")
     private String projectUrl;
 
@@ -41,6 +42,31 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Autowired
     private WebSocketService webSocketSvc;
+
+    // @PostConstruct
+    // public void init() {
+    // SetWebhook setWebhook = SetWebhook.builder()
+    // .url(webhookUrl)
+    // .build();
+    // try {
+    // this.execute(setWebhook);
+    // } catch (TelegramApiException e) {
+    // e.printStackTrace();
+    // }
+    // }
+
+    // @Override
+    // public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+    // // TODO Auto-generated method stub
+    // throw new UnsupportedOperationException("Unimplemented method
+    // 'onWebhookUpdateReceived'");
+    // }
+
+    // @Override
+    // public String getBotPath() {
+    // // TODO Auto-generated method stub
+    // throw new UnsupportedOperationException("Unimplemented method 'getBotPath'");
+    // }
 
     @Override
     public String getBotUsername() {

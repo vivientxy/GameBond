@@ -65,10 +65,10 @@ export class LobbyComponent implements OnInit {
 
   remove(team: string, idx: number) {
       this.teams.get(team)?.splice(idx,1);
-      // SEND TO SPRINGBOOT TOO
+      // TODO: SEND TO SPRINGBOOT TOO
   }
 
-  convertToMap(response: {[key: string]: string[]}): Map<string, string[]> {
+  private convertToMap(response: {[key: string]: string[]}): Map<string, string[]> {
     const map = new Map<string, string[]>();
     Object.keys(response).forEach(key => {
       map.set(key, response[key]);
