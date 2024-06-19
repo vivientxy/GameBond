@@ -32,7 +32,6 @@ export class GameScreenCComponent {
           .then(file => file.arrayBuffer())
           .then(arrBuffer => {
             this.gameboy.loadGame(arrBuffer);
-            // this.gameboy.apu.enableSound();
             this.gameboy.onFrameFinished((imageData: ImageData) => {
               context.putImageData(imageData, 0, 0);
             });

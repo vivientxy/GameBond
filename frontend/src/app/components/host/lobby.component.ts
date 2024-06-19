@@ -21,8 +21,6 @@ export class LobbyComponent implements OnInit {
   gameId!: string;
   numOfTeams!: number;
   teams: Map<string,string[]> = new Map();
-  // console.log('>>> teamA:', this.teams.get('A'))
-
 
   ngOnInit(): void {
     let hostId = localStorage.getItem("hostId");
@@ -51,8 +49,6 @@ export class LobbyComponent implements OnInit {
         resp => {
           this.teams = this.convertToMap(resp as {[key: string]: string[]});
           console.log('>>> this.teams:', this.teams);
-          console.log('>>> this.teams:', this.teams.get('Team A'));
-
         }
       )
     })
@@ -65,7 +61,7 @@ export class LobbyComponent implements OnInit {
 
   remove(team: string, idx: number) {
       this.teams.get(team)?.splice(idx,1);
-      // TODO: SEND TO SPRINGBOOT TOO
+      // TODO: SEND TO SPRINGBOOT TOO -- to send msg on telebot
   }
 
   private convertToMap(response: {[key: string]: string[]}): Map<string, string[]> {

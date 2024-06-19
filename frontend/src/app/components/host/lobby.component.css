@@ -57,6 +57,7 @@ img {
     border-radius: 20px;
     background-color: #dde5e3;
     color: #6a5d96;
+    font-size: x-large;
 }
 
 .players-box {
@@ -74,6 +75,8 @@ img {
     box-shadow: var(--mdc-fab-container-elevation-shadow);
     background-color: #8979c3;
     color: #dde5e3;
+    font-size: 120%;
+    padding: 5px;
 }
 
 .player-label:hover {
