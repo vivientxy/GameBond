@@ -33,7 +33,7 @@
     width: 100vw;
     align-items: center; /* vertically align child elements */
     justify-content: center; /* horizontally align child elements */
-    background-color: aqua;
+    background-color: #282c34;
 }
 
 /* layer 3 */
@@ -44,14 +44,16 @@
     height: 50%;
     min-width: 50%;
     max-width: 50%;
-    /* border: 1px red solid; */
+    /* border: 1px grey solid; */
 }
 
 .game-display {
     display: flex;
-    width: 80%;
+    flex: 1;
+    /* width: 80%; */
     align-items: stretch;
     padding: 7px;
+    padding-right: 0;
 
     background-color: #282c34;
     color: white;
@@ -60,9 +62,21 @@
 
 .chat-box {
     display: flex;
-    width: 20%;
+    flex: 1;
+    margin: 7px;
+    margin-left: 0;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
 
-    background-color: #f0f0f0;
+
+    /* width: 20%; */
+
+    background-color: rgba(136, 108, 228, 0.3);
+
+    /* background-color: #282c34; */
+    color: #f0f0f0;
+    /* background-color: #f0f0f0; */
+    font-size: 150%;
     justify-content: center;
     align-items: center;
 }
