@@ -61,6 +61,10 @@ public class TelegramBotService extends TelegramLongPollingBot {
             var user = receivedMessage.getFrom();
             Long chatId = receivedMessage.getChatId();
             String message = receivedMessage.getText();
+            String username = user.getUserName();
+
+            if (username == null || "".equals(username))
+                username = "User" + chatId;
 
             System.out.println(">>> msg: " + message);
 
