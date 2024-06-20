@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -91,6 +92,14 @@ public class GameService {
 
     public Map<String,List<String>> getPlayersInTeams(String hostId) {
         return redisRepo.getPlayersInTeams(hostId);
+    }
+
+    public String getPlayerHostId(String username) {
+        return redisRepo.getPlayerHostId(username);
+    }
+
+    public String getPlayerTeam(String username) {
+        return redisRepo.getPlayerTeam(username);
     }
     
     public void deletePlayer(String username) {

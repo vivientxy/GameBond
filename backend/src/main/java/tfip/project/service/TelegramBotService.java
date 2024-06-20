@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -41,6 +42,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Autowired
     private WebSocketService webSocketSvc;
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public String getBotUsername() {
@@ -93,8 +97,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
                 sendMessage = createMessage(chatId, responseText, replyKeyboardMarkup);
 
-                // TODO: if msg == input command --> send to kafka queue
-
+                sendToKafka(username, message);
             }
         } else if (update.hasCallbackQuery()) {
             // USER JUST SELECTED TEAM
@@ -251,6 +254,14 @@ public class TelegramBotService extends TelegramLongPollingBot {
         msg.setText(text);
         msg.setReplyMarkup(keyboardMarkup);
         return msg;
+    }
+
+    private void sendToKafka(String username, String message) {
+        String hostId = gameSvc.getPlayerHostId(username);
+        String teamId = gameSvc.getPlayerTeam(username);
+        teamId = teamId.replace(" ", "");
+        String kafkaTopic = hostId + teamId;
+        kafkaTemplate.send(kafkaTopic, message);
     }
 
 }
