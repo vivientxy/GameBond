@@ -18,23 +18,6 @@ import org.springframework.kafka.core.ProducerFactory;
 @Configuration
 public class KafkaConfig {
 
-    private static final String KAFKA_TOPIC = "topic1";
-
-    // @Bean
-    // public NewTopic topic() {
-    // return TopicBuilder.name(KAFKA_TOPIC)
-    // .partitions(10)
-    // .replicas(1)
-    // .build();
-    // }
-
-    // @Bean
-    // public ApplicationRunner runner(KafkaTemplate<String, String> template) {
-    // return args -> {
-    // template.send(KAFKA_TOPIC, "test");
-    // };
-    // }
-
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
