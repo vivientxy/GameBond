@@ -65,6 +65,16 @@ public class RedisRepository {
         return null;
     }
 
+    public String getPlayerHostAndTeam(String username) {
+        HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
+        String hostId = getPlayerHostId(username);
+        if (hostId != null) {
+            String teamId = hashOps.get(username, hostId);
+            return hostId + "/" + teamId.replace(" ", "");
+        }
+        return null;
+    }
+
     public void deletePlayerByUsername(String username) {
         redisTemplate.delete(username);
     }
@@ -145,7 +155,6 @@ public class RedisRepository {
         for (String string : list)
             strBuilder.append(string).append(",");
         strBuilder.deleteCharAt(strBuilder.length() - 1);
-        System.out.println(">>>> listToString: " + strBuilder.toString());
         return strBuilder.toString();
     }
 

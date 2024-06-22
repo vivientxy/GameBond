@@ -1,14 +1,16 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { WebSocketService } from '../../services/websocket.service';
 
 @Component({
   selector: 'app-main-game',
   templateUrl: './main-game.component.html',
   styleUrl: './main-game.component.css'
 })
-export class MainGameComponent implements OnInit {
+export class MainGameComponent implements OnInit, OnDestroy {
 
   private readonly router = inject(Router)
+  private readonly webSocketSvc = inject(WebSocketService)
   hostId!: string;
   gameId!: string;
   numOfTeams!: number;
@@ -26,7 +28,10 @@ export class MainGameComponent implements OnInit {
       return;
     }
 
+  }
 
+  ngOnDestroy(): void {
+    this.webSocketSvc.disconnect();
   }
 
   back() {

@@ -8,23 +8,31 @@ export class WebSocketService {
   socket = new SockJS('http:localhost:8080/sba-websocket');
   stompClient = Stomp.over(this.socket);
 
-  subscribe(topic: string, callback: any): void {
+  subscribe(topic: string, callback: (message: any) => void): void {
     const connected: boolean = this.stompClient.connected;
     if (connected) {
       this.subscribeToTopic(topic, callback);
       return;
     }
-
+  
     // if stomp client is not connected - connect and subscribe to topic
-    this.stompClient.connect({}, (): any => {
-      this.subscribeToTopic(topic, callback)
-    })
+    this.stompClient.connect({}, () => {
+      this.subscribeToTopic(topic, callback);
+    });
+  }  
+
+  private subscribeToTopic(topic: string, callback: (message: any) => void): void {
+    this.stompClient.subscribe(topic, (message: { body: string; }) => {
+      callback(message.body);
+    });
   }
 
-  private subscribeToTopic(topic: string, callback: any): void {
-    this.stompClient.subscribe(topic, (): any => {
-      callback();
-    })
+  disconnect() {
+    if (this.stompClient.connected) {
+      this.stompClient.disconnect(() => {
+        console.log("Websocket is disconnected");
+      });
+    }
   }
 
 }

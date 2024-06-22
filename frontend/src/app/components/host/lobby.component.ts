@@ -45,6 +45,7 @@ export class LobbyComponent implements OnInit {
 
     // WEBSOCKET - subscribe to one websocket topic ("hostid") here
     this.webSocketSvc.subscribe(`/topic/${hostId}`, (): any => {
+      console.log('>>> subscribing to websocket:', hostId);
       this.http.post("/api/get-team-members", hostId).subscribe(
         resp => {
           this.teams = this.convertToMap(resp as {[key: string]: string[]});

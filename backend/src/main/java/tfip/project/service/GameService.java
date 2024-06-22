@@ -101,6 +101,10 @@ public class GameService {
         return redisRepo.getPlayerTeam(username);
     }
     
+    public String getPlayerHostAndTeam(String username) {
+        return redisRepo.getPlayerHostAndTeam(username);
+    }
+
     public void deletePlayer(String username) {
         if (redisRepo.playerExists(username)) {
             redisRepo.deletePlayerByUsername(username);

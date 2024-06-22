@@ -8,13 +8,24 @@ export class GameService {
 
     private http = inject(HttpClient);
 
-    isGameStarted(): boolean {
-        return (localStorage.getItem("gameStarted") == "true") ? true : false;
-    }
+    // isGameStarted(): boolean {
+    //     return (localStorage.getItem("gameStarted") == "true") ? true : false;
+    // }
 
-    checkLogin() {
+    
+    // startHostedGame(numOfTeams: number, gameId: string) {
+    //     // generate chatboxes x numOfTeams
 
-    }
+    //     // generate game emulator x numOfTeams
+
+    //     // retrieve game ROM using gameId --> http call to springboot --> mySQL/S3
+
+    //     // load all game emulators with game ROM
+    // }
+
+    // checkLogin() {
+
+    // }
 
     getAllGameDetails(): Observable<any> {
         return this.http.get<any>('/api/get-all-games')
@@ -29,16 +40,6 @@ export class GameService {
         localStorage.setItem("numOfTeams", ''+numOfTeams);
         localStorage.setItem("gameId", gameId);
 1    }
-
-    startHostedGame(numOfTeams: number, gameId: string) {
-        // generate chatboxes x numOfTeams
-
-        // generate game emulator x numOfTeams
-
-        // retrieve game ROM using gameId --> http call to springboot --> mySQL/S3
-
-        // load all game emulators with game ROM
-    }
 
     generateHostId(numOfTeams: number): string {
         // inject numOfTeams as part of hostId so players can manually key in hostId to join game
@@ -63,5 +64,8 @@ export class GameService {
         return this.http.post<any>('/api/get-rom', gameId)
             .pipe(result => {return result})
     }
+
+    /* GAME STARTED */
+    
 
 }

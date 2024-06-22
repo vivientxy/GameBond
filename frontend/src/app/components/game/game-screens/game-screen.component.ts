@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { Gameboy } from 'gameboy-emulator';
 import { GameService } from '../../../services/game.service';
-import { firstValueFrom } from 'rxjs';
-import { Router } from '@angular/router';
+import { firstValueFrom, tap, timer } from 'rxjs';
+import { WebSocketService } from '../../../services/websocket.service';
 
 @Component({
   selector: 'app-game-screen',
@@ -11,44 +11,88 @@ import { Router } from '@angular/router';
 })
 export class GameScreenComponent implements OnInit {
 
-  private readonly router = inject(Router);
-  private readonly svc = inject(GameService);
+  private readonly gameSvc = inject(GameService);
+  private readonly webSocketSvc = inject(WebSocketService);
   gameboy = new Gameboy();
-  gameId: string | null = localStorage.getItem("gameId");
-  s3Url: string = '';
+  gameId!: string;
+  hostId!: string;
   
   @ViewChild('gameCanvasA', { static: true }) gameCanvasA!: ElementRef<HTMLCanvasElement>;
 
   ngOnInit(): void {
-    if (!this.gameId) {
-      alert("Error: no Game selected! Redirecting...");
-      this.router.navigate(['/host']);
-      return
+    const gameId = localStorage.getItem("gameId");
+    const hostId = localStorage.getItem("hostId");
+    if (gameId && hostId) {
+      this.gameId = gameId;
+      this.hostId = hostId;
     }
 
-    const canvas = this.gameCanvasA.nativeElement;
-    if (canvas) {
-      const context = canvas.getContext('2d');
-      if (context) {
-        // grab ROM from backend S3 storage
-        firstValueFrom(this.svc.getGameROM(this.gameId))
-          .then(resp => fetch(resp.romUrl))
-          .then(file => file.arrayBuffer())
-          .then(arrBuffer => {
-            this.gameboy.loadGame(arrBuffer);
-            this.gameboy.onFrameFinished((imageData: ImageData) => {
-              context.putImageData(imageData, 0, 0);
-            });
-            this.gameboy.run();
-          })
-          .catch(err => {
-            console.error("Error loading ROM", err);
+    // set up and run gameboy:
+    const context = this.gameCanvasA.nativeElement.getContext('2d');
+    if (context) {
+      firstValueFrom(this.gameSvc.getGameROM(this.gameId))
+        .then(resp => fetch(resp.romUrl))
+        .then(file => file.arrayBuffer())
+        .then(arrBuffer => {
+          this.gameboy.loadGame(arrBuffer);
+          this.gameboy.onFrameFinished((imageData: ImageData) => {
+            context.putImageData(imageData, 0, 0);
           });
-      } else {
-        console.error("2D context is not available on the canvas.");
-      }
-    } else {
-      console.error("Canvas element is not found.");
+          this.gameboy.run();
+        })
+        .catch(err => {
+          console.error("Error loading ROM", err);
+        });
     }
+
+    // subscribe to websocket topic and inputs:
+    this.webSocketSvc.subscribe(`/topic/${hostId}/TeamA`, (message: any) => {
+      this.processInput(message);
+    })
+  }
+
+  processInput(input: string) {
+    this.deactivateInputs();
+    switch (input) {
+      case 'A':
+        this.gameboy.input.isPressingA = true;
+        break;
+      case 'B':
+        this.gameboy.input.isPressingB = true;
+        break;
+      case 'LEFT':
+        this.gameboy.input.isPressingLeft = true;
+        break;
+      case 'RIGHT':
+        this.gameboy.input.isPressingRight= true;
+        break;
+      case 'DOWN':
+        this.gameboy.input.isPressingDown = true;
+        break;
+      case 'UP':
+        this.gameboy.input.isPressingUp = true;
+        break;
+      case 'START':
+        this.gameboy.input.isPressingStart = true;
+        break;
+      case 'SELECT':
+        this.gameboy.input.isPressingSelect = true;
+        break;
+      default:
+        break;
+    }
+
+    timer(100).pipe(tap(() => this.deactivateInputs())).subscribe();
+  }
+
+  deactivateInputs() {
+    this.gameboy.input.isPressingA = false;
+    this.gameboy.input.isPressingB = false;
+    this.gameboy.input.isPressingLeft = false;
+    this.gameboy.input.isPressingRight = false;
+    this.gameboy.input.isPressingDown = false;
+    this.gameboy.input.isPressingUp = false;
+    this.gameboy.input.isPressingStart = false;
+    this.gameboy.input.isPressingSelect = false;
   }
 }

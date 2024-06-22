@@ -70,8 +70,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
             if (username == null || "".equals(username))
                 username = "User" + chatId;
 
-            System.out.println(">>> msg: " + message);
-
             // get host ID and team ID
             if (message.startsWith("/start")) {
                 sendMessage = handleStartCommand(chatId, message);
@@ -93,11 +91,16 @@ public class TelegramBotService extends TelegramLongPollingBot {
                     default:
                         break;
                 }
-                String responseText = "Input received from " + user.getUserName() + ": " + message;
-                ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
-                sendMessage = createMessage(chatId, responseText, replyKeyboardMarkup);
+                // String responseText = "Input received from " + user.getUserName() + ": " + message;
+                // ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
+                // sendMessage = createMessage(chatId, responseText, replyKeyboardMarkup);
 
-                sendToKafka(username, message);
+                if (isGameInput(message)) {
+                    // sendToKafka(username, message);
+                    webSocketSvc.sendMessage(gameSvc.getPlayerHostAndTeam(username), message);
+                    return;
+                }
+
             }
         } else if (update.hasCallbackQuery()) {
             // USER JUST SELECTED TEAM
@@ -141,7 +144,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
     }
     
     private SendMessage selectedTeam(Update update) {
-        System.out.println("========== USER JUST SELECTED TEAM =============");
         String data = update.getCallbackQuery().getData();
         var msg = (Message) update.getCallbackQuery().getMessage();
         String hostId = data.split(",")[0];
@@ -162,6 +164,22 @@ public class TelegramBotService extends TelegramLongPollingBot {
         return createMessage(chatId, responseText, replyKeyboardMarkup);
     }
 
+    public boolean isGameInput(String message) {
+        switch (message) {
+            case "A":
+            case "B":
+            case "START":
+            case "SELECT":
+            case "UP":
+            case "DOWN":
+            case "LEFT":
+            case "RIGHT":
+                return true;
+            default:
+                return false;
+        }
+    }
+
     /* KEYBOARD MARKUPS */
 
     private ReplyKeyboardMarkup generateControllerKeyboardMarkup() {
@@ -178,23 +196,19 @@ public class TelegramBotService extends TelegramLongPollingBot {
         KeyboardButton buttonDown = new KeyboardButton("⬇");
         KeyboardButton buttonA = new KeyboardButton("A");
         KeyboardButton buttonB = new KeyboardButton("B");
-        KeyboardButton buttonL = new KeyboardButton("L");
-        KeyboardButton buttonR = new KeyboardButton("R");
         KeyboardButton buttonStart = new KeyboardButton("START");
         KeyboardButton buttonSelect = new KeyboardButton("SELECT");
 
-        row1.add(buttonL);
         row1.add(buttonUp);
-        row1.add(buttonR);
+        row1.add(buttonSelect);
 
-        row2.add(buttonA);
         row2.add(buttonLeft);
         row2.add(buttonRight);
+        row2.add(buttonA);
         row2.add(buttonB);
 
-        row3.add(buttonStart);
         row3.add(buttonDown);
-        row3.add(buttonSelect);
+        row3.add(buttonStart);
 
         keyboardRowList.add(row1);
         keyboardRowList.add(row2);
@@ -257,11 +271,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
     }
 
     private void sendToKafka(String username, String message) {
-        String hostId = gameSvc.getPlayerHostId(username);
-        String teamId = gameSvc.getPlayerTeam(username);
-        teamId = teamId.replace(" ", "");
-        String kafkaTopic = hostId + teamId;
-        kafkaTemplate.send(kafkaTopic, message);
+        String topic = gameSvc.getPlayerHostAndTeam(username);
+        topic = topic.replace("/", "_"); // a1b2c3d4_TeamA
+        kafkaTemplate.send(topic, message);
     }
 
 }
