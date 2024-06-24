@@ -16,8 +16,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     // problem -- this page only init once. need change to redirect
-    this.isLoggedIn = this.userSvc.validateLoggedIn();
-    this.isGameStarted = this.gameSvc.isGameStarted();
+    // this.isLoggedIn = this.userSvc.validateLoggedIn();
+    // this.isGameStarted = this.gameSvc.isGameStarted();
 
   }
   

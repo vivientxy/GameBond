@@ -56,7 +56,7 @@ export class GameService {
 
     generateQrCode(hostId: string) {
         let telegramUrl = this.generateTelegramLink(hostId);
-        return this.http.post<any>('/api/get-QR', telegramUrl)
+        return this.http.post('/api/get-QR', telegramUrl)
             .pipe(result => {return result})
     }
 
@@ -67,5 +67,24 @@ export class GameService {
 
     /* GAME STARTED */
     
-
+    sendToChatBox(team: string, message: string) {
+        console.log('>>>> team: ', team)
+        console.log('>>>> message: ', message)
+        switch (team) {
+            case 'A':
+                
+                break;
+            case 'B':
+                
+                break;
+            case 'C':
+                
+                break;
+            case 'D':
+                
+                break;
+            default:
+                break;
+        }
+    }
 }

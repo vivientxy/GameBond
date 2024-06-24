@@ -1,4 +1,4 @@
-export interface GameDetails {
+export interface GameRom {
     gameId: string
     gameTitle: string
     romFile: string

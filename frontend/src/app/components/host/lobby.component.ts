@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { WebSocketService } from '../../services/websocket.service';
 import { HttpClient } from '@angular/common/http';
+import { GameStore } from '../../stores/game.store';
+import { HostGame } from '../../models/hostgame.model';
 
 @Component({
   selector: 'app-lobby',
@@ -13,40 +15,33 @@ import { HttpClient } from '@angular/common/http';
 export class LobbyComponent implements OnInit {
 
   private readonly gameSvc = inject(GameService)
+  private readonly gameStore = inject(GameStore)
   private readonly webSocketSvc = inject(WebSocketService)
   private readonly http = inject(HttpClient)
   private readonly router = inject(Router)
   qr$!: Observable<any>;
-  hostId!: string;
-  gameId!: string;
-  numOfTeams!: number;
+  game!: HostGame;
   teams: Map<string,string[]> = new Map();
 
   ngOnInit(): void {
-    let hostId = localStorage.getItem("hostId");
-    let numOfTeams = localStorage.getItem("numOfTeams");
-    let gameId = localStorage.getItem("gameId");
-    this.hostId = hostId as string;
-    this.numOfTeams = Number(numOfTeams as string);
-    this.gameId = gameId as string;
-
-    if (!hostId || !numOfTeams || !gameId ) {
+    if (!this.gameStore.isValidGame) {
       this.router.navigate(['/'])
       return;
-    }
+    } 
 
-    this.qr$ = this.gameSvc.generateQrCode(this.hostId);
+    this.gameStore.getGame.subscribe(resp => {this.game = resp as HostGame})
+    this.qr$ = this.gameSvc.generateQrCode(this.game.hostId);
 
     const teamsList = ['Team A', 'Team B', 'Team C', 'Team D'];
-    for (let index = 0; index < this.numOfTeams; index++) {
+    for (let index = 0; index < this.game.numOfTeams; index++) {
       const teamList: string[] = []
       this.teams.set(teamsList[index], teamList)
     }
 
     // WEBSOCKET - subscribe to one websocket topic ("hostid") here
-    this.webSocketSvc.subscribe(`/topic/${hostId}`, (): any => {
-      console.log('>>> subscribing to websocket:', hostId);
-      this.http.post("/api/get-team-members", hostId).subscribe(
+    this.webSocketSvc.subscribe(`/topic/${this.game.hostId}`, (): any => {
+      console.log('>>> subscribing to websocket:', this.game.hostId);
+      this.http.post("/api/get-team-members", this.game.hostId).subscribe(
         resp => {
           this.teams = this.convertToMap(resp as {[key: string]: string[]});
           console.log('>>> this.teams:', this.teams);
@@ -56,7 +51,6 @@ export class LobbyComponent implements OnInit {
   }
 
   startGame() {
-    localStorage.setItem("gameStarted", "true")
     this.router.navigate(['/game'])
   }
 

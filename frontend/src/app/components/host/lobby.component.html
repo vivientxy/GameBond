@@ -9,8 +9,8 @@
             </p>
         </div>    
 
-        <h5 class="team-label" *ngIf="numOfTeams > 2">Team C</h5>
-        <div class="players-box"  *ngIf="numOfTeams > 2">
+        <h5 class="team-label" *ngIf="this.game.numOfTeams > 2">Team C</h5>
+        <div class="players-box"  *ngIf="this.game.numOfTeams > 2">
             <p class="player-label" *ngFor="let player of teams.get('Team C'), let idx = index">
                 <button style="all: unset;" (click)="remove('Team C', idx)">{{player}}</button>
             </p>
@@ -22,7 +22,7 @@
         <div class="qr-components">
             <h3>Choose your team!</h3>
             <br>
-            <h4>Room ID: {{hostId}}</h4>
+            <h4>Room ID: {{this.game.hostId}}</h4>
         </div>
         <div class="qr-components">
             <div *ngIf="qr$ | async as qr">
@@ -35,14 +35,14 @@
     </div>
     
     <div class="teams" style="border-top-left-radius: 20px;">
-        <h5 class="team-label" *ngIf="numOfTeams > 1">Team B</h5>
-        <div class="players-box" *ngIf="numOfTeams > 1">
+        <h5 class="team-label" *ngIf="this.game.numOfTeams > 1">Team B</h5>
+        <div class="players-box" *ngIf="this.game.numOfTeams > 1">
             <p class="player-label" *ngFor="let player of teams.get('Team B'), let idx = index">
                 <button style="all: unset;" (click)="remove('Team B', idx)">{{player}}</button>
             </p>
         </div>
-        <h5 class="team-label" *ngIf="numOfTeams > 3">Team D</h5>
-        <div class="players-box" *ngIf="numOfTeams > 3">
+        <h5 class="team-label" *ngIf="this.game.numOfTeams > 3">Team D</h5>
+        <div class="players-box" *ngIf="this.game.numOfTeams > 3">
             <p class="player-label" *ngFor="let player of teams.get('Team D'), let idx = index">
                 <button style="all: unset;" (click)="remove('Team D', idx)">{{player}}</button>
             </p>

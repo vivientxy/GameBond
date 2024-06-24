@@ -3,6 +3,8 @@ import { Gameboy } from 'gameboy-emulatorB';
 import { firstValueFrom, tap, timer } from 'rxjs';
 import { GameService } from '../../../services/game.service';
 import { WebSocketService } from '../../../services/websocket.service';
+import { HostGame } from '../../../models/hostgame.model';
+import { GameStore } from '../../../stores/game.store';
 
 @Component({
   selector: 'app-game-screen-b',
@@ -13,24 +15,19 @@ export class GameScreenBComponent implements OnInit {
 
   private readonly gameSvc = inject(GameService);
   private readonly webSocketSvc = inject(WebSocketService);
+  private readonly gameStore = inject(GameStore)
+  game!: HostGame;
   gameboy = new Gameboy();
-  gameId!: string;
-  hostId!: string;
-  
+
   @ViewChild('gameCanvasB', { static: true }) gameCanvasB!: ElementRef<HTMLCanvasElement>;
 
   ngOnInit(): void {
-    const gameId = localStorage.getItem("gameId");
-    const hostId = localStorage.getItem("hostId");
-    if (gameId && hostId) {
-      this.gameId = gameId;
-      this.hostId = hostId;
-    }
+    this.gameStore.getGame.subscribe(resp => {this.game = resp as HostGame})
 
     // set up and run gameboy:
     const context = this.gameCanvasB.nativeElement.getContext('2d');
     if (context) {
-      firstValueFrom(this.gameSvc.getGameROM(this.gameId))
+      firstValueFrom(this.gameSvc.getGameROM(this.game.gameId))
         .then(resp => fetch(resp.romUrl))
         .then(file => file.arrayBuffer())
         .then(arrBuffer => {
@@ -46,7 +43,7 @@ export class GameScreenBComponent implements OnInit {
     }
 
     // subscribe to websocket topic and inputs:
-    this.webSocketSvc.subscribe(`/topic/${hostId}/TeamB`, (message: any) => {
+    this.webSocketSvc.subscribe(`/topic/${this.game.hostId}/TeamB`, (message: any) => {
       this.processInput(message);
     })
   }

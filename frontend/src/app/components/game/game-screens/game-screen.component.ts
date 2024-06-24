@@ -3,6 +3,8 @@ import { Gameboy } from 'gameboy-emulator';
 import { GameService } from '../../../services/game.service';
 import { firstValueFrom, tap, timer } from 'rxjs';
 import { WebSocketService } from '../../../services/websocket.service';
+import { GameStore } from '../../../stores/game.store';
+import { HostGame } from '../../../models/hostgame.model';
 
 @Component({
   selector: 'app-game-screen',
@@ -13,24 +15,19 @@ export class GameScreenComponent implements OnInit {
 
   private readonly gameSvc = inject(GameService);
   private readonly webSocketSvc = inject(WebSocketService);
+  private readonly gameStore = inject(GameStore)
+  game!: HostGame;
   gameboy = new Gameboy();
-  gameId!: string;
-  hostId!: string;
   
   @ViewChild('gameCanvasA', { static: true }) gameCanvasA!: ElementRef<HTMLCanvasElement>;
 
   ngOnInit(): void {
-    const gameId = localStorage.getItem("gameId");
-    const hostId = localStorage.getItem("hostId");
-    if (gameId && hostId) {
-      this.gameId = gameId;
-      this.hostId = hostId;
-    }
+    this.gameStore.getGame.subscribe(resp => {this.game = resp as HostGame})
 
     // set up and run gameboy:
     const context = this.gameCanvasA.nativeElement.getContext('2d');
     if (context) {
-      firstValueFrom(this.gameSvc.getGameROM(this.gameId))
+      firstValueFrom(this.gameSvc.getGameROM(this.game.gameId))
         .then(resp => fetch(resp.romUrl))
         .then(file => file.arrayBuffer())
         .then(arrBuffer => {
@@ -46,8 +43,9 @@ export class GameScreenComponent implements OnInit {
     }
 
     // subscribe to websocket topic and inputs:
-    this.webSocketSvc.subscribe(`/topic/${hostId}/TeamA`, (message: any) => {
-      this.processInput(message);
+    this.webSocketSvc.subscribe(`/topic/${this.game.hostId}/TeamA`, (message: any) => {
+      this.processInput(JSON.parse(message).message);
+      this.gameSvc.sendToChatBox('A', JSON.parse(message).username + ': ' + JSON.parse(message).message)
     })
   }
 
@@ -95,4 +93,6 @@ export class GameScreenComponent implements OnInit {
     this.gameboy.input.isPressingStart = false;
     this.gameboy.input.isPressingSelect = false;
   }
+
+
 }

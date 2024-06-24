@@ -27,6 +27,7 @@ import { GameScreenComponent } from './components/game/game-screens/game-screen.
 import { GameScreenBComponent } from './components/game/game-screens/game-screen-b.component';
 import { GameScreenCComponent } from './components/game/game-screens/game-screen-c.component';
 import { GameScreenDComponent } from './components/game/game-screens/game-screen-d.component';
+import { GameStore } from './stores/game.store';
 
 @NgModule({
   declarations: [
@@ -54,13 +55,13 @@ import { GameScreenDComponent } from './components/game/game-screens/game-screen
     NgMaterialsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    
   ],
   providers: [
     provideAnimationsAsync(),
     UserService,
     GameService,
     WebSocketService,
+    GameStore,
   ],
   bootstrap: [AppComponent]
 })

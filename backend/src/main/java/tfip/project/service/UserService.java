@@ -71,7 +71,7 @@ public class UserService {
     public String generateResetLink(User user) {
         String resetId = UUID.randomUUID().toString().substring(0,18);
         redisRepo.saveResetLink(resetId, user.getUsername());
-        return projectUrl + "reset/" + resetId;
+        return projectUrl + "/reset/" + resetId;
     }
 
     public User validateResetLink(String resetId) {

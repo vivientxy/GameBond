@@ -7,68 +7,63 @@
 
     <div class="game-area">
 
-        <div class="game-instance" *ngIf="numOfTeams == 1" style="height: 100%; max-width: 100%;">
+        <div class="game-instance" *ngIf="this.game.numOfTeams == 1" style="height: 100%; max-width: 100%;">
             <div class="team-label">
                 <button style="all: unset;">Team A</button>
             </div>
             <div class="game-display">
-                <!-- gamescreen A -->
                 <app-game-screen></app-game-screen>
             </div>
             <div class="chat-box">
-                <app-chatbox></app-chatbox>
+                <app-chatbox [messages]="messagesA"></app-chatbox>
             </div>
         </div>
 
-        <div class="game-instance" *ngIf="numOfTeams > 1">
+        <div class="game-instance" *ngIf="this.game.numOfTeams > 1">
             <div class="team-label">
                 <button style="all: unset;">Team A</button>
             </div>
             <div class="game-display">
-                <!-- gamescreen A -->
                 <app-game-screen></app-game-screen>
             </div>
             <div class="chat-box">
-                <app-chatbox></app-chatbox>
+                <app-chatbox [messages]="messagesA"></app-chatbox>
             </div>
         </div>
         
-        <div class="game-instance" *ngIf="numOfTeams > 1">
+        <div class="game-instance" *ngIf="this.game.numOfTeams > 1">
             <div class="team-label">
                 <button style="all: unset;">Team B</button>
             </div>
             <div class="game-display">
-                <!-- gamescreen B -->
                  <app-game-screen-b></app-game-screen-b>
             </div>
             <div class="chat-box">
-                <app-chatbox></app-chatbox>
+                <app-chatbox [messages]="messagesB"></app-chatbox>
             </div>
         </div>
 
-        <div class="game-instance" *ngIf="numOfTeams > 2">
+        <div class="game-instance" *ngIf="this.game.numOfTeams > 2">
             <div class="team-label">
                 <button style="all: unset;">Team C</button>
             </div>
             <div class="game-display">
-                <!-- gamescreen C -->
                 <app-game-screen-c></app-game-screen-c>
             </div>
             <div class="chat-box">
-                <app-chatbox></app-chatbox>
+                <app-chatbox [messages]="messagesC"></app-chatbox>
             </div>
         </div>
 
-        <div class="game-instance" *ngIf="numOfTeams > 3">
+        <div class="game-instance" *ngIf="this.game.numOfTeams > 3">
             <div class="team-label">
                 <button style="all: unset;">Team D</button>
             </div>
             <div class="game-display">
-                <!-- gamescreen D -->
                 <app-game-screen-d></app-game-screen-d>
             </div>
             <div class="chat-box">
-                <app-chatbox></app-chatbox>
+                <app-chatbox [messages]="messagesD"></app-chatbox>
             </div>
         </div>
 

@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../../services/websocket.service';
+import { GameStore } from '../../stores/game.store';
+import { HostGame } from '../../models/hostgame.model';
 
 @Component({
   selector: 'app-main-game',
@@ -10,24 +12,21 @@ import { WebSocketService } from '../../services/websocket.service';
 export class MainGameComponent implements OnInit, OnDestroy {
 
   private readonly router = inject(Router)
+  private readonly gameStore = inject(GameStore)
   private readonly webSocketSvc = inject(WebSocketService)
-  hostId!: string;
-  gameId!: string;
-  numOfTeams!: number;
+  game!: HostGame;
+  messagesA: string[] = [];
+  messagesB: string[] = [];
+  messagesC: string[] = [];
+  messagesD: string[] = [];
 
   ngOnInit(): void {
-    let hostId = localStorage.getItem("hostId");
-    let numOfTeams = localStorage.getItem("numOfTeams");
-    let gameId = localStorage.getItem("gameId");
-    this.hostId = hostId as string;
-    this.numOfTeams = Number(numOfTeams as string);
-    this.gameId = gameId as string;
-
-    if (!hostId || !numOfTeams || !gameId ) {
+    if (!this.gameStore.isValidGame) {
       this.router.navigate(['/'])
       return;
-    }
+    } 
 
+    this.gameStore.getGame.subscribe(resp => {this.game = resp as HostGame})
   }
 
   ngOnDestroy(): void {
@@ -35,7 +34,7 @@ export class MainGameComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    localStorage.removeItem("gameStarted");
+    // localStorage.removeItem("gameStarted");
     this.router.navigate(['/lobby'])
   }
 }

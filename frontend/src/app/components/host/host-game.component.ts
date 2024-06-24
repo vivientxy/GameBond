@@ -1,8 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GameService } from '../../services/game.service';
-import { GameDetails } from '../../models/gamedetails.model';
+import { GameRom } from '../../models/gamerom.model';
 import { Router } from '@angular/router';
+import { GameStore } from '../../stores/game.store';
+import { HostGame } from '../../models/hostgame.model';
 
 @Component({
   selector: 'app-host-game',
@@ -12,10 +14,11 @@ import { Router } from '@angular/router';
 export class HostGameComponent implements OnInit {
 
   private readonly fb = inject(FormBuilder)
+  private readonly gameStore = inject(GameStore)
   private readonly gameSvc = inject(GameService)
   private readonly router = inject(Router)
   hostForm!: FormGroup;
-  gameList: GameDetails[] = []
+  gameList: GameRom[] = []
 
   ngOnInit(): void {
     this.hostForm = this.fb.group({
@@ -30,8 +33,9 @@ export class HostGameComponent implements OnInit {
     let numOfTeams = this.hostForm.controls['numOfTeams'].value;
     let gameId = this.hostForm.controls['game'].value;
 
-    this.gameSvc.startLobby(numOfTeams, gameId);
-    
+    // this.gameSvc.startLobby(numOfTeams, gameId);
+
+    this.gameStore.hostNewGame({gameId: gameId, numOfTeams: numOfTeams} as HostGame);
     this.router.navigate(['/lobby'])
   }
 

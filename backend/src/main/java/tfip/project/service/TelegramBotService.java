@@ -21,6 +21,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
@@ -95,9 +99,10 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 // ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
                 // sendMessage = createMessage(chatId, responseText, replyKeyboardMarkup);
 
+                JsonObject json = Json.createObjectBuilder().add("username", username).add("message", message).build();
                 if (isGameInput(message)) {
                     // sendToKafka(username, message);
-                    webSocketSvc.sendMessage(gameSvc.getPlayerHostAndTeam(username), message);
+                    webSocketSvc.sendMessage(gameSvc.getPlayerHostAndTeam(username), json.toString());
                     return;
                 }
 
