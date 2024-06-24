@@ -4,3 +4,7 @@ export interface HostGame {
     numOfTeams: number
     // qr: string
 }
+
+export interface HostGameState{
+    gameState: HostGame;
+}

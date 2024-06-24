@@ -1,6 +1,6 @@
 <div class="chat-box">
-    <p *ngFor="let msg of messages">
-        <span class="username">{{msg.split(": ")[0]}}: </span>
-        <span>{{msg.split(": ")[1]}}</span>
+    <p *ngFor="let chat of chats">
+        <span class="username">{{ chat.username }}: </span>
+        <span>{{ chat.message }}</span>
     </p>
 </div>

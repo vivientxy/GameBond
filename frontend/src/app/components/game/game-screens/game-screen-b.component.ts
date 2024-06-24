@@ -5,6 +5,8 @@ import { GameService } from '../../../services/game.service';
 import { WebSocketService } from '../../../services/websocket.service';
 import { HostGame } from '../../../models/hostgame.model';
 import { GameStore } from '../../../stores/game.store';
+import { ChatboxStore } from '../../../stores/chatbox.store';
+import { Chat } from '../../../models/chatbox.model';
 
 @Component({
   selector: 'app-game-screen-b',
@@ -16,6 +18,7 @@ export class GameScreenBComponent implements OnInit {
   private readonly gameSvc = inject(GameService);
   private readonly webSocketSvc = inject(WebSocketService);
   private readonly gameStore = inject(GameStore)
+  private readonly chatStore = inject(ChatboxStore)
   game!: HostGame;
   gameboy = new Gameboy();
 
@@ -43,9 +46,15 @@ export class GameScreenBComponent implements OnInit {
     }
 
     // subscribe to websocket topic and inputs:
-    this.webSocketSvc.subscribe(`/topic/${this.game.hostId}/TeamB`, (message: any) => {
-      this.processInput(message);
+    this.webSocketSvc.subscribe(`/topic/${this.game.hostId}/TeamD`, (message: any) => {
+      this.processInput(JSON.parse(message).message);
+      const chat: Chat = {
+        username: JSON.parse(message).username,
+        message: JSON.parse(message).message
+      }
+      this.chatStore.addChatTeamD(chat);
     })
+
   }
 
   processInput(input: string) {

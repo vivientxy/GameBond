@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { WebSocketService } from '../../services/websocket.service';
+import { Chat } from '../../models/chatbox.model';
 
 @Component({
   selector: 'app-chatbox',
@@ -8,27 +8,6 @@ import { WebSocketService } from '../../services/websocket.service';
 })
 export class ChatboxComponent {
   
-  @Input() messages: string[] = ["vivtxy: A",
-                                "kitkiat: B",
-                                "bendevon: UP",
-                                "leslietangweejie: UP",
-                                "kitkiat: SELECT",
-                                "User217857321: B",
-                                "bendevon: START",
-                                "leslietangweejie: L",
-                                "kitkiat: A",
-                                "leslietangweejie: A",
-                                "vivtxy: UP",
-                                "username: UP",
-                                "kitkiat: SELECT",
-                                "vivtxy: B",
-                                "bendevon: START",
-                                "username: L",
-                                "username: A",
-                                "username: UP",
-                                "username: UP",
-                                "username: SELECT",
-                                "username: B",
-                                "username: START"];
+  @Input() chats: Chat[] = [];
 
 }

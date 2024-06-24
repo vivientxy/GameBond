@@ -28,6 +28,7 @@ import { GameScreenBComponent } from './components/game/game-screens/game-screen
 import { GameScreenCComponent } from './components/game/game-screens/game-screen-c.component';
 import { GameScreenDComponent } from './components/game/game-screens/game-screen-d.component';
 import { GameStore } from './stores/game.store';
+import { ChatboxStore } from './stores/chatbox.store';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { GameStore } from './stores/game.store';
     GameService,
     WebSocketService,
     GameStore,
+    ChatboxStore
   ],
   bootstrap: [AppComponent]
 })

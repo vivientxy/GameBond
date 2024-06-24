@@ -1,11 +1,7 @@
 import { Injectable, inject } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { HostGame } from "../models/hostgame.model";
+import { HostGame, HostGameState } from "../models/hostgame.model";
 import { GameService } from "../services/game.service";
-
-export interface HostGameState{
-    gameState: HostGame;
-}
 
 @Injectable()
 export class GameStore extends ComponentStore<HostGameState> {

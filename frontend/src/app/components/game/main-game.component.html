@@ -15,7 +15,9 @@
                 <app-game-screen></app-game-screen>
             </div>
             <div class="chat-box">
-                <app-chatbox [messages]="messagesA"></app-chatbox>
+                <div *ngIf="messagesA$ | async as messagesA">
+                    <app-chatbox [chats]="messagesA"></app-chatbox>
+                </div>
             </div>
         </div>
 
@@ -27,7 +29,9 @@
                 <app-game-screen></app-game-screen>
             </div>
             <div class="chat-box">
-                <app-chatbox [messages]="messagesA"></app-chatbox>
+                <div *ngIf="messagesA$ | async as messagesA">
+                    <app-chatbox [chats]="messagesA"></app-chatbox>
+                </div>
             </div>
         </div>
         
@@ -39,7 +43,9 @@
                  <app-game-screen-b></app-game-screen-b>
             </div>
             <div class="chat-box">
-                <app-chatbox [messages]="messagesB"></app-chatbox>
+                <div *ngIf="messagesB$ | async as messagesB">
+                    <app-chatbox [chats]="messagesB"></app-chatbox>
+                </div>
             </div>
         </div>
 
@@ -51,7 +57,9 @@
                 <app-game-screen-c></app-game-screen-c>
             </div>
             <div class="chat-box">
-                <app-chatbox [messages]="messagesC"></app-chatbox>
+                <div *ngIf="messagesC$ | async as messagesC">
+                    <app-chatbox [chats]="messagesC"></app-chatbox>
+                </div>
             </div>
         </div>
 
@@ -63,7 +71,9 @@
                 <app-game-screen-d></app-game-screen-d>
             </div>
             <div class="chat-box">
-                <app-chatbox [messages]="messagesD"></app-chatbox>
+                <div *ngIf="messagesD$ | async as messagesD">
+                    <app-chatbox [chats]="messagesD"></app-chatbox>
+                </div>
             </div>
         </div>
 
