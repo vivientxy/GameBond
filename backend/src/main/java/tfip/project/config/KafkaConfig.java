@@ -28,10 +28,10 @@ public class KafkaConfig {
         return new KafkaAdmin(configs);
     }
 
-    @Bean
-    public NewTopic topic1() {
-        return new NewTopic("baeldung", 4, (short) 1);
-    }
+    // @Bean
+    // public NewTopic topic1() {
+    //     return new NewTopic("baeldung", 4, (short) 1);
+    // }
 
     /* PRODUCER CONFIG */
 

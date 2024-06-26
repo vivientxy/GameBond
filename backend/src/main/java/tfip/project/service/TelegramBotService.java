@@ -101,7 +101,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
                 JsonObject json = Json.createObjectBuilder().add("username", username).add("message", message).build();
                 if (isGameInput(message)) {
-                    // sendToKafka(username, message);
+                    // sendToKafka(username, json.toString());
                     webSocketSvc.sendMessage(gameSvc.getPlayerHostAndTeam(username), json.toString());
                     return;
                 }

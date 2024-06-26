@@ -1,5 +1,6 @@
 package tfip.project.service;
 
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,11 @@ public class WebSocketService {
     public void sendMessagePlayerAdded(String topicSuffix) {
         messagingTemplate.convertAndSend("/topic/" + topicSuffix, "Player added");
     }
-    
+
+    /* KAFKA --> WEBSOCKET */
+    @KafkaListener(topics = "your-topic", groupId = "mygroup")
+    public void listen(String message) {
+        messagingTemplate.convertAndSend("/topic/messages", message);
+    }
+
 }

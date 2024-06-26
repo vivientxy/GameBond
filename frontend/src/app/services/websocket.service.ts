@@ -5,34 +5,53 @@ import * as Stomp from 'stompjs';
 @Injectable()
 export class WebSocketService {
 
-  socket = new SockJS('http:localhost:8080/sba-websocket');
-  stompClient = Stomp.over(this.socket);
+  private stompClient: any | null = null;
+  private socket: WebSocket | null = null;
 
-  subscribe(topic: string, callback: (message: any) => void): void {
-    const connected: boolean = this.stompClient.connected;
-    if (connected) {
-      this.subscribeToTopic(topic, callback);
-      return;
-    }
-  
-    // if stomp client is not connected - connect and subscribe to topic
+  connect(): void {
+    this.socket = new SockJS('http://localhost:8080/sba-websocket');
+    this.stompClient = Stomp.over(this.socket);
+
     this.stompClient.connect({}, () => {
-      this.subscribeToTopic(topic, callback);
-    });
-  }  
-
-  private subscribeToTopic(topic: string, callback: (message: any) => void): void {
-    this.stompClient.subscribe(topic, (message: { body: string; }) => {
-      callback(message.body);
-    });
+      console.log('Web Socket Opened...')
+    }, this.onError);
   }
 
-  disconnect() {
-    if (this.stompClient.connected) {
-      this.stompClient.disconnect(() => {
-        console.log("Websocket is disconnected");
-      });
+  subscribe(topic: string, callback: (message: any) => void): void {
+    if (this.stompClient && this.stompClient.connected) {
+      this.subscribeToTopic(topic, callback)
+    } else if (this.stompClient) {
+      this.stompClient.connect({}, () => {
+        this.subscribeToTopic(topic, callback)
+      }, this.onError);
+    } else {
+      console.error('Stomp client is not initialized.');
     }
+  }
+
+  private subscribeToTopic(topic: string, callback: (message: any) => void): void {
+    if (this.stompClient) {
+      this.stompClient.subscribe(topic, (message: { body: string }) => {
+        callback(message.body)
+      });
+    } else {
+      console.error('Cannot subscribe to topic because stompClient is null.')
+    }
+  }
+
+  disconnect(): void {
+    if (this.stompClient) {
+      console.log('Disconnecting Web Socket...')
+      this.stompClient.disconnect(() => {
+        console.log('Websocket is disconnected')
+      });
+      this.stompClient = null;
+      this.socket = null;
+    }
+  }
+
+  private onError(error: any): void {
+    console.error('Error in WebSocket connection:', error)
   }
 
 }

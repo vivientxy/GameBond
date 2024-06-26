@@ -46,13 +46,13 @@ export class GameScreenDComponent {
     }
 
     // subscribe to websocket topic and inputs:
-    this.webSocketSvc.subscribe(`/topic/${this.game.hostId}/TeamB`, (message: any) => {
+    this.webSocketSvc.subscribe(`/topic/${this.game.hostId}/TeamD`, (message: any) => {
       this.processInput(JSON.parse(message).message);
       const chat: Chat = {
         username: JSON.parse(message).username,
         message: JSON.parse(message).message
       }
-      this.chatStore.addChatTeamB(chat);
+      this.chatStore.addChatTeamD(chat);
     })
     
   }
