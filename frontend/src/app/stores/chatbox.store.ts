@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
 import { Chat, ChatSlice } from "../models/chatbox.model";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class ChatboxStore extends ComponentStore<ChatSlice> {
@@ -9,72 +10,18 @@ export class ChatboxStore extends ComponentStore<ChatSlice> {
         super({ TeamA: [], TeamB: [], TeamC: [], TeamD: [] })
     }
 
-    readonly addChatTeamA = this.updater<Chat>(
-        (currState: ChatSlice, newChat: Chat) => {
-            const newState: ChatSlice = { ...currState };
-            newState.TeamA.push(newChat);
+    readonly addChat = this.updater<{ team: keyof ChatSlice, chat: Chat }>(
+        (currState, { team, chat }) => {
+            const newState = { ...currState };
+            newState[team].push(chat);
             return newState;
-    })
-
-    readonly addChatTeamB = this.updater<Chat>(
-        (currState: ChatSlice, newChat: Chat) => {
-            const newState: ChatSlice = { ...currState };
-            newState.TeamB.push(newChat);
-            return newState;
-    })
+        }
+    );
     
-    readonly addChatTeamC = this.updater<Chat>(
-        (currState: ChatSlice, newChat: Chat) => {
-            const newState: ChatSlice = { ...currState };
-            newState.TeamC.push(newChat);
-            return newState;
-    })
-    
-    readonly addChatTeamD = this.updater<Chat>(
-        (currState: ChatSlice, newChat: Chat) => {
-            const newState: ChatSlice = { ...currState };
-            newState.TeamD.push(newChat);
-            return newState;
-    })
-    
-    readonly getChatsTeamA = this.select<Chat[]>(
-        (currState: ChatSlice) => {
-            return currState.TeamA.map(chat => { 
-                return {
-                    username: chat.username,
-                    message: chat.message
-                } as Chat;
-            }).reverse();
-    })
-
-    readonly getChatsTeamB = this.select<Chat[]>(
-        (currState: ChatSlice) => {
-            return currState.TeamB.map(chat => { 
-                return {
-                    username: chat.username,
-                    message: chat.message
-                } as Chat;
-            }).reverse();
-    })
-
-    readonly getChatsTeamC = this.select<Chat[]>(
-        (currState: ChatSlice) => {
-            return currState.TeamC.map(chat => { 
-                return {
-                    username: chat.username,
-                    message: chat.message
-                } as Chat;
-            }).reverse();
-    })
-
-    readonly getChatsTeamD = this.select<Chat[]>(
-        (currState: ChatSlice) => {
-            return currState.TeamD.map(chat => { 
-                return {
-                    username: chat.username,
-                    message: chat.message
-                } as Chat;
-            }).reverse();
-    })
+    readonly getChats = (team: keyof ChatSlice): Observable<Chat[]> =>
+        this.select(state => state[team].map(chat => ({
+            username: chat.username,
+            message: chat.message
+        })).reverse());
 
 }

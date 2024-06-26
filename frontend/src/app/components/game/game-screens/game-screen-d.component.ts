@@ -52,7 +52,7 @@ export class GameScreenDComponent {
         username: JSON.parse(message).username,
         message: JSON.parse(message).message
       }
-      this.chatStore.addChatTeamD(chat);
+      this.chatStore.addChat({ team: 'TeamD', chat: chat});
     })
     
   }

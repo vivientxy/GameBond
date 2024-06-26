@@ -52,7 +52,7 @@ export class GameScreenComponent implements OnInit {
         username: JSON.parse(message).username,
         message: JSON.parse(message).message
       }
-      this.chatStore.addChatTeamA(chat);
+      this.chatStore.addChat({ team: 'TeamA', chat: chat});
     })
 
   }

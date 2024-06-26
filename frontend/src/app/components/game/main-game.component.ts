@@ -16,15 +16,17 @@ export class MainGameComponent implements OnInit, OnDestroy {
 
   private readonly router = inject(Router)
   private readonly gameStore = inject(GameStore)
-  private readonly chatStore = inject(ChatboxStore)
+  private chatStore = inject(ChatboxStore)
   private readonly webSocketSvc = inject(WebSocketService)
   game!: HostGame;
-  messagesA$: Observable<Chat[]> = this.chatStore.getChatsTeamA;
-  messagesB$: Observable<Chat[]> = this.chatStore.getChatsTeamB;
-  messagesC$: Observable<Chat[]> = this.chatStore.getChatsTeamC;
-  messagesD$: Observable<Chat[]> = this.chatStore.getChatsTeamD;
+  messagesA$: Observable<Chat[]> = this.chatStore.getChats('TeamA');
+  messagesB$: Observable<Chat[]> = this.chatStore.getChats('TeamB');
+  messagesC$: Observable<Chat[]> = this.chatStore.getChats('TeamC');
+  messagesD$: Observable<Chat[]> = this.chatStore.getChats('TeamD');
 
   ngOnInit(): void {
+    // this.chatStore = new ChatboxStore();
+
     if (!this.gameStore.isValidGame) {
       this.router.navigate(['/'])
       return;
@@ -37,6 +39,7 @@ export class MainGameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // this.chatStore
     this.webSocketSvc.disconnect();
   }
 
@@ -45,23 +48,23 @@ export class MainGameComponent implements OnInit, OnDestroy {
     this.router.navigate(['/lobby'])
   }
 
-  addChat(team: string, chat: Chat) {
-    switch (team) {
-      case 'TeamA':
-        this.chatStore.addChatTeamA(chat);
-        break;
-      case 'TeamB':
-        this.chatStore.addChatTeamB(chat);        
-        break;
-      case 'TeamC':
-        this.chatStore.addChatTeamC(chat);
-        break;
-      case 'TeamD':
-        this.chatStore.addChatTeamD(chat);
-        break;    
-      default:
-        break;
-    }
-  }
+  // addChat(team: string, chat: Chat) {
+  //   switch (team) {
+  //     case 'TeamA':
+  //       this.chatStore.addChatTeamA(chat);
+  //       break;
+  //     case 'TeamB':
+  //       this.chatStore.addChatTeamB(chat);        
+  //       break;
+  //     case 'TeamC':
+  //       this.chatStore.addChatTeamC(chat);
+  //       break;
+  //     case 'TeamD':
+  //       this.chatStore.addChatTeamD(chat);
+  //       break;    
+  //     default:
+  //       break;
+  //   }
+  // }
 
 }

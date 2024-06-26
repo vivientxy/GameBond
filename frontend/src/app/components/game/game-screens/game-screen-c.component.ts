@@ -52,7 +52,7 @@ export class GameScreenCComponent {
         username: JSON.parse(message).username,
         message: JSON.parse(message).message
       }
-      this.chatStore.addChatTeamC(chat);
+      this.chatStore.addChat({ team: 'TeamC', chat: chat});
     })
 
   }

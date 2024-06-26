@@ -73,3 +73,14 @@ p {
     text-wrap: wrap;
     line-height: 1em;
 }
+
+/* select game card */
+
+.mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+    background-color: rgba(136, 108, 228, 0.6);
+}
+
+.game-selection-area .mat-button-toggle-group-appearance-standard .mat-button-toggle-appearance-standard + .mat-button-toggle-appearance-standard,
+.game-selection-area .mat-button-toggle-group {
+    border: 0;
+}

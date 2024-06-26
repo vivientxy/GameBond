@@ -20,8 +20,8 @@
             Select game:
         </div>
 
-        <div>
-            <mat-button-toggle-group formControlName="game" class="game-selection-area" [hideSingleSelectionIndicator]="true">
+        <div class="game-selection-area">
+            <mat-button-toggle-group formControlName="game" [hideSingleSelectionIndicator]="true">
 
                 <mat-button-toggle *ngFor="let game of gameList"  [value]="game.gameId" class="game-button">
                     <mat-card class="game-card">
