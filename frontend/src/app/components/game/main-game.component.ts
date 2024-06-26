@@ -25,8 +25,6 @@ export class MainGameComponent implements OnInit, OnDestroy {
   messagesD$: Observable<Chat[]> = this.chatStore.getChats('TeamD');
 
   ngOnInit(): void {
-    // this.chatStore = new ChatboxStore();
-
     if (!this.gameStore.isValidGame) {
       this.router.navigate(['/'])
       return;
@@ -34,7 +32,8 @@ export class MainGameComponent implements OnInit, OnDestroy {
 
     this.gameStore.getGame.subscribe(resp => {this.game = resp as HostGame})
 
-
+    this.webSocketSvc.unsubscribe(`/topic/${this.game.hostId}`);
+    this.chatStore.resetChats(true);
 
   }
 
@@ -47,24 +46,5 @@ export class MainGameComponent implements OnInit, OnDestroy {
     // localStorage.removeItem("gameStarted");
     this.router.navigate(['/lobby'])
   }
-
-  // addChat(team: string, chat: Chat) {
-  //   switch (team) {
-  //     case 'TeamA':
-  //       this.chatStore.addChatTeamA(chat);
-  //       break;
-  //     case 'TeamB':
-  //       this.chatStore.addChatTeamB(chat);        
-  //       break;
-  //     case 'TeamC':
-  //       this.chatStore.addChatTeamC(chat);
-  //       break;
-  //     case 'TeamD':
-  //       this.chatStore.addChatTeamD(chat);
-  //       break;    
-  //     default:
-  //       break;
-  //   }
-  // }
 
 }

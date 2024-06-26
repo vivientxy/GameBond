@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subscription } from 'rxjs';
 import SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
 
@@ -7,6 +8,7 @@ export class WebSocketService {
 
   private stompClient: any | null = null;
   private socket: WebSocket | null = null;
+  private subscriptions: { [topic: string]: Subscription } = {};
 
   connect(): void {
     this.socket = new SockJS('http://localhost:8080/sba-websocket');
@@ -31,11 +33,21 @@ export class WebSocketService {
 
   private subscribeToTopic(topic: string, callback: (message: any) => void): void {
     if (this.stompClient) {
-      this.stompClient.subscribe(topic, (message: { body: string }) => {
+      this.subscriptions[topic] = this.stompClient.subscribe(topic, (message: { body: string }) => {
         callback(message.body)
       });
     } else {
       console.error('Cannot subscribe to topic because stompClient is null.')
+    }
+  }
+
+  unsubscribe(topic: string): void {
+    if (this.subscriptions[topic]) {
+      this.subscriptions[topic].unsubscribe();
+      delete this.subscriptions[topic];
+      console.log(`Unsubscribed from topic: ${topic}`);
+    } else {
+      console.warn(`No subscription found for topic: ${topic}`);
     }
   }
 
