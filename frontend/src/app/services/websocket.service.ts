@@ -13,32 +13,26 @@ export class WebSocketService {
   connect(): void {
     this.socket = new SockJS('http://localhost:8080/sba-websocket');
     this.stompClient = Stomp.over(this.socket);
-
-    this.stompClient.connect({}, () => {
-      console.log('Web Socket Opened...')
-    }, this.onError);
   }
 
   subscribe(topic: string, callback: (message: any) => void): void {
-    if (this.stompClient && this.stompClient.connected) {
-      this.subscribeToTopic(topic, callback)
-    } else if (this.stompClient) {
+    if (!this.stompClient) {
+      console.error('Stomp client is not initialised');
+      return;
+    }
+    if (!this.stompClient.connected) {
       this.stompClient.connect({}, () => {
         this.subscribeToTopic(topic, callback)
-      }, this.onError);
+      })
     } else {
-      console.error('Stomp client is not initialized.');
+      this.subscribeToTopic(topic, callback)
     }
   }
 
   private subscribeToTopic(topic: string, callback: (message: any) => void): void {
-    if (this.stompClient) {
-      this.subscriptions[topic] = this.stompClient.subscribe(topic, (message: { body: string }) => {
-        callback(message.body)
-      });
-    } else {
-      console.error('Cannot subscribe to topic because stompClient is null.')
-    }
+    this.subscriptions[topic] = this.stompClient.subscribe(topic, (message: { body: string }) => {
+      callback(message.body)
+    })
   }
 
   unsubscribe(topic: string): void {
@@ -46,24 +40,21 @@ export class WebSocketService {
       this.subscriptions[topic].unsubscribe();
       delete this.subscriptions[topic];
       console.log(`Unsubscribed from topic: ${topic}`);
-    } else {
-      console.warn(`No subscription found for topic: ${topic}`);
     }
+  }
+
+  unsubscribeAll(): void {
+    for (const topic in this.subscriptions)
+      this.unsubscribe(topic);
   }
 
   disconnect(): void {
     if (this.stompClient) {
-      console.log('Disconnecting Web Socket...')
-      this.stompClient.disconnect(() => {
-        console.log('Websocket is disconnected')
-      });
+      this.unsubscribeAll();
+      this.stompClient.disconnect();
       this.stompClient = null;
       this.socket = null;
     }
-  }
-
-  private onError(error: any): void {
-    console.error('Error in WebSocket connection:', error)
   }
 
 }
