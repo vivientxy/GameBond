@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -47,9 +46,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Autowired
     private WebSocketService webSocketSvc;
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
-
     @Override
     public String getBotUsername() {
         return username;
@@ -62,70 +58,41 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        SendMessage sendMessage = new SendMessage();
-
         if (update.hasMessage() && update.getMessage().hasText()) {
             var receivedMessage = update.getMessage();
             var user = receivedMessage.getFrom();
             Long chatId = receivedMessage.getChatId();
             String message = receivedMessage.getText();
             String username = user.getUserName();
-
             if (username == null || "".equals(username))
                 username = "User" + chatId;
 
             // get host ID and team ID
             if (message.startsWith("/start")) {
-                sendMessage = handleStartCommand(chatId, message);
+                handleStartCommand(chatId, message);
             } else {
-                // replace message symbols with Strings --> these should correspond with emulator input
-                switch (message) {
-                    case "⬆":
-                        message = "UP";
-                        break;
-                    case "⬅":
-                        message = "LEFT";
-                        break;
-                    case "➡":
-                        message = "RIGHT";
-                        break;
-                    case "⬇":
-                        message = "DOWN";
-                        break;
-                    default:
-                        break;
-                }
-                // String responseText = "Input received from " + user.getUserName() + ": " + message;
-                // ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
-                // sendMessage = createMessage(chatId, responseText, replyKeyboardMarkup);
-
-                JsonObject json = Json.createObjectBuilder().add("username", username).add("message", message).build();
-                if (isGameInput(message)) {
-                    // sendToKafka(username, json.toString());
+                String gameInput = filterGameInput(message);
+                if (gameInput != null) {
+                    JsonObject json = Json.createObjectBuilder().add("username", username).add("message", gameInput).build();
                     webSocketSvc.sendMessage(gameSvc.getPlayerHostAndTeam(username), json.toString());
                     return;
                 }
-
             }
         } else if (update.hasCallbackQuery()) {
             // USER JUST SELECTED TEAM
-            sendMessage = selectedTeam(update);
-        }
-
-        try {
-            execute(sendMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
+            handleSelectedTeam(update);
         }
     }
 
 
     /* HANDLE MESSAGE SCENARIOS */
 
-    private SendMessage handleStartCommand(Long chatId, String messageText) {
+    private void handleStartCommand(Long chatId, String messageText) {
         if (messageText.length() <= 6) {
             // no hostId:
-            return redirectToJoinGame(chatId);
+            String responseText = "Welcome to GameBond! Click here to join a game:";
+            InlineKeyboardMarkup joinKeyboardMarkup = generateJoinKeyboardMarkup();
+            sendMessage(chatId, responseText, joinKeyboardMarkup);
         } else {
             String payload = messageText.substring(7);
             String decodedUrl = new String(Base64.getDecoder().decode(payload), StandardCharsets.UTF_8);
@@ -134,21 +101,13 @@ public class TelegramBotService extends TelegramLongPollingBot {
             Integer numOfTeams = Integer.parseInt(hostId.substring(7));
 
             // hostId + numOfTeams obtained -- prompt team selection
-            // TODO: IF numOfTeams == 1, DON'T NEED INLINE KEYBOARD. ASSIGN TEAM VALUE TO A
-
             String responseText = "Please select your team!";
             InlineKeyboardMarkup teamKeyboardMarkup = generateTeamKeyboardMarkup(numOfTeams, hostId);
-            return createMessage(chatId, responseText, teamKeyboardMarkup);
+            sendMessage(chatId, responseText, teamKeyboardMarkup);
         }
     }
-
-    private SendMessage redirectToJoinGame(Long chatId) {
-        String responseText = "Welcome to GameBond! Click here to join a game:";
-        InlineKeyboardMarkup joinKeyboardMarkup = generateJoinKeyboardMarkup();
-        return createMessage(chatId, responseText, joinKeyboardMarkup);
-    }
     
-    private SendMessage selectedTeam(Update update) {
+    private void handleSelectedTeam(Update update) {
         String data = update.getCallbackQuery().getData();
         var msg = (Message) update.getCallbackQuery().getMessage();
         String hostId = data.split(",")[0];
@@ -166,23 +125,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
         String responseText = "Welcome to " + teamId + ", " + username + "! Please check the game screen and wait for the game to start :)";
         ReplyKeyboardMarkup replyKeyboardMarkup = generateControllerKeyboardMarkup();
-        return createMessage(chatId, responseText, replyKeyboardMarkup);
-    }
-
-    public boolean isGameInput(String message) {
-        switch (message) {
-            case "A":
-            case "B":
-            case "START":
-            case "SELECT":
-            case "UP":
-            case "DOWN":
-            case "LEFT":
-            case "RIGHT":
-                return true;
-            default:
-                return false;
-        }
+        sendMessage(chatId, responseText, replyKeyboardMarkup);
     }
 
     /* KEYBOARD MARKUPS */
@@ -267,18 +210,36 @@ public class TelegramBotService extends TelegramLongPollingBot {
         return queryParams;
     }
 
-    private SendMessage createMessage(Long chatId, String text, ReplyKeyboard keyboardMarkup) {
+    private void sendMessage(Long chatId, String text, ReplyKeyboard keyboardMarkup) {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.setText(text);
         msg.setReplyMarkup(keyboardMarkup);
-        return msg;
+        try {
+            execute(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void sendToKafka(String username, String message) {
-        String topic = gameSvc.getPlayerHostAndTeam(username);
-        topic = topic.replace("/", "_"); // a1b2c3d4_TeamA
-        kafkaTemplate.send(topic, message);
+    private String filterGameInput(String message) {
+        switch (message) {
+            case "A":
+            case "B":
+            case "START":
+            case "SELECT":
+                return message;
+            case "⬆":
+                return "UP";
+            case "⬅":
+                return "LEFT";
+            case "➡":
+                return "RIGHT";
+            case "⬇":
+                return "DOWN";
+            default:
+                return null;
+        }
     }
 
 }

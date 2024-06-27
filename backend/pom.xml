@@ -117,12 +117,6 @@
 			<artifactId>jjwt-api</artifactId>
 			<version>0.12.5</version>
 		</dependency>
-
-		<!-- kafka queue -->
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
-		</dependency>
 		
 	</dependencies>
 
