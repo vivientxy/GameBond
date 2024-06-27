@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -66,6 +67,13 @@ public class GameController {
         Map<String, List<String>> teamMap = gameSvc.getPlayersInTeams(hostId);
         JsonObject json = mapToJsonObject(teamMap);
         return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
+    }
+
+    @GetMapping("/end-game")
+    public ResponseEntity<String> endGame(@RequestParam(required = true) String hostId) {
+        System.out.println(">>> triggered /api/end-game for hostId: " + hostId);
+        gameSvc.deleteGame(hostId);
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
     
 

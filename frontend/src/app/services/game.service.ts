@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
@@ -7,25 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 export class GameService {
 
     private http = inject(HttpClient);
-
-    // isGameStarted(): boolean {
-    //     return (localStorage.getItem("gameStarted") == "true") ? true : false;
-    // }
-
-    
-    // startHostedGame(numOfTeams: number, gameId: string) {
-    //     // generate chatboxes x numOfTeams
-
-    //     // generate game emulator x numOfTeams
-
-    //     // retrieve game ROM using gameId --> http call to springboot --> mySQL/S3
-
-    //     // load all game emulators with game ROM
-    // }
-
-    // checkLogin() {
-
-    // }
 
     getAllGameDetails(): Observable<any> {
         return this.http.get<any>('/api/get-all-games')
@@ -87,4 +68,13 @@ export class GameService {
                 break;
         }
     }
+
+    /* GAME ENDED */
+
+    endGame(hostId: string) {
+        const queryParams = new HttpParams()
+            .set('hostId', hostId)
+        return this.http.get<any>('/api/end-game', {params: queryParams})
+    }
+
 }

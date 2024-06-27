@@ -6,6 +6,7 @@ import { HostGame } from '../../models/hostgame.model';
 import { ChatboxStore } from '../../stores/chatbox.store';
 import { Chat } from '../../models/chatbox.model';
 import { Observable } from 'rxjs';
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'app-main-game',
@@ -15,6 +16,7 @@ import { Observable } from 'rxjs';
 export class MainGameComponent implements OnInit, OnDestroy {
 
   private readonly router = inject(Router)
+  private readonly gameSvc = inject(GameService)
   private readonly gameStore = inject(GameStore)
   private chatStore = inject(ChatboxStore)
   private readonly webSocketSvc = inject(WebSocketService)
@@ -38,12 +40,11 @@ export class MainGameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.chatStore
     this.webSocketSvc.disconnect();
+    this.gameSvc.endGame(this.game.hostId).subscribe();
   }
 
   back() {
-    // localStorage.removeItem("gameStarted");
     this.router.navigate(['/lobby'])
   }
 

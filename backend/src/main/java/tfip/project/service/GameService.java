@@ -71,7 +71,7 @@ public class GameService {
 
     public void createNewHost(String hostId, Integer numOfTeams) {
         if (redisRepo.hostExists(hostId))
-            redisRepo.deleteHost(hostId);
+            deleteGame(hostId);
         List<String> teams = Arrays.asList("Team A", "Team B", "Team C", "Team D");
         for (int i = 0; i < numOfTeams; i++)
             redisRepo.savePlayerByHostId(hostId, teams.get(i), "");
@@ -117,6 +117,7 @@ public class GameService {
 
     public void deleteGame(String hostId) {
         Map<String, List<String>> teamsMap = redisRepo.getPlayersInTeams(hostId);
+        System.out.println(">>> deleting game " + hostId + " : " + teamsMap);
         for (List<String> playersList : teamsMap.values()) {
             redisRepo.deletePlayerByUsername(playersList);
         }                    
