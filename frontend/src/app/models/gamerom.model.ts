@@ -4,3 +4,7 @@ export interface GameRom {
     romFile: string
     pictureUrl: string
 }
+
+export interface GameRomSlice {
+    roms: GameRom[]
+}

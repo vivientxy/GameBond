@@ -29,6 +29,7 @@ import { GameScreenCComponent } from './components/game/game-screens/game-screen
 import { GameScreenDComponent } from './components/game/game-screens/game-screen-d.component';
 import { GameStore } from './stores/game.store';
 import { ChatboxStore } from './stores/chatbox.store';
+import { RomStore } from './stores/rom.store';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { ChatboxStore } from './stores/chatbox.store';
     GameService,
     WebSocketService,
     GameStore,
-    ChatboxStore
+    ChatboxStore,
+    RomStore
   ],
   bootstrap: [AppComponent]
 })

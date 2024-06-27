@@ -22,6 +22,16 @@ CREATE TABLE membership (
         REFERENCES users(username)
 );
 
+CREATE TABLE user_games (
+    username VARCHAR(32) NOT NULL UNIQUE,
+    game_id VARCHAR(8) NOT NULL,
+
+    CONSTRAINT fk_username FOREIGN KEY(username)
+        REFERENCES users(username),
+    CONSTRAINT fk_game_id FOREIGN KEY(game_id)
+        REFERENCES games(game_id)
+);
+
 CREATE TABLE games (
     game_id VARCHAR(8) PRIMARY KEY,
     game_title VARCHAR(64) NOT NULL,
@@ -50,6 +60,10 @@ INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('8er6d4as'
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('1d5rvb64','Wordtris','https://gamebond.sgp1.digitaloceanspaces.com/Wordtris.gb','https://gamebond.sgp1.digitaloceanspaces.com/Wordtris.jpg');
 -- INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('sv8t4s6d','Marios Picross','https://gamebond.sgp1.digitaloceanspaces.com/Marios%20Picross.gb','https://gamebond.sgp1.digitaloceanspaces.com/Marios%20Picross.jpg');
 -- INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('n8y56rd1','Pokemon Pinball','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Pinball.gbc','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Pinball.jpg');
+INSERT INTO user_games(username, game_id) VALUES ('vivientxy','4fc803sb');
+INSERT INTO user_games(username, game_id) VALUES ('vivientxy','n5e3d12f');
+INSERT INTO user_games(username, game_id) VALUES ('vivientxy','8er6d4as');
+INSERT INTO user_games(username, game_id) VALUES ('vivientxy','1d5rvb64');
 
 GRANT ALL PRIVILEGES ON gamebond.* TO 'betty'@'%';
 FLUSH PRIVILEGES;

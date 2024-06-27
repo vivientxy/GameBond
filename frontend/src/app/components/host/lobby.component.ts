@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -12,7 +12,7 @@ import { HostGame } from '../../models/hostgame.model';
   templateUrl: './lobby.component.html',
   styleUrl: './lobby.component.css'
 })
-export class LobbyComponent implements OnInit {
+export class LobbyComponent implements OnInit, OnDestroy {
 
   private readonly gameSvc = inject(GameService)
   private readonly gameStore = inject(GameStore)
@@ -49,6 +49,10 @@ export class LobbyComponent implements OnInit {
         }
       )
     })
+  }
+
+  ngOnDestroy(): void {
+    this.webSocketSvc.unsubscribe(`/topic/${this.game.hostId}`);
   }
 
   startGame() {

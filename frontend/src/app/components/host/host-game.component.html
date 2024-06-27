@@ -25,7 +25,7 @@
 
                 <mat-button-toggle *ngFor="let game of gameList"  [value]="game.gameId" class="game-button">
                     <mat-card class="game-card">
-                        <img mat-card-image [src]="game.pictureUrl">
+                        <img mat-card-image [src]="game.pictureUrl" [alt]="game.gameTitle">
                         <mat-card-actions>
                             <p>{{game.gameTitle}}</p>
                         </mat-card-actions>

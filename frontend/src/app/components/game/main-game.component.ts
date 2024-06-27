@@ -31,17 +31,13 @@ export class MainGameComponent implements OnInit, OnDestroy {
       this.router.navigate(['/'])
       return;
     } 
-
     this.gameStore.getGame.subscribe(resp => {this.game = resp as HostGame})
-
-    this.webSocketSvc.unsubscribe(`/topic/${this.game.hostId}`);
-    this.chatStore.resetChats(true);
-
   }
 
   ngOnDestroy(): void {
     this.webSocketSvc.disconnect();
     this.gameSvc.endGame(this.game.hostId).subscribe();
+    this.chatStore.resetChats(true);
   }
 
   back() {

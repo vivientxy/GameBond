@@ -64,14 +64,11 @@ img {
     min-width: 180px;
 }
 
-.mat-card-actions {
-    display: flex;
-}
-
 p {
-    display: flex;
     text-wrap: wrap;
     line-height: 1em;
+    width: 100%;
+    text-align: center;
 }
 
 /* select game card */

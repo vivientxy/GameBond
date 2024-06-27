@@ -5,6 +5,7 @@ import { GameRom } from '../../models/gamerom.model';
 import { Router } from '@angular/router';
 import { GameStore } from '../../stores/game.store';
 import { HostGame } from '../../models/hostgame.model';
+import { RomStore } from '../../stores/rom.store';
 
 @Component({
   selector: 'app-host-game',
@@ -15,6 +16,7 @@ export class HostGameComponent implements OnInit {
 
   private readonly fb = inject(FormBuilder)
   private readonly gameStore = inject(GameStore)
+  private readonly romStore = inject(RomStore)
   private readonly gameSvc = inject(GameService)
   private readonly router = inject(Router)
   hostForm!: FormGroup;
@@ -25,8 +27,19 @@ export class HostGameComponent implements OnInit {
       numOfTeams: this.fb.control(null,[Validators.required]),
       game: this.fb.control(null,[Validators.required])
     })
-    this.gameSvc.getAllGameDetails()
-      .subscribe(response => {this.gameList =  response})
+
+    this.romStore.getRoms.subscribe(roms => {
+      if (roms.length > 0) {
+        console.log('roms retrieved from store');
+        this.gameList = roms;
+      } else {
+        console.log('roms retrieved from api');
+        this.gameSvc.getAllGameDetails().subscribe(resp => {
+          this.gameList = resp;
+          this.romStore.addRoms(resp);
+        })
+      }
+    })
   }
 
   processHostGame() {
