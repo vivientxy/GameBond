@@ -64,5 +64,15 @@ public interface SqlQueries {
         FROM gamebond.games
         WHERE game_title = ?
         """;
+    public static final String SQL_ADD_GAME = """
+        INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES (?,?,?,?);
+        """;
+    public static final String SQL_ADD_GAME_WITHOUT_PICTURE = """
+        INSERT INTO games(game_id, game_title, rom_file) VALUES (?,?,?);
+        """;
+    public static final String SQL_ADD_GAME_TO_USER = """
+        INSERT INTO user_games(username, game_id) VALUES (?,?);
+        """;
+
 
 }

@@ -1,13 +1,17 @@
 package tfip.project.service;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -19,6 +23,7 @@ import jakarta.json.JsonReader;
 import tfip.project.model.GameDetails;
 import tfip.project.repo.GameRepository;
 import tfip.project.repo.RedisRepository;
+import tfip.project.repo.S3Repository;
 
 @Service
 public class GameService {
@@ -33,9 +38,36 @@ public class GameService {
 
     @Autowired
     RedisRepository redisRepo;
+    
+    @Autowired
+    S3Repository s3Repo;
 
     public List<GameDetails> getAllGames() {
         return gameRepo.getAllGames();
+    }
+
+    @Transactional
+    public boolean saveGameRom(String username, MultipartFile rom) {
+        String id = UUID.randomUUID().toString().substring(0, 8);
+        String s3url;
+        try {
+            s3url = s3Repo.saveToS3(rom, id);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Rolling back transaction - failed to save to S3");
+        }
+
+        GameDetails game = new GameDetails();
+        game.setGameId(id);
+        game.setRomFile(s3url);
+        game.setGameTitle(rom.getOriginalFilename());
+
+        boolean isGameAdded = gameRepo.saveGame(game);
+        boolean isGameAddedToUser = gameRepo.saveGameToUser(username, game);
+        if (!isGameAdded || !isGameAddedToUser)
+            throw new RuntimeException("Rolling back transaction - failed to save to MySQL");
+
+        return true;
     }
 
     public GameDetails getGameDetailsByGameId(String gameId) {
@@ -65,9 +97,6 @@ public class GameService {
         }
         return qrCode;
     }
-
-
-
 
     public void createNewHost(String hostId, Integer numOfTeams) {
         if (redisRepo.hostExists(hostId))

@@ -9,6 +9,7 @@ import { HostGameComponent } from './components/host/host-game.component';
 import { LobbyComponent } from './components/host/lobby.component';
 import { JoinGameComponent } from './components/host/join-game.component';
 import { MainGameComponent } from './components/game/main-game.component';
+import { AddRomComponent } from './components/game/add-rom.component';
 
 const routes: Routes = [
   { path: '', component: SelectorComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'host', component: HostGameComponent },
   { path: 'lobby', component: LobbyComponent },
   { path: 'game', component: MainGameComponent },
+  { path: 'add-rom', component: AddRomComponent },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 

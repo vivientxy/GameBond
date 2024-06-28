@@ -46,6 +46,11 @@ export class GameService {
             .pipe(result => {return result})
     }
 
+    addGameROM(form: FormData) {
+        return this.http.post<any>('/api/add-rom', form)
+            .pipe(result => {return result})
+    }
+
     /* GAME STARTED */
     
     sendToChatBox(team: string, message: string) {

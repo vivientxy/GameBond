@@ -7,10 +7,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -19,6 +22,7 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
+import jakarta.mail.Multipart;
 import tfip.project.model.GameDetails;
 import tfip.project.service.GameService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +50,16 @@ public class GameController {
         String romUrl = game.getRomFile();
         JsonObject json = Json.createObjectBuilder().add("romUrl", romUrl).build();
         return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
+    }
+
+    @PostMapping(path = {"/add-rom"}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> addRom(@RequestPart MultipartFile rom, @RequestPart String username) {
+        try {
+            gameSvc.saveGameRom(username, rom);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/get-QR")

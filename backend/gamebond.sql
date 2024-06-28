@@ -22,21 +22,21 @@ CREATE TABLE membership (
         REFERENCES users(username)
 );
 
-CREATE TABLE user_games (
-    username VARCHAR(32) NOT NULL UNIQUE,
-    game_id VARCHAR(8) NOT NULL,
-
-    CONSTRAINT fk_username FOREIGN KEY(username)
-        REFERENCES users(username),
-    CONSTRAINT fk_game_id FOREIGN KEY(game_id)
-        REFERENCES games(game_id)
-);
-
 CREATE TABLE games (
     game_id VARCHAR(8) PRIMARY KEY,
     game_title VARCHAR(64) NOT NULL,
     rom_file VARCHAR(256) NOT NULL,
     picture_url VARCHAR(256)
+);
+
+CREATE TABLE user_games (
+    username VARCHAR(32) NOT NULL,
+    game_id VARCHAR(8) NOT NULL,
+
+    CONSTRAINT fk_username_games FOREIGN KEY(username)
+        REFERENCES users(username),
+    CONSTRAINT fk_game_id FOREIGN KEY(game_id)
+        REFERENCES games(game_id)
 );
 
 
@@ -53,11 +53,11 @@ INSERT INTO membership(username) VALUES ('betty');
 INSERT INTO membership(username) VALUES ('hoseh');
 INSERT INTO membership(username) VALUES ('kiat');
 INSERT INTO membership(username) VALUES ('ryo');
--- INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('8a6e0804','Bomberman','https://gamebond.sgp1.digitaloceanspaces.com/Bomberman.gb','https://gamebond.sgp1.digitaloceanspaces.com/Bomberman.jpg');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('4fc803sb','Motocross Maniacs','https://gamebond.sgp1.digitaloceanspaces.com/Motocross%20Maniacs.gb','https://gamebond.sgp1.digitaloceanspaces.com/Motocross%20Maniacs.jpg');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('n5e3d12f','Pokemon Red','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Red.gb','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Red.jpg');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('8er6d4as','Tetris','https://gamebond.sgp1.digitaloceanspaces.com/Tetris.gb','https://gamebond.sgp1.digitaloceanspaces.com/Tetris.jpg');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('1d5rvb64','Wordtris','https://gamebond.sgp1.digitaloceanspaces.com/Wordtris.gb','https://gamebond.sgp1.digitaloceanspaces.com/Wordtris.jpg');
+-- INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('8a6e0804','Bomberman','https://gamebond.sgp1.digitaloceanspaces.com/Bomberman.gb','https://gamebond.sgp1.digitaloceanspaces.com/Bomberman.jpg');
 -- INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('sv8t4s6d','Marios Picross','https://gamebond.sgp1.digitaloceanspaces.com/Marios%20Picross.gb','https://gamebond.sgp1.digitaloceanspaces.com/Marios%20Picross.jpg');
 -- INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('n8y56rd1','Pokemon Pinball','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Pinball.gbc','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Pinball.jpg');
 INSERT INTO user_games(username, game_id) VALUES ('vivientxy','4fc803sb');

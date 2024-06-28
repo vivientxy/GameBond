@@ -46,6 +46,23 @@ public class GameRepository implements SqlQueries {
         }
     }
 
+    public boolean saveGame(GameDetails game) {
+        try {
+            if (game.getPictureUrl() != null)
+                return template.update(SQL_ADD_GAME, game.getGameId(), game.getGameTitle(), game.getRomFile(), game.getPictureUrl()) > 0 ? true : false;
+            return template.update(SQL_ADD_GAME_WITHOUT_PICTURE, game.getGameId(), game.getGameTitle(), game.getRomFile()) > 0 ? true : false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean saveGameToUser(String username, GameDetails game) {
+        try {
+            return template.update(SQL_ADD_GAME_TO_USER, username, game.getGameId()) > 0 ? true : false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 
     private class GameDetailsRowMapper implements RowMapper<GameDetails> {

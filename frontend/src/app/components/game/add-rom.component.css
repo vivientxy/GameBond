@@ -1,0 +1,17 @@
+.container {
+    align-items: center;
+    text-align: center;
+}
+
+.form-button {
+    width: 80%;
+    max-width: 500px;
+}
+
+span {
+    color: grey;
+}
+
+.file-name {
+    margin-left: 1rem;
+}

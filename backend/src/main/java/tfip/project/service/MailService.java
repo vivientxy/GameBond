@@ -45,7 +45,7 @@ public class MailService {
 				<p>To reset your password, click on the button below:</p>
 				<p><a href='
                 """+ resetLink +"""
-                ' style='display: inline-block; padding: 10px 20px; border-radius: 20px; background-color: #c309e8; color: white; text-decoration: none;'>Reset Password</a></p>
+                ' style='display: inline-block; padding: 10px 20px; border-radius: 20px; background-color: #886ce4; color: white; text-decoration: none;'>Reset Password</a></p>
 				<p>Alternatively, you may also click on the link below:
 				<br><a href='
                 """+ resetLink +"""

@@ -30,6 +30,7 @@ import { GameScreenDComponent } from './components/game/game-screens/game-screen
 import { GameStore } from './stores/game.store';
 import { ChatboxStore } from './stores/chatbox.store';
 import { RomStore } from './stores/rom.store';
+import { AddRomComponent } from './components/game/add-rom.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { RomStore } from './stores/rom.store';
     HostGameComponent,
     LobbyComponent,
     JoinGameComponent,
+    AddRomComponent,
   ],
   imports: [
     BrowserModule,

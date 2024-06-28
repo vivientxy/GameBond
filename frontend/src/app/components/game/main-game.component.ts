@@ -18,7 +18,7 @@ export class MainGameComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router)
   private readonly gameSvc = inject(GameService)
   private readonly gameStore = inject(GameStore)
-  private chatStore = inject(ChatboxStore)
+  private readonly chatStore = inject(ChatboxStore)
   private readonly webSocketSvc = inject(WebSocketService)
   game!: HostGame;
   messagesA$: Observable<Chat[]> = this.chatStore.getChats('TeamA');
