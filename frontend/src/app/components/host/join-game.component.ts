@@ -24,10 +24,7 @@ export class JoinGameComponent implements OnInit {
     hostId = hostId.toLowerCase()
 
     // generate URL and redirect
-    const telegramLink = this.gameSvc.generateTelegramLink(hostId);
-    console.log('>>> telegram link:', telegramLink)
-
-    window.location.href = telegramLink;
+    window.location.href = this.gameSvc.generateTelegramLink(hostId);
   }
 
 }

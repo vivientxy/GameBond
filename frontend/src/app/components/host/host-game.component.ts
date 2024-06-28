@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { GameStore } from '../../stores/game.store';
 import { HostGame } from '../../models/hostgame.model';
 import { RomStore } from '../../stores/rom.store';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-host-game',
@@ -18,11 +19,15 @@ export class HostGameComponent implements OnInit {
   private readonly gameStore = inject(GameStore)
   private readonly romStore = inject(RomStore)
   private readonly gameSvc = inject(GameService)
+  private readonly userSvc = inject(UserService)
   private readonly router = inject(Router)
   hostForm!: FormGroup;
   gameList: GameRom[] = []
 
   ngOnInit(): void {
+    if (!this.userSvc.isLoggedIn())
+      this.router.navigate(['/login'])
+
     this.hostForm = this.fb.group({
       numOfTeams: this.fb.control(null,[Validators.required]),
       game: this.fb.control(null,[Validators.required])

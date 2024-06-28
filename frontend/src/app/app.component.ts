@@ -9,10 +9,10 @@ import { GameService } from './services/game.service';
 })
 export class AppComponent implements OnInit {
 
-  private readonly userSvc = inject(UserService)
-  private readonly gameSvc = inject(GameService)
-  isLoggedIn = false;
-  isGameStarted = false;
+  // private readonly userSvc = inject(UserService)
+  // private readonly gameSvc = inject(GameService)
+  // isLoggedIn = false;
+  // isGameStarted = false;
 
   ngOnInit(): void {
     // problem -- this page only init once. need change to redirect

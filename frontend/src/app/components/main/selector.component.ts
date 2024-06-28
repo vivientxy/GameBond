@@ -9,17 +9,15 @@ import { Router } from '@angular/router';
 })
 export class SelectorComponent {
 
-  private readonly svc = inject(UserService)
+  private readonly userSvc = inject(UserService)
   private readonly router = inject(Router)
-  isLoggedIn!: boolean;
 
   joinGame() {
     this.router.navigate(['/join'])
   }
 
   hostGame() {
-    this.isLoggedIn = this.svc.validateLoggedIn();
-    if (this.isLoggedIn)
+    if (this.userSvc.isLoggedIn())
       this.router.navigate(['/host'])
     else
       this.router.navigate(['/login'])

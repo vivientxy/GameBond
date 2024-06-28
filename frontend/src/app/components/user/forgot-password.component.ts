@@ -34,7 +34,7 @@ export class ForgotPasswordComponent implements OnInit {
       firstName: '',
       lastName: '',
     };
-    // add a last touch component -- only take value of the last touched field
+    // only take value of the last touched field -- in case user filled in both
     if (this.lastTouchedField === 'username')
       user.email = '';
     else if (this.lastTouchedField === 'email')
