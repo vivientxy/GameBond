@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 @Injectable()
 export class UserService {
 
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   registerUser(user: User): Observable<any> {
     return this.http.post<any>('/api/register', user)
@@ -33,12 +33,19 @@ export class UserService {
         .pipe(result => {return result})
   }
 
-  validateLoggedIn(): boolean {
-    return (localStorage.getItem("isLoggedIn") == "true") ? true : false;
+  isLoggedIn(): boolean {
+    return sessionStorage.getItem('user') != null ? true : false;
   }
 
-  logout() {
-    localStorage.removeItem("isLoggedIn")
+  logout(): void {
+    sessionStorage.removeItem('user');
+  }
+
+  getUser(): User | null {
+    let userString = sessionStorage.getItem('user');
+    if (userString)
+      return JSON.parse(userString) as User;
+    return null;
   }
 
 }

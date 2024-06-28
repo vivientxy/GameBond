@@ -106,8 +106,10 @@ public class GameController {
             JsonObjectBuilder jBuilder = Json.createObjectBuilder()
                 .add("gameId", game.getGameId())
                 .add("gameTitle", game.getGameTitle())
-                .add("romFile", game.getRomFile())
-                .add("pictureUrl", game.getPictureUrl());
+                .add("romFile", game.getRomFile());
+            if (game.getPictureUrl() == null)
+                game.setPictureUrl("");
+                jBuilder.add("pictureUrl", game.getPictureUrl());
             arrBuilder.add(jBuilder);
         }
         return arrBuilder.build();

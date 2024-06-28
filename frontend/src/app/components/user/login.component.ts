@@ -45,10 +45,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.userSvc.loginUser(user)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: loginSuccess => {
-          // TODO: add cookie/auth token to parent to indicate user is logged in
-          localStorage.setItem("isLoggedIn", "true")
-          this.router.navigate(['/'])
+        next: user => {
+          sessionStorage.setItem('user', JSON.stringify(user))
+          this.router.navigate(['/']);
         },
         error: err => {
           this.loginForm.patchValue(user)
