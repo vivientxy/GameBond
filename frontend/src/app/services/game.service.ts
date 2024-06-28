@@ -8,8 +8,10 @@ export class GameService {
 
     private http = inject(HttpClient);
 
-    getAllGameDetails(): Observable<any> {
-        return this.http.get<any>('/api/get-all-games')
+    getAllGameDetails(username: string): Observable<any> {
+        const queryParams = new HttpParams()
+            .set('username', username)
+        return this.http.get<any>('/api/get-all-games', {params: queryParams})
             .pipe(result => {return result})
     }
 
@@ -49,29 +51,6 @@ export class GameService {
     addGameROM(form: FormData) {
         return this.http.post<any>('/api/add-rom', form)
             .pipe(result => {return result})
-    }
-
-    /* GAME STARTED */
-    
-    sendToChatBox(team: string, message: string) {
-        console.log('>>>> team: ', team)
-        console.log('>>>> message: ', message)
-        switch (team) {
-            case 'A':
-                
-                break;
-            case 'B':
-                
-                break;
-            case 'C':
-                
-                break;
-            case 'D':
-                
-                break;
-            default:
-                break;
-        }
     }
 
     /* GAME ENDED */

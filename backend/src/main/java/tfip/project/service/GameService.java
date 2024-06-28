@@ -46,6 +46,10 @@ public class GameService {
         return gameRepo.getAllGames();
     }
 
+    public List<GameDetails> getAllGamesByUsername(String username) {
+        return gameRepo.getAllGamesByUsername(username);
+    }
+
     @Transactional
     public boolean saveGameRom(String username, MultipartFile rom) {
         String id = UUID.randomUUID().toString().substring(0, 8);

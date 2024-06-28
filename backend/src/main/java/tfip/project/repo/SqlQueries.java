@@ -54,6 +54,12 @@ public interface SqlQueries {
         SELECT *
         FROM gamebond.games
         """;
+    public static final String SQL_GET_ALL_GAMES_BY_USERNAME = """
+        SELECT games.game_id, game_title, rom_file, picture_url FROM gamebond.user_games
+        INNER JOIN gamebond.games
+        ON games.game_id = user_games.game_id
+        WHERE user_games.username = ?
+        """;
     public static final String SQL_GET_GAME_BY_ID = """
         SELECT *
         FROM gamebond.games
@@ -73,6 +79,5 @@ public interface SqlQueries {
     public static final String SQL_ADD_GAME_TO_USER = """
         INSERT INTO user_games(username, game_id) VALUES (?,?);
         """;
-
 
 }

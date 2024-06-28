@@ -26,6 +26,14 @@ public class GameRepository implements SqlQueries {
         }
     }
 
+    public List<GameDetails> getAllGamesByUsername(String username) {
+        try {
+            return template.query(SQL_GET_ALL_GAMES_BY_USERNAME, new GameDetailsRowMapper(), username);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public GameDetails getGameDetailsByGameId(String gameId) {
         try {
             return template.queryForObject(SQL_GET_GAME_BY_ID,

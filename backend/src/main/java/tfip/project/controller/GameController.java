@@ -37,8 +37,8 @@ public class GameController {
     GameService gameSvc;
 
     @GetMapping("/get-all-games")
-    public ResponseEntity<String> getAllGames() {
-        List<GameDetails> gameList = gameSvc.getAllGames();
+    public ResponseEntity<String> getAllGamesByUsername(@RequestParam String username) {
+        List<GameDetails> gameList = gameSvc.getAllGamesByUsername(username);
         JsonArray gameArray = listToJsonArray(gameList);
         return new ResponseEntity<String>(gameArray.toString(), HttpStatus.OK);
     }

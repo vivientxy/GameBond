@@ -44,7 +44,8 @@ export class AddRomComponent implements OnInit {
     this.gameSvc.addGameROM(formData)
       .subscribe(response => {
         console.log('>>> http response:', response)
-        alert('File uploaded successfully!')
+        alert('ROM uploaded successfully!')
+        this.router.navigate(['/host'])
       })
   }
 

@@ -17,7 +17,7 @@ export class MainComponent implements OnInit {
 
   private readonly userSvc = inject(UserService)
   private readonly router = inject(Router)
-  isLoggedIn!: boolean
+  isLoggedIn: boolean = this.userSvc.isLoggedIn();
 
   ngOnInit(): void {
       this.userSvc.isLoggedInAsObservable().subscribe(bool => this.isLoggedIn = bool)
