@@ -18,6 +18,11 @@ public class User {
     private boolean active;
 
     public JsonObject toJson() {
+        if (username == null) username = "";
+        if (password == null) password = "";
+        if (email == null) email = "";
+        if (firstName == null) firstName = "";
+        if (lastName == null) lastName = "";
         return Json.createObjectBuilder()
             .add("username", username)
             .add("password", password)

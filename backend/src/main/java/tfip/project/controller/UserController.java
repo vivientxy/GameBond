@@ -50,17 +50,20 @@ public class UserController {
 
     @PostMapping(path = {"/login"})
     public ResponseEntity<String> verifyLogin(@RequestBody String json) {
-        System.out.println(">>> triggered login controller");
-
         User formUser = jsonToUser(json);
         Boolean isLoginSuccess = userSvc.validateLogin(formUser.getUsername(), formUser.getPassword());
         System.out.println(">>> isLoginSuccess:" + isLoginSuccess);
 
         if (isLoginSuccess == null)
             return new ResponseEntity<String>("Username not found", HttpStatus.NOT_FOUND);
-        if (isLoginSuccess)
-            return new ResponseEntity<String>(HttpStatus.OK);
-        return new ResponseEntity<String>("Wrong password", HttpStatus.UNAUTHORIZED);
+        if (!isLoginSuccess)
+            return new ResponseEntity<String>("Wrong password", HttpStatus.UNAUTHORIZED);
+
+        User retrievedUser = userSvc.getUserByUsername(formUser.getUsername());
+        retrievedUser.setPassword("");
+        System.out.println(">>> retrievedUser:" + retrievedUser.toJson().toString());
+        
+        return new ResponseEntity<String>(retrievedUser.toJson().toString(), HttpStatus.OK);
     }
 
     @PostMapping(path = {"/reset"})

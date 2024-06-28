@@ -22,7 +22,6 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import jakarta.mail.Multipart;
 import tfip.project.model.GameDetails;
 import tfip.project.service.GameService;
 import org.springframework.web.bind.annotation.GetMapping;
