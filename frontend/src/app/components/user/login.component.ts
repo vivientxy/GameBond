@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: user => {
           sessionStorage.setItem('user', JSON.stringify(user))
+          this.userSvc.loggedInSignal.next(true);
           this.router.navigate(['/']);
         },
         error: err => {

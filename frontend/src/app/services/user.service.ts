@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable()
@@ -33,11 +33,18 @@ export class UserService {
         .pipe(result => {return result})
   }
 
+  loggedInSignal = new Subject<boolean>();
+
+  isLoggedInAsObservable() {
+    return this.loggedInSignal.asObservable();
+  }
+
   isLoggedIn(): boolean {
     return sessionStorage.getItem('user') != null ? true : false;
   }
 
   logout(): void {
+    this.loggedInSignal.next(false);
     sessionStorage.removeItem('user');
   }
 
