@@ -74,6 +74,33 @@ public class GameService {
         return true;
     }
 
+    @Transactional
+    public boolean saveGameRom(String username, MultipartFile rom, MultipartFile pic) {
+        String id = UUID.randomUUID().toString().substring(0, 8);
+        String romS3url;
+        String picS3url;
+        try {
+            romS3url = s3Repo.saveToS3(rom, id);
+            picS3url = s3Repo.saveToS3(pic, pic.getOriginalFilename());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Rolling back transaction - failed to save to S3");
+        }
+
+        GameDetails game = new GameDetails();
+        game.setGameId(id);
+        game.setRomFile(romS3url);
+        game.setGameTitle(rom.getOriginalFilename());
+        game.setPictureUrl(picS3url);
+
+        boolean isGameAdded = gameRepo.saveGame(game);
+        boolean isGameAddedToUser = gameRepo.saveGameToUser(username, game);
+        if (!isGameAdded || !isGameAddedToUser)
+            throw new RuntimeException("Rolling back transaction - failed to save to MySQL");
+
+        return true;
+    }
+
     public GameDetails getGameDetailsByGameId(String gameId) {
         return gameRepo.getGameDetailsByGameId(gameId);
     }

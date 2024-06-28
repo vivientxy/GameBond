@@ -17,7 +17,8 @@ export class AddRomComponent implements OnInit {
   private readonly gameSvc = inject(GameService)
   private readonly userSvc = inject(UserService)
   romForm!: FormGroup;
-  selectedFile: any = null;
+  selectedRomFile: any = null;
+  selectedPicFile: any = null;
   user!: User | null;
 
   ngOnInit(): void {
@@ -26,18 +27,20 @@ export class AddRomComponent implements OnInit {
       this.router.navigate(['/']);
 
     this.romForm = this.fb.group({
-      fileSource: this.fb.control('', [Validators.required])
+      romFile: this.fb.control('', [Validators.required]),
+      picFile: this.fb.control('')
     })
   }
 
   addRom() {
     const formData = new FormData();
-    const fileSourceValue = this.romForm.get('fileSource')?.value
+    const romFileValue = this.romForm.get('romFile')?.value
+    const picFileValue = this.romForm.get('picFile')?.value
 
-    if (fileSourceValue !== null && fileSourceValue !== undefined)
-      formData.append('rom', fileSourceValue)
-
-    console.log('>>> this.user:', this.user)
+    if (romFileValue !== null && romFileValue !== undefined)
+      formData.append('rom', romFileValue)
+    if (picFileValue !== null && picFileValue !== undefined)
+      formData.append('pic', picFileValue)
     if (this.user)
       formData.append('username', this.user.username)
 
@@ -49,13 +52,18 @@ export class AddRomComponent implements OnInit {
       })
   }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0] ?? null;
-    if (event.target.files.length > 0) {
-      this.romForm.patchValue({
-        fileSource: this.selectedFile
-      })
-    }
+  onFileSelectedRom(event: any): void {
+    this.selectedRomFile = event.target.files[0] ?? null;
+    this.romForm.patchValue({
+      romFile: this.selectedRomFile
+    })
+  }
+
+  onFileSelectedPic(event: any): void {
+    this.selectedPicFile = event.target.files[0] ?? null;
+    this.romForm.patchValue({
+      picFile: this.selectedPicFile
+    })
   }
 
 }

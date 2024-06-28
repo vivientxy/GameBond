@@ -52,9 +52,12 @@ public class GameController {
     }
 
     @PostMapping(path = {"/add-rom"}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> addRom(@RequestPart MultipartFile rom, @RequestPart String username) {
+    public ResponseEntity<String> addRom(@RequestPart MultipartFile rom, @RequestPart(required = false) MultipartFile pic, @RequestPart String username) {
         try {
-            gameSvc.saveGameRom(username, rom);
+            if (pic == null)
+                gameSvc.saveGameRom(username, rom);
+            else
+                gameSvc.saveGameRom(username, rom, pic);
             return new ResponseEntity<String>(HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);

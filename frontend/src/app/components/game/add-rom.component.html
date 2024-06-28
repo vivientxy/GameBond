@@ -6,11 +6,17 @@
   <form [formGroup]="romForm" (submit)="addRom()" enctype="multipart/form-data">
 
     <div style="margin-bottom: 30px;">
-        <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
-        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept=".gb">
-        <span class="file-name">{{selectedFile?.name}}</span>
+        <button type="button" mat-raised-button (click)="romInput.click()">Add ROM File*</button>
+        <input hidden (change)="onFileSelectedRom($event)" #romInput type="file" accept=".gb">
+        <span class="file-name">{{selectedRomFile?.name}}</span>
     </div>
 
-    <button mat-flat-button color="primary" type="submit" class="form-button">Add ROM</button>
+    <div style="margin-bottom: 30px;">
+        <button type="button" mat-raised-button (click)="picInput.click()">Add Cover Picture</button>
+        <input hidden (change)="onFileSelectedPic($event)" #picInput type="file" accept="image/*">
+        <span class="file-name">{{selectedPicFile?.name}}</span>
+    </div>
+
+    <button mat-flat-button color="primary" type="submit" class="form-button" [disabled]="romForm.invalid">Add ROM</button>
   </form>
 </div>
