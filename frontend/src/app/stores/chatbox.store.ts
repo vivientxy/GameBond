@@ -14,6 +14,8 @@ export class ChatboxStore extends ComponentStore<ChatSlice> {
         (currState: ChatSlice, { team, chat }) => {
             const newState = { ...currState };
             newState[team].push(chat);
+            if (newState[team].length > 30)
+                newState[team].splice(0,1);
             return newState;
         }
     )

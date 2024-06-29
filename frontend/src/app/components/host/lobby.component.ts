@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { WebSocketService } from '../../services/websocket.service';
 import { HttpClient } from '@angular/common/http';
-import { GameStore } from '../../stores/game.store';
 import { HostGame } from '../../models/hostgame.model';
 
 @Component({
@@ -15,7 +14,6 @@ import { HostGame } from '../../models/hostgame.model';
 export class LobbyComponent implements OnInit, OnDestroy {
 
   private readonly gameSvc = inject(GameService)
-  private readonly gameStore = inject(GameStore)
   private readonly webSocketSvc = inject(WebSocketService)
   private readonly http = inject(HttpClient)
   private readonly router = inject(Router)
@@ -24,12 +22,12 @@ export class LobbyComponent implements OnInit, OnDestroy {
   teams: Map<string,string[]> = new Map();
 
   ngOnInit(): void {
-    if (!this.gameStore.isValidGame) {
+    let game = this.gameSvc.getGame();
+    if (!game) {
       this.router.navigate(['/'])
       return;
-    } 
-
-    this.gameStore.getGame.subscribe(resp => {this.game = resp as HostGame})
+    }
+    this.game = game;
     this.qr$ = this.gameSvc.generateQrCode(this.game.hostId);
 
     const teamsList = ['Team A', 'Team B', 'Team C', 'Team D'];

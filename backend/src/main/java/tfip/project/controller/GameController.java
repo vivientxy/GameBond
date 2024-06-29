@@ -87,7 +87,6 @@ public class GameController {
 
     @GetMapping("/end-game")
     public ResponseEntity<String> endGame(@RequestParam(required = true) String hostId) {
-        System.out.println(">>> triggered /api/end-game for hostId: " + hostId);
         gameSvc.deleteGame(hostId);
         return new ResponseEntity<String>(HttpStatus.OK);
     }

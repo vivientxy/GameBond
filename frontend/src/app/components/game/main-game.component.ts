@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../../services/websocket.service';
-import { GameStore } from '../../stores/game.store';
 import { HostGame } from '../../models/hostgame.model';
 import { ChatboxStore } from '../../stores/chatbox.store';
 import { Chat } from '../../models/chatbox.model';
@@ -17,7 +16,6 @@ export class MainGameComponent implements OnInit, OnDestroy {
 
   private readonly router = inject(Router)
   private readonly gameSvc = inject(GameService)
-  private readonly gameStore = inject(GameStore)
   private readonly chatStore = inject(ChatboxStore)
   private readonly webSocketSvc = inject(WebSocketService)
   game!: HostGame;
@@ -27,20 +25,21 @@ export class MainGameComponent implements OnInit, OnDestroy {
   messagesD$: Observable<Chat[]> = this.chatStore.getChats('TeamD');
 
   ngOnInit(): void {
-    if (!this.gameStore.isValidGame) {
+    let game = this.gameSvc.getGame();
+    if (!game) {
       this.router.navigate(['/'])
       return;
-    } 
-    this.gameStore.getGame.subscribe(resp => {this.game = resp as HostGame})
+    }
+    this.game = game;
   }
 
   ngOnDestroy(): void {
     this.webSocketSvc.disconnect();
-    this.gameSvc.endGame(this.game.hostId).subscribe();
     this.chatStore.resetChats(true);
   }
 
-  back() {
+  endGame() {
+    this.gameSvc.endGame(this.game.hostId).subscribe(); // wipe redis data
     this.router.navigate(['/lobby'])
   }
 

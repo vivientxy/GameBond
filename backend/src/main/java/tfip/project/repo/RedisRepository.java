@@ -35,7 +35,7 @@ public class RedisRepository {
 
     public void saveQRLink(String telegramUrl, String urlLink) {
         ValueOperations<String,String> valueOps = redisTemplate.opsForValue();
-        valueOps.set(telegramUrl, urlLink);
+        valueOps.set(telegramUrl, urlLink, 30, TimeUnit.DAYS);
     }
 
     public String getQRLink(String telegramUrl) {
@@ -48,6 +48,7 @@ public class RedisRepository {
     public void savePlayerByUsername(String username, String hostId, String teamId) {
         HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
         hashOps.put(username, hostId, teamId);
+        redisTemplate.expire(username, 1, TimeUnit.DAYS);
     }
 
     public String getPlayerHostId(String username) {
@@ -97,6 +98,7 @@ public class RedisRepository {
             playersList = stringToList(playersInTeamString);
         playersList.add(username);
         hashOps.put(hostId, teamId, listToString(playersList));
+        redisTemplate.expire(hostId, 1, TimeUnit.DAYS);
     }
 
     public List<String> getPlayersInTeam(String hostId, String teamId) {

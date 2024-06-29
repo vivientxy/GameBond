@@ -27,9 +27,10 @@ import { GameScreenComponent } from './components/game/game-screens/game-screen.
 import { GameScreenBComponent } from './components/game/game-screens/game-screen-b.component';
 import { GameScreenCComponent } from './components/game/game-screens/game-screen-c.component';
 import { GameScreenDComponent } from './components/game/game-screens/game-screen-d.component';
-import { GameStore } from './stores/game.store';
 import { ChatboxStore } from './stores/chatbox.store';
 import { AddRomComponent } from './components/game/add-rom.component';
+import { MembershipComponent } from './components/membership/membership.component';
+import { StripeService } from './services/stripe.service';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { AddRomComponent } from './components/game/add-rom.component';
     LobbyComponent,
     JoinGameComponent,
     AddRomComponent,
+    MembershipComponent
   ],
   imports: [
     BrowserModule,
@@ -64,8 +66,8 @@ import { AddRomComponent } from './components/game/add-rom.component';
     UserService,
     GameService,
     WebSocketService,
-    GameStore,
     ChatboxStore,
+    StripeService
   ],
   bootstrap: [AppComponent]
 })
