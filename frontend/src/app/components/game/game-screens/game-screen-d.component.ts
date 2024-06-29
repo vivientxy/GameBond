@@ -4,7 +4,6 @@ import { firstValueFrom, tap, timer } from 'rxjs';
 import { GameService } from '../../../services/game.service';
 import { WebSocketService } from '../../../services/websocket.service';
 import { HostGame } from '../../../models/hostgame.model';
-import { GameStore } from '../../../stores/game.store';
 import { ChatboxStore } from '../../../stores/chatbox.store';
 import { Chat } from '../../../models/chatbox.model';
 
@@ -17,7 +16,6 @@ export class GameScreenDComponent {
   
   private readonly gameSvc = inject(GameService);
   private readonly webSocketSvc = inject(WebSocketService);
-  private readonly gameStore = inject(GameStore)
   private readonly chatStore = inject(ChatboxStore)
   game!: HostGame;
   gameboy = new Gameboy();
@@ -25,7 +23,8 @@ export class GameScreenDComponent {
   @ViewChild('gameCanvasD', { static: true }) gameCanvasD!: ElementRef<HTMLCanvasElement>;
 
   ngOnInit(): void {
-    this.gameStore.getGame.subscribe(resp => {this.game = resp as HostGame})
+    let game = this.gameSvc.getGame();
+    if (game) this.game = game;
 
     // set up and run gameboy:
     const context = this.gameCanvasD.nativeElement.getContext('2d');

@@ -16,12 +16,13 @@ export class GameService {
             .pipe(result => {return result})
     }
 
-    startLobby(numOfTeams: number, gameId: string) {
-        // let hostId = this.generateHostId(numOfTeams);
-        let hostId = 'e0133494';
+    startLobby(numOfTeams: number, gameId: string): string {
+        // const hostId = this.generateHostId(numOfTeams);
+        const hostId = 'e0133494';
 
         const game: HostGame = {hostId: hostId, gameId: gameId, numOfTeams: numOfTeams};
         sessionStorage.setItem("game", JSON.stringify(game));
+        return hostId;
     }
 
     isValidGame(): boolean {
