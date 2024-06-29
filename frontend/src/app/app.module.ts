@@ -31,6 +31,8 @@ import { ChatboxStore } from './stores/chatbox.store';
 import { AddRomComponent } from './components/game/add-rom.component';
 import { MembershipComponent } from './components/membership/membership.component';
 import { StripeService } from './services/stripe.service';
+import { SuccessComponent } from './components/membership/success.component';
+import { CancelComponent } from './components/membership/cancel.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import { StripeService } from './services/stripe.service';
     LobbyComponent,
     JoinGameComponent,
     AddRomComponent,
-    MembershipComponent
+    MembershipComponent,
+    SuccessComponent,
+    CancelComponent
   ],
   imports: [
     BrowserModule,

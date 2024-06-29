@@ -2,13 +2,9 @@ package tfip.project.service;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
-import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.param.checkout.SessionCreateParams.LineItem;
-import com.stripe.param.checkout.SessionCreateParams.LineItem.PriceData;
-import com.stripe.param.checkout.SessionCreateParams.LineItem.PriceData.ProductData;
 
 import jakarta.annotation.PostConstruct;
 
@@ -26,74 +22,47 @@ public class StripeService {
                 Stripe.apiKey = stripeSecretKey;
         }
 
-        public Session createCheckoutSession(String name, Long price) throws StripeException {
+        public String createCheckoutSession(Integer tier, String email) throws StripeException {
+                System.out.println(">>> stripe service: createCheckoutSession... tier: " + tier + ", email: " + email);
+                String priceId;
+                switch (tier) {
+                        case (0):
+                                // priceId = "price_1PWzgh00X8yfGho68KJc7CAw"; // live
+                                priceId = "price_1PX2vX00X8yfGho6SkWxqXb0"; // test
+                                break;
+                        case (1):
+                                // priceId = "price_1PWzhL00X8yfGho630tSf85G"; // live
+                                priceId = "price_1PX2wj00X8yfGho62vufqZlR"; // test
+                                break;
+                        case (2):
+                                // priceId = "price_1PWzhy00X8yfGho6dqu70GjB"; // live
+                                priceId = "price_1PX2xD00X8yfGho6F9dG5kdf"; // test
+                                break;
+                        case (3):
+                                // priceId = "price_1PWziU00X8yfGho6qyOyYPS5"; // live
+                                priceId = "price_1PX2xk00X8yfGho6TmlaOpLO"; // test
+                                break;
+                        default:
+                                priceId = null;
+                                break;
+                }
+                System.out.println(">>> price id selected: " + priceId);
 
-                ProductData product = SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                .setName(name)
-                                .build();
-                PriceData priceData = SessionCreateParams.LineItem.PriceData.builder()
-                                .setCurrency("sgd")
-                                .setUnitAmount(price)
-                                .setProductData(product)
-                                .build();
                 LineItem lineItem = SessionCreateParams.LineItem.builder()
                                 .setQuantity(1L)
-                                .setPriceData(priceData)
+                                .setPrice(priceId)
                                 .build();
                 SessionCreateParams params = SessionCreateParams.builder()
-                                .setMode(SessionCreateParams.Mode.PAYMENT)
+                                .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
                                 .setSuccessUrl("http://localhost:4200/payment/success")
                                 .setCancelUrl("http://localhost:4200/payment/cancel")
+                                .setCustomerEmail(email)
                                 .addLineItem(lineItem)
                                 .build();
-                return Session.create(params);
+                Session session = Session.create(params);
+                System.out.println(">>> session id: " + session.getId());
+
+                return session.getId();
         }
-
-        public PaymentIntent createPaymentIntent(long amount) throws Exception {
-                PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
-                                .setAmount(amount)
-                                .setCurrency("sgd")
-                                .build();
-                return PaymentIntent.create(createParams);
-        }
-        // post("/create-checkout-session", (request, response) -> {
-        // String YOUR_DOMAIN = "http://localhost:4242";
-        // SessionCreateParams params =
-        // SessionCreateParams.builder()
-        // .setMode(SessionCreateParams.Mode.PAYMENT)
-        // .setSuccessUrl(YOUR_DOMAIN + "/payment/success")
-        // .setCancelUrl(YOUR_DOMAIN + "/payment/cancel")
-        // .addLineItem(
-        // SessionCreateParams.LineItem.builder()
-        // .setQuantity(1L)
-        // // Provide the exact Price ID (for example, pr_1234) of the product you want
-        // to sell
-        // .setPrice("{{PRICE_ID}}")
-        // .build())
-        // .build();
-        // Session session = Session.create(params);
-
-        // response.redirect(session.getUrl(), 303);
-        // return "";
-        // });
-
-        // public String createCheckoutSession(SubscriptionRequestDTO dto) throws
-        // StripeException {
-        // SessionCreateParams params = SessionCreateParams.builder()
-        // .addLineItem(
-        // SessionCreateParams.LineItem.builder()
-        // //live id: price_1OyGWhRovknRUrZ7YpWqQpuK
-        // .setPrice("price_1OypdkRovknRUrZ7r04LzNL6")
-        // .setQuantity(1L)
-        // .build())
-        // .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-        // .setSuccessUrl(dto.getSuccessUrl())
-        // .setCancelUrl(dto.getCancelUrl())
-        // .setCustomerEmail(dto.getEmail())
-        // .build();
-
-        // Session session = Session.create(params);
-        // return session.getId();
-        // }
 
 }

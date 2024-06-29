@@ -11,6 +11,8 @@ import { JoinGameComponent } from './components/host/join-game.component';
 import { MainGameComponent } from './components/game/main-game.component';
 import { AddRomComponent } from './components/game/add-rom.component';
 import { MembershipComponent } from './components/membership/membership.component';
+import { SuccessComponent } from './components/membership/success.component';
+import { CancelComponent } from './components/membership/cancel.component';
 
 const routes: Routes = [
   { path: '', component: SelectorComponent },
@@ -19,6 +21,8 @@ const routes: Routes = [
   { path: 'reset/:resetId', component: ResetPasswordComponent },
   { path: 'reset', component: ForgotPasswordComponent },
   { path: 'membership', component: MembershipComponent },
+  { path: 'payment/success', component: SuccessComponent },
+  { path: 'payment/cancel', component: CancelComponent },
   { path: 'join', component: JoinGameComponent },
   { path: 'host', component: HostGameComponent },
   { path: 'lobby', component: LobbyComponent },

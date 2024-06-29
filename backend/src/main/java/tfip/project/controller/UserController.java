@@ -14,6 +14,7 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import tfip.project.model.StripeCheckoutRequest;
 import tfip.project.model.User;
 import tfip.project.service.MailService;
 import tfip.project.service.StripeService;
@@ -110,22 +111,13 @@ public class UserController {
     }
 
     @PostMapping("/payment/create-session")
-    public Session createCheckoutSession() throws Exception {
-        return stripeSvc.createCheckoutSession("Lite", 299L);
-    }
-
-    @PostMapping("/create-payment-intent")
-    public Map<String, String> createPaymentIntent(@RequestBody Map<String, Object> data) {
-        try {
-            long amount = (Long) data.get("amount");
-            PaymentIntent paymentIntent = stripeSvc.createPaymentIntent(amount);
-            Map<String, String> response = new HashMap<>();
-            response.put("clientSecret", paymentIntent.getClientSecret());
-            return response;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<String> createCheckoutSession(@RequestBody StripeCheckoutRequest req) throws Exception {
+        System.out.println(">>> entered api/payment/create-session");
+        String sessionId = stripeSvc.createCheckoutSession(req.getTier(), req.getEmail());
+        JsonObject json = Json.createObjectBuilder()
+            .add("sessionId", sessionId)
+            .build();
+        return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
     }
     
     private User jsonToUser(String jsonString) {
