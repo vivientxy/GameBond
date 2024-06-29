@@ -106,11 +106,11 @@
 		</dependency>
 
 		<!-- JWT -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
 			<version>0.12.5</version>
-		</dependency>
+		</dependency> -->
 
 		<!-- S3 -->
 		<dependency>
@@ -127,6 +127,13 @@
 			<groupId>jakarta.xml.bind</groupId>
 			<artifactId>jakarta.xml.bind-api</artifactId>
 			<version>4.0.2</version>
+		</dependency>
+
+		<!-- Stripe -->
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>26.0.0</version>
 		</dependency>
 
 
