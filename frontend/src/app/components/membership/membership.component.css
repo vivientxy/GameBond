@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.container {
+    margin-top: 10px;
+    flex-flow: row wrap;
+    max-width: 100%;
+    min-width: 100%;
+    align-content: center;
+    text-align: center;
+}
+
+.banner {
+    padding: 10px;
+    font-size: larger;
+    font-weight: 300;
+}
+
+/* game cards */
+
+.membership-button {
+    /* display: inline flex; */
+    max-width: 220px;
+    margin: 5px;
+    border-radius: 20px;
+}
+
+.membership-card {
+    /* display: inline flex; */
+    margin: 5px;
+    max-width: 300px;
+    border-radius: 20px;
+}
+
+p {
+    width: 100%;
+    text-align: center;
+}
+
+/* select membership card */
+
+.mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+    background-color: rgba(136, 108, 228, 0.6);
+}
+
+.buttons-area .mat-button-toggle-group-appearance-standard .mat-button-toggle-appearance-standard + .mat-button-toggle-appearance-standard,
+.buttons-area .mat-button-toggle-group {
+    border: 0;
+}

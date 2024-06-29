@@ -3,14 +3,20 @@ package tfip.project.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stripe.model.PaymentIntent;
+import com.stripe.model.checkout.Session;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import tfip.project.model.User;
 import tfip.project.service.MailService;
+import tfip.project.service.StripeService;
 import tfip.project.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +37,9 @@ public class UserController {
 
     @Autowired
 	MailService mailSvc;
+
+    @Autowired
+    private StripeService stripeSvc;
 
     @PostMapping(path = {"/register"})
     public ResponseEntity<String> registerNewUser(@RequestBody String json) {
@@ -99,7 +108,25 @@ public class UserController {
             return new ResponseEntity<String>(HttpStatus.NOT_MODIFIED);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
-    
+
+    @PostMapping("/payment/create-session")
+    public Session createCheckoutSession() throws Exception {
+        return stripeSvc.createCheckoutSession("Lite", 299L);
+    }
+
+    @PostMapping("/create-payment-intent")
+    public Map<String, String> createPaymentIntent(@RequestBody Map<String, Object> data) {
+        try {
+            long amount = (Long) data.get("amount");
+            PaymentIntent paymentIntent = stripeSvc.createPaymentIntent(amount);
+            Map<String, String> response = new HashMap<>();
+            response.put("clientSecret", paymentIntent.getClientSecret());
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
     
     private User jsonToUser(String jsonString) {
         JsonReader jsonReader = Json.createReader(new StringReader(jsonString));

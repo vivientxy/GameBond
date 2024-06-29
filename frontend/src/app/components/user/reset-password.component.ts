@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../models/user.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-reset-password',
@@ -20,6 +21,10 @@ export class ResetPasswordComponent implements OnInit {
   user!: User;
   isValid = true;
 
+  constructor(private titleService:Title) {
+    this.titleService.setTitle("Reset your password | GameBond");
+  }
+  
   ngOnInit(): void {
     this.resetForm = this.fb.group({
       password: this.fb.control<string>('', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),

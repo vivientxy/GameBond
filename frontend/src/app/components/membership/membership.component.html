@@ -1,0 +1,39 @@
+<div class="container">
+
+    <h3 style="margin-bottom: 10px;">Upgrade Your Membership</h3>
+
+    <form [formGroup]="membershipForm" (submit)="upgradeMembership()">
+
+        <div class="banner">
+            Select Membership Tier:
+        </div>
+
+        <div class="buttons-area">
+            <mat-button-toggle-group formControlName="tier" [hideSingleSelectionIndicator]="true">
+
+                <mat-button-toggle *ngFor="let tier of tiers"  [value]="tier" class="membership-button">
+                    <mat-card class="membership-card">
+                        <mat-card-header>
+                            <mat-card-title>{{tier.name}}</mat-card-title>
+                            
+                        </mat-card-header>
+                        <mat-card-content>
+                            <p>{{tier.monthlyGames}} games / month</p>
+                            <p>{{tier.maxRoms}} Max ROMs</p>
+                        </mat-card-content>
+                        <mat-card-footer>
+                            <mat-card-subtitle>${{tier.price}}</mat-card-subtitle>
+                        </mat-card-footer>
+                        
+                    </mat-card>
+                </mat-button-toggle>
+
+            </mat-button-toggle-group>
+        </div>
+
+        <div class="banner">
+            <button type="submit" mat-flat-button color="primary" [disabled]="membershipForm.invalid" style="padding: 10px;">Upgrade Membership</button>
+        </div>
+
+    </form>
+</div>

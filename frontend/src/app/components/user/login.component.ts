@@ -4,6 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { User } from '../../models/user.model';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   private unsubscribe$ = new Subject();
 
+  constructor(private titleService:Title) {
+    this.titleService.setTitle("Login | GameBond");
+  }
+  
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       username: this.fb.control<string>('', [Validators.required]),

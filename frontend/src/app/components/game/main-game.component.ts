@@ -6,6 +6,7 @@ import { ChatboxStore } from '../../stores/chatbox.store';
 import { Chat } from '../../models/chatbox.model';
 import { Observable } from 'rxjs';
 import { GameService } from '../../services/game.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-main-game',
@@ -24,6 +25,10 @@ export class MainGameComponent implements OnInit, OnDestroy {
   messagesC$: Observable<Chat[]> = this.chatStore.getChats('TeamC');
   messagesD$: Observable<Chat[]> = this.chatStore.getChats('TeamD');
 
+  constructor(private titleService:Title) {
+    this.titleService.setTitle("Game On! | GameBond");
+  }
+  
   ngOnInit(): void {
     let game = this.gameSvc.getGame();
     if (!game) {

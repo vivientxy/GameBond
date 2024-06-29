@@ -10,6 +10,7 @@ import { LobbyComponent } from './components/host/lobby.component';
 import { JoinGameComponent } from './components/host/join-game.component';
 import { MainGameComponent } from './components/game/main-game.component';
 import { AddRomComponent } from './components/game/add-rom.component';
+import { MembershipComponent } from './components/membership/membership.component';
 
 const routes: Routes = [
   { path: '', component: SelectorComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'reset/:resetId', component: ResetPasswordComponent },
   { path: 'reset', component: ForgotPasswordComponent },
+  { path: 'membership', component: MembershipComponent },
   { path: 'join', component: JoinGameComponent },
   { path: 'host', component: HostGameComponent },
   { path: 'lobby', component: LobbyComponent },

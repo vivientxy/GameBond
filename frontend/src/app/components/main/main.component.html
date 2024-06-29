@@ -7,8 +7,8 @@
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item [routerLink]="['/login']" *ngIf="!isLoggedIn">Login</button>
-      <button mat-menu-item [routerLink]="['/reset']" *ngIf="!isLoggedIn">Forgot Password</button>
       <button mat-menu-item [routerLink]="['/register']" *ngIf="!isLoggedIn">Register Account</button>
+      <button mat-menu-item [routerLink]="['/membership']" *ngIf="isLoggedIn">Manage Membership</button>
       <button mat-menu-item (click)="logout()" *ngIf="isLoggedIn">Logout</button>
     </mat-menu>
   </div>

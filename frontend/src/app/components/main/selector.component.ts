@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-selector',
@@ -11,6 +12,10 @@ export class SelectorComponent {
 
   private readonly userSvc = inject(UserService)
   private readonly router = inject(Router)
+
+  constructor(private titleService:Title) {
+    this.titleService.setTitle("GameBond");
+  }
 
   joinGame() {
     this.router.navigate(['/join'])

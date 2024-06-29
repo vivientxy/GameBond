@@ -4,6 +4,7 @@ import { User } from '../../models/user.model';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from '../../services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-register',
@@ -18,6 +19,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
   private unsubscribe$ = new Subject();
 
+  constructor(private titleService:Title) {
+    this.titleService.setTitle("Register an Account! | GameBond");
+  }
+  
   ngOnInit(): void {
     this.registerForm = this.fb.group({
       username: this.fb.control<string>('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]),

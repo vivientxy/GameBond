@@ -5,6 +5,7 @@ import { GameRom } from '../../models/gamerom.model';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-host-game',
@@ -20,6 +21,10 @@ export class HostGameComponent implements OnInit {
   hostForm!: FormGroup;
   gameList: GameRom[] = []
   user!: User;
+
+  constructor(private titleService:Title) {
+    this.titleService.setTitle("Host a Game! | GameBond");
+  }
 
   ngOnInit(): void {
     let user = this.userSvc.getUser();

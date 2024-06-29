@@ -4,6 +4,7 @@ import { User } from '../../models/user.model';
 import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-forgot-password',
@@ -19,6 +20,10 @@ export class ForgotPasswordComponent implements OnInit {
   private unsubscribe$ = new Subject();
   private lastTouchedField = '';
 
+  constructor(private titleService:Title) {
+    this.titleService.setTitle("Reset your password | GameBond");
+  }
+  
   ngOnInit(): void {
     this.forgotPasswordForm = this.fb.group({
       username: this.fb.control(''),
