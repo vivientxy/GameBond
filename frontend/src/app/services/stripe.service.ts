@@ -28,4 +28,10 @@ export class StripeService {
       .then(resp => {alert(resp.error.message)})
   }
 
+  upgradeMembership(uuid: string, email: string): Observable<any> {
+    const body = { uuid: uuid, email: email }; 
+    return this.http.post<any>('api/payment/upgrade-membership', body)
+      .pipe(result => {return result})
+  }
+
 }

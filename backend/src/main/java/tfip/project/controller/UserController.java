@@ -15,7 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tfip.project.model.StripeCheckoutRequest;
+import tfip.project.model.UpgradeMembershipRequest;
 import tfip.project.model.User;
+import tfip.project.model.UserMembership;
 import tfip.project.service.MailService;
 import tfip.project.service.StripeService;
 import tfip.project.service.UserService;
@@ -112,12 +114,26 @@ public class UserController {
 
     @PostMapping("/payment/create-session")
     public ResponseEntity<String> createCheckoutSession(@RequestBody StripeCheckoutRequest req) throws Exception {
-        System.out.println(">>> entered api/payment/create-session");
         String sessionId = stripeSvc.createCheckoutSession(req.getTier(), req.getEmail());
+        String uuid = stripeSvc.saveTier(req.getTier(), req.getEmail());
         JsonObject json = Json.createObjectBuilder()
             .add("sessionId", sessionId)
+            .add("uuid", uuid)
             .build();
         return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
+    }
+
+    @PostMapping("/payment/upgrade-membership")
+    public ResponseEntity<String> upgradeMembership(@RequestBody UpgradeMembershipRequest req) throws Exception {
+        Integer tier = stripeSvc.validateTier(req.getUuid(), req.getEmail());
+        if (tier == null)
+            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+
+        UserMembership membership = userSvc.updateUserMembership(req.getEmail(), tier);
+        if (membership == null)
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return new ResponseEntity<String>(membership.toJson().toString(), HttpStatus.OK);
     }
     
     private User jsonToUser(String jsonString) {

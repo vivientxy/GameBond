@@ -7,7 +7,9 @@ import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.param.checkout.SessionCreateParams.LineItem;
 
 import jakarta.annotation.PostConstruct;
+import tfip.project.repo.RedisRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class StripeService {
 
         @Value("${stripe.secret.key}")
         private String stripeSecretKey;
+
+        @Autowired
+        RedisRepository redisRepo;
 
         @PostConstruct
         public void init() {
@@ -55,7 +60,7 @@ public class StripeService {
                 SessionCreateParams params = SessionCreateParams.builder()
                                 .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
                                 .setSuccessUrl("http://localhost:4200/payment/success")
-                                .setCancelUrl("http://localhost:4200/payment/cancel")
+                                .setCancelUrl("http://localhost:4200/membership")
                                 .setCustomerEmail(email)
                                 .addLineItem(lineItem)
                                 .build();
@@ -63,6 +68,14 @@ public class StripeService {
                 System.out.println(">>> session id: " + session.getId());
 
                 return session.getId();
+        }
+
+        public String saveTier(Integer tier, String email) {
+                return redisRepo.saveMembershipTier(tier, email);
+        }
+
+        public Integer validateTier(String uuid, String email) {
+                return redisRepo.validateMembershipTier(uuid, email);
         }
 
 }

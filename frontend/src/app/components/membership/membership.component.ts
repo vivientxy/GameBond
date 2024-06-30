@@ -42,10 +42,9 @@ export class MembershipComponent {
 
   upgradeMembership() {
     let membership: Membership = this.membershipForm.controls['tier'].value;
-    console.log('>>> tier selected:', membership) // 0, 1, 2 or 3
-
     this.stripeSvc.createPaymentSession(membership.tier, this.user.email)
       .subscribe(resp => {
+        sessionStorage.setItem('uuid', resp.uuid)
         this.stripeSvc.redirectToCheckout(resp.sessionId);
       })
   }

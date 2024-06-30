@@ -32,7 +32,7 @@ import { AddRomComponent } from './components/game/add-rom.component';
 import { MembershipComponent } from './components/membership/membership.component';
 import { StripeService } from './services/stripe.service';
 import { SuccessComponent } from './components/membership/success.component';
-import { CancelComponent } from './components/membership/cancel.component';
+import { FailComponent } from './components/membership/fail.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +55,7 @@ import { CancelComponent } from './components/membership/cancel.component';
     AddRomComponent,
     MembershipComponent,
     SuccessComponent,
-    CancelComponent
+    FailComponent
   ],
   imports: [
     BrowserModule,

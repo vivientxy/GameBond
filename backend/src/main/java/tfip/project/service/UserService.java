@@ -1,5 +1,6 @@
 package tfip.project.service;
 
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import tfip.project.model.User;
+import tfip.project.model.UserMembership;
 import tfip.project.repo.RedisRepository;
 import tfip.project.repo.UserRepository;
 
@@ -79,6 +81,18 @@ public class UserService {
         if (username == null)
             return null;
         return getUserByUsername(username);
+    }
+
+    public UserMembership updateUserMembership(String email, Integer tier) {
+        String username = getUserByEmail(email).getUsername();
+        UserMembership membership = new UserMembership();
+        membership.setUsername(username);
+        membership.setMembership(tier);
+        membership.setMembershipDate(new Date());
+        boolean isUpdated = userRepo.updateMembership(membership);
+        if (isUpdated) 
+            return membership;
+        return null;
     }
 
 }

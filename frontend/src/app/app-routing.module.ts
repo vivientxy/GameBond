@@ -12,7 +12,7 @@ import { MainGameComponent } from './components/game/main-game.component';
 import { AddRomComponent } from './components/game/add-rom.component';
 import { MembershipComponent } from './components/membership/membership.component';
 import { SuccessComponent } from './components/membership/success.component';
-import { CancelComponent } from './components/membership/cancel.component';
+import { FailComponent } from './components/membership/fail.component';
 
 const routes: Routes = [
   { path: '', component: SelectorComponent },
@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'reset', component: ForgotPasswordComponent },
   { path: 'membership', component: MembershipComponent },
   { path: 'payment/success', component: SuccessComponent },
-  { path: 'payment/cancel', component: CancelComponent },
+  { path: 'upgrade/fail', component: FailComponent },
   { path: 'join', component: JoinGameComponent },
   { path: 'host', component: HostGameComponent },
   { path: 'lobby', component: LobbyComponent },
