@@ -1,1 +1,13 @@
-<p>success works!</p>
+<div class="container">
+
+    <h3 style="margin-bottom: 10px;">Welcome to your new {{membership?.name}} Membership!</h3>
+
+    <div style="margin: 50px;" class="gleam-container">
+        <img [src]="'/assets/membership-tiers/'+membership?.name?.toLowerCase()+'.png'" [alt]="membership?.name?.toLowerCase()">
+    </div>
+
+    <div>
+        <button type="button" mat-flat-button color="primary" style="padding: 10px;" [routerLink]="['/host']">Host a Game Now!</button>
+    </div>
+
+</div>

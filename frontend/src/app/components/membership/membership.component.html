@@ -14,15 +14,19 @@
                 <mat-button-toggle *ngFor="let tier of tiers"  [value]="tier" class="membership-button">
                     <mat-card class="membership-card">
                         <mat-card-header>
-                            <mat-card-title>{{tier.name}}</mat-card-title>
-                            
+                            <div class="header-container">
+                                <mat-card-title style="font-size: xx-large; margin-bottom: 15px;">{{tier.name}}</mat-card-title>
+                            </div>
                         </mat-card-header>
                         <mat-card-content>
-                            <p>{{tier.monthlyGames}} games / month</p>
-                            <p>{{tier.maxRoms}} Max ROMs</p>
+                            <div class="img-container">
+                                <img [src]="'/assets/membership-tiers/'+tier?.name?.toLowerCase()+'.png'" [alt]="tier?.name?.toLowerCase()">
+                            </div>
+                            <p><span style="color: lightgrey;">►</span> {{tier.monthlyGames}} games / month</p>
+                            <p><span style="color: lightgrey;">►</span> {{tier.maxRoms}} max ROMs</p>
                         </mat-card-content>
-                        <mat-card-footer>
-                            <mat-card-subtitle>S${{tier.price}}</mat-card-subtitle>
+                        <mat-card-footer style="margin-top: 10px; margin-bottom: 10px;">
+                            <mat-card-title style="font-size: x-large;">S${{tier.price}}</mat-card-title>
                         </mat-card-footer>
                         
                     </mat-card>

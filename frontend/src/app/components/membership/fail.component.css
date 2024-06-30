@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.container {
+    margin-top: 10px;
+    flex-flow: row wrap;
+    max-width: 100%;
+    min-width: 100%;
+    align-content: center;
+    text-align: center;
+}
+
+img {
+    width: 400px;
+    margin: 50px;
+}
+
+button {
+    font-size: x-large;
+    padding: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+p {
+    font-size: medium;
+    color: grey;
+    font-style: italic;
+}
+
+span {
+    text-decoration: underline;
+}

@@ -23,26 +23,38 @@ body, html {
     font-weight: 300;
 }
 
-/* game cards */
+/* membership cards */
 
-.membership-button {
-    /* display: inline flex; */
-    max-width: 220px;
-    margin: 5px;
-    border-radius: 20px;
-}
-
+.membership-button,
 .membership-card {
-    /* display: inline flex; */
     margin: 5px;
     max-width: 300px;
     border-radius: 20px;
 }
 
+.header-container {
+    width: 100%;
+}
+
+.img-container {
+    width: 200px;
+    height: 160px;
+    align-content: center;
+}
+
+img {
+    max-width: 150px;
+    max-height: 150px;
+}
+
 p {
     width: 100%;
     text-align: center;
+    line-height: 1.5em;
+    margin-top: 10px;
 }
+
+
 
 /* select membership card */
 
