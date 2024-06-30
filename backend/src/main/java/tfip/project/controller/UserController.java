@@ -3,16 +3,11 @@ package tfip.project.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stripe.model.PaymentIntent;
-import com.stripe.model.checkout.Session;
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
 
 import tfip.project.model.StripeCheckoutRequest;
 import tfip.project.model.UpgradeMembershipRequest;
