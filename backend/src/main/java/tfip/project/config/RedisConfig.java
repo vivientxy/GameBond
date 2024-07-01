@@ -20,15 +20,12 @@ public class RedisConfig {
     private String redisUsername;
     @Value("${spring.data.redis.password}")
     private String redisPassword;
-    @Value("${spring.data.redis.database}")
-    private Integer redisDatabase;
     
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
         redisConfig.setHostName(redisHost);
         redisConfig.setPort(redisPort);
-        redisConfig.setDatabase(redisDatabase);
         if (!"NOT_SET".equals(redisUsername.trim())) {
             redisConfig.setUsername(redisUsername);
             redisConfig.setPassword(redisPassword);

@@ -43,27 +43,20 @@ CREATE TABLE user_games (
 -- add fake items
 INSERT INTO users(username, password, email, firstname, lastname) VALUES ('vivientxy','123123123','vivientxy@hotmail.com','Vivien','Tang');
 INSERT INTO users(username, password, email, firstname) VALUES ('fred','password#123','fred@hotmail.com','fred');
-INSERT INTO users(username, password, email, firstname, lastname) VALUES ('betty','password#123','betty@hotmail.com','betty','chew');
-INSERT INTO users(username, password, email) VALUES ('hoseh','password#123','hoseh@hotmail.com');
-INSERT INTO users(username, password, email, firstname, lastname) VALUES ('kiat','password#123','kiat@hotmail.com','kiat','heong');
-INSERT INTO users(username, password, email) VALUES ('ryo','password#123','ryo@hotmail.com');
 INSERT INTO membership(username, membership) VALUES ('vivientxy',2);
-INSERT INTO membership(username, membership) VALUES ('fred',1);
-INSERT INTO membership(username) VALUES ('betty');
-INSERT INTO membership(username) VALUES ('hoseh');
-INSERT INTO membership(username) VALUES ('kiat');
-INSERT INTO membership(username) VALUES ('ryo');
+INSERT INTO membership(username, membership) VALUES ('fred',0);
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('default1','Tetris','https://gamebond.sgp1.digitaloceanspaces.com/Tetris.gb','https://gamebond.sgp1.digitaloceanspaces.com/Tetris.jpg');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('default2','Wordtris','https://gamebond.sgp1.digitaloceanspaces.com/Wordtris.gb','https://gamebond.sgp1.digitaloceanspaces.com/Wordtris.jpg');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('default3','Motocross Maniacs','https://gamebond.sgp1.digitaloceanspaces.com/Motocross%20Maniacs.gb','https://gamebond.sgp1.digitaloceanspaces.com/Motocross%20Maniacs.jpg');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('default4','Pokemon Red','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Red.gb','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Red.jpg');
--- INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('8a6e0804','Bomberman','https://gamebond.sgp1.digitaloceanspaces.com/Bomberman.gb','https://gamebond.sgp1.digitaloceanspaces.com/Bomberman.jpg');
--- INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('sv8t4s6d','Marios Picross','https://gamebond.sgp1.digitaloceanspaces.com/Marios%20Picross.gb','https://gamebond.sgp1.digitaloceanspaces.com/Marios%20Picross.jpg');
--- INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('n8y56rd1','Pokemon Pinball','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Pinball.gbc','https://gamebond.sgp1.digitaloceanspaces.com/Pokemon%20Pinball.jpg');
 INSERT INTO user_games(username, game_id) VALUES ('vivientxy','default1');
 INSERT INTO user_games(username, game_id) VALUES ('vivientxy','default2');
 INSERT INTO user_games(username, game_id) VALUES ('vivientxy','default3');
 INSERT INTO user_games(username, game_id) VALUES ('vivientxy','default4');
+INSERT INTO user_games(username, game_id) VALUES ('fred','default1');
+INSERT INTO user_games(username, game_id) VALUES ('fred','default2');
+INSERT INTO user_games(username, game_id) VALUES ('fred','default3');
+INSERT INTO user_games(username, game_id) VALUES ('fred','default4');
 
 GRANT ALL PRIVILEGES ON gamebond.* TO 'betty'@'%';
 FLUSH PRIVILEGES;

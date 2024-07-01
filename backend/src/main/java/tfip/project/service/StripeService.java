@@ -18,6 +18,8 @@ public class StripeService {
 
         @Value("${stripe.secret.key}")
         private String stripeSecretKey;
+        @Value("${project.url}")
+        private String projectUrl;
 
         @Autowired
         RedisRepository redisRepo;
@@ -59,8 +61,8 @@ public class StripeService {
                                 .build();
                 SessionCreateParams params = SessionCreateParams.builder()
                                 .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-                                .setSuccessUrl("http://localhost:4200/payment/success")
-                                .setCancelUrl("http://localhost:4200/membership")
+                                .setSuccessUrl(projectUrl + "/payment/success")
+                                .setCancelUrl(projectUrl + "/membership")
                                 .setCustomerEmail(email)
                                 .addLineItem(lineItem)
                                 .build();

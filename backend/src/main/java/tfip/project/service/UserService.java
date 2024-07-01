@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tfip.project.model.User;
 import tfip.project.model.UserMembership;
+import tfip.project.repo.GameRepository;
 import tfip.project.repo.RedisRepository;
 import tfip.project.repo.UserRepository;
 
@@ -22,6 +23,9 @@ public class UserService {
 
     @Autowired
     private RedisRepository redisRepo;
+
+    @Autowired
+    private GameRepository gameRepo;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -58,7 +62,8 @@ public class UserService {
         System.out.println(">>> service: register user:" + user);
         boolean userCreated = userRepo.createUser(user);
         boolean membershipCreated = userRepo.createUserMembership(user.getUsername(), 0);
-        if (!userCreated || !membershipCreated)
+        boolean defaultGamesAdded = gameRepo.saveDefaultGamesToNewUser(user.getUsername());
+        if (!userCreated || !membershipCreated || !defaultGamesAdded)
             throw new RuntimeException("Rolling back transaction - User/Membership creation failed");
         return true;
     }
@@ -73,7 +78,7 @@ public class UserService {
     public String generateResetLink(User user) {
         String resetId = UUID.randomUUID().toString().substring(0,18);
         redisRepo.saveResetLink(resetId, user.getUsername());
-        return projectUrl + "/reset/" + resetId;
+        return projectUrl + "/#/reset/" + resetId;
     }
 
     public User validateResetLink(String resetId) {

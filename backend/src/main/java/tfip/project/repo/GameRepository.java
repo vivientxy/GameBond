@@ -2,6 +2,7 @@ package tfip.project.repo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,19 @@ public class GameRepository implements SqlQueries {
         }
     }
 
+    public boolean saveDefaultGamesToNewUser(String username) {
+        try {
+            List<String> defaultGameList = Arrays.asList("default1", "default2", "default3", "default4");
+            int counter = 0;
+            for (String gameId : defaultGameList)
+                counter += template.update(SQL_ADD_GAME_TO_USER, username, gameId);
+            if (counter == 4)
+                return true;
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     private class GameDetailsRowMapper implements RowMapper<GameDetails> {
         @Override
