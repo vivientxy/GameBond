@@ -33,6 +33,8 @@ import { MembershipComponent } from './components/membership/membership.componen
 import { StripeService } from './services/stripe.service';
 import { SuccessComponent } from './components/membership/success.component';
 import { FailComponent } from './components/membership/fail.component';
+import { rxStompServiceFactory } from './rx-stomp-service-factory';
+import { RxStompService } from './rx-stomp.service';
 
 @NgModule({
   declarations: [
@@ -69,6 +71,10 @@ import { FailComponent } from './components/membership/fail.component';
     provideAnimationsAsync(),
     UserService,
     GameService,
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+    },
     WebSocketService,
     ChatboxStore,
     StripeService

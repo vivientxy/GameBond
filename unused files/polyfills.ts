@@ -6,8 +6,8 @@
 /****************************************
  * APPLICATION IMPORTS
  */
-(function () {
-    if (typeof global === 'undefined') {
-        window.global = window;
-    }
-})();
+// (function () {
+//     if (typeof global === 'undefined') {
+//         window.global = window;
+//     }
+// })();

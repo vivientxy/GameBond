@@ -37,7 +37,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
     }
 
     // WEBSOCKET - subscribe to one websocket topic ("hostid") here
-    this.webSocketSvc.connect();
     this.webSocketSvc.subscribe(`/topic/${this.game.hostId}`, (): any => {
       console.log('>>> subscribing to websocket:', this.game.hostId);
       this.http.post("/api/get-team-members", this.game.hostId).subscribe(

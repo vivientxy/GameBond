@@ -1,38 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
-import SockJS from 'sockjs-client';
-import * as Stomp from 'stompjs';
+import { RxStompService } from '../rx-stomp.service';
 
 @Injectable()
 export class WebSocketService {
 
-  private stompClient: any | null = null;
-  private socket: WebSocket | null = null;
+  constructor(private rxStompService: RxStompService) { }
   private subscriptions: { [topic: string]: Subscription } = {};
 
-  connect(): void {
-    this.socket = new SockJS('http://localhost:8080/sba-websocket');
-    this.stompClient = Stomp.over(this.socket);
-  }
-
   subscribe(topic: string, callback: (message: any) => void): void {
-    if (!this.stompClient) {
-      console.error('Stomp client is not initialised');
-      return;
-    }
-    if (!this.stompClient.connected) {
-      this.stompClient.connect({}, () => {
-        this.subscribeToTopic(topic, callback)
+    this.subscriptions[topic] = this.rxStompService.watch(topic)
+      .subscribe((message: { body: string }) => {
+        callback(message.body)
       })
-    } else {
-      this.subscribeToTopic(topic, callback)
-    }
-  }
-
-  private subscribeToTopic(topic: string, callback: (message: any) => void): void {
-    this.subscriptions[topic] = this.stompClient.subscribe(topic, (message: { body: string }) => {
-      callback(message.body)
-    })
   }
 
   unsubscribe(topic: string): void {
@@ -46,15 +26,6 @@ export class WebSocketService {
   unsubscribeAll(): void {
     for (const topic in this.subscriptions)
       this.unsubscribe(topic);
-  }
-
-  disconnect(): void {
-    if (this.stompClient) {
-      this.unsubscribeAll();
-      this.stompClient.disconnect();
-      this.stompClient = null;
-      this.socket = null;
-    }
   }
 
 }

@@ -39,7 +39,7 @@ export class MainGameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.webSocketSvc.disconnect();
+    this.webSocketSvc.unsubscribeAll();
     this.chatStore.resetChats(true);
   }
 
