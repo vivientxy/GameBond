@@ -54,6 +54,7 @@ public class StripeService {
                                 break;
                 }
                 System.out.println(">>> price id selected: " + priceId);
+                System.out.println(">>> success url: " + projectUrl + "/payment/success");
 
                 LineItem lineItem = SessionCreateParams.LineItem.builder()
                                 .setQuantity(1L)

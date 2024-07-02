@@ -75,6 +75,9 @@ public class GameService {
 
     @Transactional
     public boolean saveGameRom(String username, MultipartFile rom, MultipartFile pic) {
+        if (isRomLimit(username))
+            throw new RuntimeException("User has hit max ROM limit allowed for membership tier. ROM has not been saved");
+
         String id = UUID.randomUUID().toString().substring(0, 8);
         String romS3url;
         String picS3url;
@@ -102,6 +105,8 @@ public class GameService {
 
     public boolean isRomLimit(String username) {
         UserMembership membership = userRepo.getMembership(username);
+        if (membership == null)
+            throw new RuntimeException("Internal error - failed to retrieve user's membership. Please try again later or contact us at business.gamebond@hotmail.com if issue persists.");
         int currRomCount = userRepo.checkRomByUser(username);
         int romEntitlement = membership.getRomEntitlement();
         if (currRomCount < romEntitlement) 

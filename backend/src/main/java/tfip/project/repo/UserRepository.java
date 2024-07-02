@@ -1,11 +1,13 @@
 package tfip.project.repo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import tfip.project.model.User;
@@ -81,9 +83,20 @@ public class UserRepository implements SqlQueries {
 
     public UserMembership getMembership(String username) {
         try {
-            return template.queryForObject(SQL_GET_USER_BY_USERNAME,
-                    BeanPropertyRowMapper.newInstance(UserMembership.class), username);
+            SqlRowSet rs = template.queryForRowSet(SQL_GET_MEMBERSHIP, username);
+            UserMembership membership = new UserMembership();
+            if (rs.first()) {
+                membership.setUsername(rs.getString("username"));
+                membership.setTier(rs.getInt("tier"));
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Date date = sdf.parse(rs.getString("membership_date"));
+                membership.setMembershipDate(date);
+                membership.setMonthlyGamesEntitlement(rs.getInt("monthly_games_entitlement"));
+                membership.setRomEntitlement(rs.getInt("rom_entitlement"));
+            }
+            return membership;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
