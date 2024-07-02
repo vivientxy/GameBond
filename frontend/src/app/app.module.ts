@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -35,6 +35,7 @@ import { SuccessComponent } from './components/membership/success.component';
 import { FailComponent } from './components/membership/fail.component';
 import { rxStompServiceFactory } from './rx-stomp-service-factory';
 import { RxStompService } from './rx-stomp.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,10 @@ import { RxStompService } from './rx-stomp.service';
     NgMaterialsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [
     provideAnimationsAsync(),
