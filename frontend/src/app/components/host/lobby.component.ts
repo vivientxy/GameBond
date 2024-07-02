@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { WebSocketService } from '../../services/websocket.service';
 import { HttpClient } from '@angular/common/http';
 import { HostGame } from '../../models/hostgame.model';
@@ -35,6 +35,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
       const teamList: string[] = []
       this.teams.set(teamsList[index], teamList)
     }
+
+    // initial call for existing team members if navigated back from main-game screen
+    firstValueFrom(this.http.post("/api/get-team-members", this.game.hostId))
+      .then(resp => {this.teams = this.convertToMap(resp as {[key: string]: string[]})}
+    )
 
     // WEBSOCKET - subscribe to one websocket topic ("hostid") here
     this.webSocketSvc.subscribe(`/topic/${this.game.hostId}`, (): any => {
