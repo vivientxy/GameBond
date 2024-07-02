@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
-
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
@@ -71,7 +69,7 @@ public class GameController {
             JsonObject jsonObject = Json.createObjectBuilder().add("qr", qrCode).build();
             createNewHostInRedis(telegramUrl);
             return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
-        } catch (UnirestException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }

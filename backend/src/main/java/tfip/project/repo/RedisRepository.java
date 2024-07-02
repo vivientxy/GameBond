@@ -36,7 +36,7 @@ public class RedisRepository {
 
     public void saveQRLink(String telegramUrl, String urlLink) {
         ValueOperations<String,String> valueOps = redisTemplate.opsForValue();
-        valueOps.set(telegramUrl, urlLink, 30, TimeUnit.DAYS);
+        valueOps.set(telegramUrl, urlLink, 1, TimeUnit.DAYS);
     }
 
     public String getQRLink(String telegramUrl) {

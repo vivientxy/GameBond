@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, map } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { HostGame } from "../models/hostgame.model";
 
@@ -17,9 +17,7 @@ export class GameService {
     }
 
     startLobby(numOfTeams: number, gameId: string): string {
-        // const hostId = this.generateHostId(numOfTeams);
-        const hostId = 'e0133494';
-
+        const hostId = this.generateHostId(numOfTeams);
         const game: HostGame = {hostId: hostId, gameId: gameId, numOfTeams: numOfTeams};
         sessionStorage.setItem("game", JSON.stringify(game));
         return hostId;

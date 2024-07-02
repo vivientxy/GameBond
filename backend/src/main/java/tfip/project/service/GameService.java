@@ -1,25 +1,21 @@
 package tfip.project.service;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 import tfip.project.model.GameDetails;
 import tfip.project.repo.GameRepository;
 import tfip.project.repo.RedisRepository;
@@ -27,11 +23,6 @@ import tfip.project.repo.S3Repository;
 
 @Service
 public class GameService {
-    
-    @Value("${qr.api.key}")
-    private String qrApiKey;
-    @Value("${qr.workspace.id}")
-    private String qrWorkspaceId;
 
     @Autowired
     GameRepository gameRepo;
@@ -109,21 +100,21 @@ public class GameService {
         return gameRepo.getGameDetailsByGameTitle(title);
     }
 
-    public String getQRCode(String telegramUrl) throws UnirestException {
+    public String getQRCode(String telegramUrl) throws Exception {
         String qrCode = redisRepo.getQRLink(telegramUrl);
         if (qrCode == null) {
             System.out.println(">>> QR link not found in Redis... calling external API...");
-            JsonObject body = Json.createObjectBuilder().add("url", telegramUrl).build();
-            HttpResponse<String> response = Unirest.post("https://api.dub.co/links?workspaceId=" + qrWorkspaceId)
-                .header("Authorization", "Bearer " + qrApiKey)
-                .header("Content-Type", "application/json")
-                .body(body.toString())
-                .asString();
-            if (response.getStatus() == 200) {
-                JsonReader reader = Json.createReader(new StringReader(response.getBody()));
-                JsonObject qrResponse = reader.readObject();
-                qrCode = qrResponse.getString("qrCode");
-                redisRepo.saveQRLink(telegramUrl, qrCode);
+            RequestEntity<Void> req = RequestEntity
+                    .get("https://api.qrserver.com/v1/create-qr-code/?charset-source=UTF-8&size=1000x1000&data=" + telegramUrl)
+                    .accept(MediaType.IMAGE_PNG)
+                    .build();
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<byte[]> resp = restTemplate.exchange(req, byte[].class);
+            if (resp.getStatusCode().is2xxSuccessful()) {
+                qrCode = "data:image/png;base64," + Base64.getEncoder().encodeToString(resp.getBody());
+                redisRepo.saveQRLink(telegramUrl, qrCode);    
+            } else {
+                throw new Exception("unable to retrieve QR code from API");
             }
         }
         return qrCode;
