@@ -17,6 +17,11 @@
         <span class="file-name">{{selectedPicFile?.name}}</span>
     </div>
 
-    <button mat-flat-button color="primary" type="submit" class="form-button" [disabled]="romForm.invalid">Add ROM</button>
+    <div>
+      <button mat-flat-button color="primary" type="submit" class="form-button" [disabled]="romForm.invalid">Add ROM</button>
+    </div>
+    <div>
+      <button mat-flat-button color="secondary" type="button" class="form-button" [routerLink]="['/host']">Back to Host Game</button>
+    </div>
   </form>
 </div>
