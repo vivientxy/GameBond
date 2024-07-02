@@ -61,7 +61,7 @@ public class UserService {
         user.setPassword(encodedPassword);
         System.out.println(">>> service: register user:" + user);
         boolean userCreated = userRepo.createUser(user);
-        boolean membershipCreated = userRepo.createUserMembership(user.getUsername(), 0);
+        boolean membershipCreated = userRepo.createNewUserMembership(user.getUsername());
         boolean defaultGamesAdded = gameRepo.saveDefaultGamesToNewUser(user.getUsername());
         if (!userCreated || !membershipCreated || !defaultGamesAdded)
             throw new RuntimeException("Rolling back transaction - User/Membership creation failed");
@@ -92,8 +92,10 @@ public class UserService {
         String username = getUserByEmail(email).getUsername();
         UserMembership membership = new UserMembership();
         membership.setUsername(username);
-        membership.setMembership(tier);
+        membership.setTier(tier);
         membership.setMembershipDate(new Date());
+        membership.setMonthlyGamesEntitlement(membership.getMonthlyGamesEntitlementByTier());
+        membership.setRomEntitlement(membership.getRomEntitlementByTier());
         boolean isUpdated = userRepo.updateMembership(membership);
         if (isUpdated) 
             return membership;

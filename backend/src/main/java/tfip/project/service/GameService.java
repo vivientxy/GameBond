@@ -17,15 +17,20 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import tfip.project.model.GameDetails;
+import tfip.project.model.UserMembership;
 import tfip.project.repo.GameRepository;
 import tfip.project.repo.RedisRepository;
 import tfip.project.repo.S3Repository;
+import tfip.project.repo.UserRepository;
 
 @Service
 public class GameService {
 
     @Autowired
     GameRepository gameRepo;
+
+    @Autowired
+    UserRepository userRepo;
 
     @Autowired
     RedisRepository redisRepo;
@@ -43,13 +48,16 @@ public class GameService {
 
     @Transactional
     public boolean saveGameRom(String username, MultipartFile rom) {
+        if (isRomLimit(username))
+            throw new RuntimeException("User has hit max ROM limit allowed for membership tier. ROM has not been saved");
+
         String id = UUID.randomUUID().toString().substring(0, 8);
         String s3url;
         try {
             s3url = s3Repo.saveToS3(rom, id);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Rolling back transaction - failed to save to S3");
+            throw new RuntimeException("Internal error - failed to save to S3. Please try again later or contact us at business.gamebond@hotmail.com if issue persists.");
         }
 
         GameDetails game = new GameDetails();
@@ -60,7 +68,7 @@ public class GameService {
         boolean isGameAdded = gameRepo.saveGame(game);
         boolean isGameAddedToUser = gameRepo.saveGameToUser(username, game);
         if (!isGameAdded || !isGameAddedToUser)
-            throw new RuntimeException("Rolling back transaction - failed to save to MySQL");
+            throw new RuntimeException("Internal error - failed to save to MySQL. Please try again later or contact us at business.gamebond@hotmail.com if issue persists.");
 
         return true;
     }
@@ -75,7 +83,7 @@ public class GameService {
             picS3url = s3Repo.saveToS3(pic, pic.getOriginalFilename());
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Rolling back transaction - failed to save to S3");
+            throw new RuntimeException("Internal error - failed to save to S3. Please try again later or contact us at business.gamebond@hotmail.com if issue persists.");
         }
 
         GameDetails game = new GameDetails();
@@ -87,8 +95,17 @@ public class GameService {
         boolean isGameAdded = gameRepo.saveGame(game);
         boolean isGameAddedToUser = gameRepo.saveGameToUser(username, game);
         if (!isGameAdded || !isGameAddedToUser)
-            throw new RuntimeException("Rolling back transaction - failed to save to MySQL");
+            throw new RuntimeException("Internal error - failed to save to MySQL. Please try again later or contact us at business.gamebond@hotmail.com if issue persists.");
 
+        return true;
+    }
+
+    public boolean isRomLimit(String username) {
+        UserMembership membership = userRepo.getMembership(username);
+        int currRomCount = userRepo.checkRomByUser(username);
+        int romEntitlement = membership.getRomEntitlement();
+        if (currRomCount < romEntitlement) 
+            return false;
         return true;
     }
 

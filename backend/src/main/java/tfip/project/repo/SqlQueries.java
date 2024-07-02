@@ -34,9 +34,9 @@ public interface SqlQueries {
         """;
 
     // MEMBERSHIP
-    public static final String SQL_ADD_USER_MEMBERSHIP = """
-        INSERT INTO membership(username,membership)
-        VALUES (?,?)
+    public static final String SQL_ADD_NEW_USER_MEMBERSHIP = """
+        INSERT INTO membership(username)
+        VALUES (?)
         """;
     public static final String SQL_GET_MEMBERSHIP = """
         SELECT *
@@ -45,9 +45,14 @@ public interface SqlQueries {
         """;
     public static final String SQL_UPDATE_MEMBERSHIP = """
         UPDATE gamebond.membership
-        SET membership=?, membership_date=?
+        SET tier=?, membership_date=?, monthly_games_entitlement=?, rom_entitlement=?
         WHERE username=?;
         """;
+    public static final String SQL_ROM_COUNT_BY_USER = """
+        SELECT COUNT(*) FROM gamebond.user_games
+        WHERE username = ?
+        """;
+    
 
     // GAMES
     public static final String SQL_GET_ALL_GAMES = """

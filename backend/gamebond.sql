@@ -15,8 +15,10 @@ CREATE TABLE users (
 
 CREATE TABLE membership (
     username VARCHAR(32) NOT NULL UNIQUE,
-    membership INT NOT NULL DEFAULT 0,
+    tier INT NOT NULL DEFAULT 0,
     membership_date DATETIME DEFAULT current_timestamp,
+    monthly_games_entitlement INT NOT NULL DEFAULT 5,
+    rom_entitlement INT NOT NULL DEFAULT 5,
 
     CONSTRAINT fk_username FOREIGN KEY(username)
         REFERENCES users(username)
@@ -43,8 +45,8 @@ CREATE TABLE user_games (
 -- add fake items
 INSERT INTO users(username, password, email, firstname, lastname) VALUES ('vivientxy','123123123','vivientxy@hotmail.com','Vivien','Tang');
 INSERT INTO users(username, password, email, firstname) VALUES ('fred','password#123','fred@hotmail.com','fred');
-INSERT INTO membership(username, membership) VALUES ('vivientxy',2);
-INSERT INTO membership(username, membership) VALUES ('fred',0);
+INSERT INTO membership(username, tier, monthly_games_entitlement, rom_entitlement) VALUES ('vivientxy',2,50,10);
+INSERT INTO membership(username) VALUES ('fred');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('default1','Tetris','https://gamebond.sgp1.digitaloceanspaces.com/Tetris.gb','https://gamebond.sgp1.digitaloceanspaces.com/Tetris.jpg');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('default2','Wordtris','https://gamebond.sgp1.digitaloceanspaces.com/Wordtris.gb','https://gamebond.sgp1.digitaloceanspaces.com/Wordtris.jpg');
 INSERT INTO games(game_id, game_title, rom_file, picture_url) VALUES ('default3','Motocross Maniacs','https://gamebond.sgp1.digitaloceanspaces.com/Motocross%20Maniacs.gb','https://gamebond.sgp1.digitaloceanspaces.com/Motocross%20Maniacs.jpg');

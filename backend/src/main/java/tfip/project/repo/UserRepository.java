@@ -61,18 +61,18 @@ public class UserRepository implements SqlQueries {
 
     // MEMBERSHIP
 
-    public boolean createUserMembership(String username, int membershipLevel) {
+    public boolean createNewUserMembership(String username) {
         try {
-            this.template.update(SQL_ADD_USER_MEMBERSHIP, username, membershipLevel);
+            this.template.update(SQL_ADD_NEW_USER_MEMBERSHIP, username);
             return true;
         } catch (DuplicateKeyException e) {
             return false;
         }
     }
 
-    public boolean createUserMembership(UserMembership membership) {
+    public boolean createNewUserMembership(UserMembership membership) {
         try {
-            this.template.update(SQL_ADD_USER_MEMBERSHIP, membership.getUsername(), membership.getMembership());
+            this.template.update(SQL_ADD_NEW_USER_MEMBERSHIP, membership.getUsername());
             return true;
         } catch (DuplicateKeyException e) {
             return false;
@@ -89,12 +89,22 @@ public class UserRepository implements SqlQueries {
     }
 
     public boolean updateMembership(UserMembership membership) {
-        return template.update(SQL_UPDATE_MEMBERSHIP, membership.getMembership(), new Date(),
+        return template.update(SQL_UPDATE_MEMBERSHIP, membership.getTier(), new Date(),
+                membership.getMonthlyGamesEntitlementByTier(), membership.getRomEntitlementByTier(),
                 membership.getUsername()) > 0 ? true : false;
     }
 
     public boolean deleteMembership(String username) {
-        return template.update(SQL_UPDATE_MEMBERSHIP, 0, new Date(), username) > 0 ? true : false;
+        return template.update(SQL_UPDATE_MEMBERSHIP, 0, new Date(), 5, 5, username) > 0 ? true : false;
+    }
+
+    // ROM COUNT
+    public Integer checkRomByUser(String username) {
+        try {
+            return template.queryForObject(SQL_ROM_COUNT_BY_USER, Integer.class, username);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
