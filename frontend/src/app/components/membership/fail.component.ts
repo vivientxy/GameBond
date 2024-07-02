@@ -28,7 +28,7 @@ export class FailComponent {
       return
     }
     
-    // sessionStorage.removeItem('uuid');
+    sessionStorage.removeItem('uuid');
   }
 
 }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, firstValueFrom } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable()
@@ -40,7 +40,15 @@ export class UserService {
   }
 
   isLoggedIn(): boolean {
-    return sessionStorage.getItem('user') != null ? true : false;
+    let userString = sessionStorage.getItem('user');
+    if (!userString)
+      return false;
+    let user = JSON.parse(userString) as User
+    let isValidLogin!: boolean;
+    firstValueFrom(this.http.post<any>('/api/verify-login', user))
+      .then(resp => {isValidLogin = true})
+      .catch(err => {isValidLogin = false})
+    return isValidLogin;
   }
 
   logout(): void {

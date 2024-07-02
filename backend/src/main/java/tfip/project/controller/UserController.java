@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PostMapping(path = {"/login"})
-    public ResponseEntity<String> verifyLogin(@RequestBody String json) {
+    public ResponseEntity<String> processLogin(@RequestBody String json) {
         User formUser = jsonToUser(json);
         Boolean isLoginSuccess = userSvc.validateLogin(formUser.getUsername(), formUser.getPassword());
         System.out.println(">>> isLoginSuccess:" + isLoginSuccess);
@@ -71,6 +71,15 @@ public class UserController {
         System.out.println(">>> retrievedUser:" + retrievedUser.toJson().toString());
         
         return new ResponseEntity<String>(retrievedUser.toJson().toString(), HttpStatus.OK);
+    }
+
+    @PostMapping(path = {"/verify-login"})
+    public ResponseEntity<String> verifyLogin(@RequestBody String json) {
+        User ngUser = jsonToUser(json);
+        User dbUser = userSvc.getUserByUsername(ngUser.getUsername());
+        if (ngUser.getEmail().equals(dbUser.getEmail()))
+            return new ResponseEntity<String>(HttpStatus.OK);
+        return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping(path = {"/reset"})
