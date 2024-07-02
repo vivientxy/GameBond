@@ -41,7 +41,7 @@ export class SuccessComponent implements OnInit {
       }
     })
     
-    // sessionStorage.removeItem('uuid');
+    sessionStorage.removeItem('uuid');
   }
 
 }

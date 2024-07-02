@@ -1,8 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Membership, MEMBERSHIPS } from '../../models/membership.model';
 import { User } from '../../models/user.model';
-import { StripeService } from '../../services/stripe.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -13,7 +11,6 @@ import { UserService } from '../../services/user.service';
 export class FailComponent {
   
   private readonly userSvc = inject(UserService)
-  private readonly stripeSvc = inject(StripeService)
   private readonly router = inject(Router)
   user!: User;
 
@@ -28,7 +25,7 @@ export class FailComponent {
       return
     }
     
-    // sessionStorage.removeItem('uuid');
+    sessionStorage.removeItem('uuid');
   }
 
 }
