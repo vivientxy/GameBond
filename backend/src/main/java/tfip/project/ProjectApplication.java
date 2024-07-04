@@ -22,8 +22,8 @@ public class ProjectApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-		botsApi.registerBot(bot);
+		// TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+		// botsApi.registerBot(bot);
 
 	}
 

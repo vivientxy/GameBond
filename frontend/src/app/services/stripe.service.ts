@@ -23,10 +23,10 @@ export class StripeService {
       .pipe(result => {return result})
   }
 
-  redirectToCheckout(sessionId: string): void {
-    this.stripe?.redirectToCheckout({sessionId: sessionId})
-      .then(resp => {alert(resp.error.message)})
-  }
+  // redirectToCheckout(sessionId: string): void {
+  //   this.stripe?.redirectToCheckout({sessionId: sessionId})
+  //     .then(resp => {alert(resp.error.message)})
+  // }
 
   upgradeMembership(uuid: string, email: string): Observable<any> {
     const body = { uuid: uuid, email: email }; 

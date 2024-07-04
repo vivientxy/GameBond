@@ -109,10 +109,10 @@ public class UserController {
 
     @PostMapping("/payment/create-session")
     public ResponseEntity<String> createCheckoutSession(@RequestBody StripeCheckoutRequest req) throws Exception {
-        String sessionId = stripeSvc.createCheckoutSession(req.getTier(), req.getEmail());
+        String url = stripeSvc.createCheckoutSession(req.getTier(), req.getEmail());
         String uuid = stripeSvc.saveTier(req.getTier(), req.getEmail());
         JsonObject json = Json.createObjectBuilder()
-            .add("sessionId", sessionId)
+            .add("checkoutUrl", url)
             .add("uuid", uuid)
             .build();
         return new ResponseEntity<String>(json.toString(), HttpStatus.OK);

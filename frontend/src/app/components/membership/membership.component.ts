@@ -31,6 +31,7 @@ export class MembershipComponent {
     if (user) {
       this.user = user
     }
+    sessionStorage.removeItem('uuid');
 
     this.membershipForm = this.fb.group({
       tier: this.fb.control(null,[Validators.required]),
@@ -42,7 +43,8 @@ export class MembershipComponent {
     this.stripeSvc.createPaymentSession(membership.tier, this.user.email)
       .subscribe(resp => {
         sessionStorage.setItem('uuid', resp.uuid)
-        this.stripeSvc.redirectToCheckout(resp.sessionId);
+        // this.stripeSvc.redirectToCheckout(resp.sessionId);
+        window.location.href = resp.checkoutUrl;
       })
   }
 }
