@@ -12,7 +12,6 @@ import java.io.StringReader;
 import tfip.project.model.StripeCheckoutRequest;
 import tfip.project.model.UpgradeMembershipRequest;
 import tfip.project.model.User;
-import tfip.project.model.UserMembership;
 import tfip.project.service.MailService;
 import tfip.project.service.StripeService;
 import tfip.project.service.UserService;
@@ -124,11 +123,12 @@ public class UserController {
         if (tier == null)
             return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
 
-        UserMembership membership = userSvc.updateUserMembership(req.getEmail(), tier);
-        if (membership == null)
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+        // UserMembership membership = userSvc.updateUserMembership(req.getEmail(), tier);
+        // if (membership == null)
+        //     return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        return new ResponseEntity<String>(membership.toJson().toString(), HttpStatus.OK);
+        // return new ResponseEntity<String>(membership.toJson().toString(), HttpStatus.OK);
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
     
     private User jsonToUser(String jsonString) {

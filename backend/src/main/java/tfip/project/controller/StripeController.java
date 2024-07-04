@@ -30,7 +30,6 @@ public class StripeController {
     @Autowired
     UserService userSvc;
 
-    @SuppressWarnings("deprecation")
     @PostMapping("/stripe/events")
     public String handleStripeEvent(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) throws StripeException {
         if (sigHeader == null)
@@ -56,16 +55,15 @@ public class StripeController {
         // Handle the event
         switch (event.getType()) {
             case "customer.subscription.updated":
-                Subscription sub = (Subscription) event.getData().getObject();
-                String custId = sub.getCustomer();
-                Customer cust = Customer.retrieve(custId);
-                String email = cust.getEmail();
+                Subscription sub = (Subscription) stripeObject;
+                Long currCycleStart = sub.getCurrentPeriodStart();
+                String email = Customer.retrieve(sub.getCustomer()).getEmail();
                 if (sub.getCancelAt() == null) {
                     String priceId = sub.getItems().getData().get(0).getPlan().getId();
-                    userSvc.updateUserMembership(email, StripePriceId.fromPriceId(priceId).getTier());
+                    userSvc.updateUserMembership(email, StripePriceId.fromPriceId(priceId).getTier(), currCycleStart);
                     System.out.println(">>> update membership for " + email + "; new membership: " + StripePriceId.fromPriceId(priceId).toString());
                 } else {
-                    userSvc.updateUserMembership(email, 0);
+                    userSvc.updateUserMembership(email, 0, currCycleStart);
                     System.out.println(">>> cancelling membership for " + email);
                 }
                 break;

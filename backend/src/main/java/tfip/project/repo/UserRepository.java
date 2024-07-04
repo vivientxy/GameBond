@@ -102,7 +102,7 @@ public class UserRepository implements SqlQueries {
     }
 
     public boolean updateMembership(UserMembership membership) {
-        return template.update(SQL_UPDATE_MEMBERSHIP, membership.getTier(), new Date(),
+        return template.update(SQL_UPDATE_MEMBERSHIP, membership.getTier(), membership.getMembershipDate(),
                 membership.getMonthlyGamesEntitlementByTier(), membership.getRomEntitlementByTier(),
                 membership.getUsername()) > 0 ? true : false;
     }

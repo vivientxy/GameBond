@@ -88,12 +88,15 @@ public class UserService {
         return getUserByUsername(username);
     }
 
-    public UserMembership updateUserMembership(String email, Integer tier) {
+    public UserMembership updateUserMembership(String email, Integer tier, Long epochDate) {
         String username = getUserByEmail(email).getUsername();
+        Date date = new Date(epochDate * 1000);
+        System.out.println(">>> epochDate: " + epochDate);
+        System.out.println(">>> date: " + date);
         UserMembership membership = new UserMembership();
         membership.setUsername(username);
         membership.setTier(tier);
-        membership.setMembershipDate(new Date());
+        membership.setMembershipDate(date);
         membership.setMonthlyGamesEntitlement(membership.getMonthlyGamesEntitlementByTier());
         membership.setRomEntitlement(membership.getRomEntitlementByTier());
         boolean isUpdated = userRepo.updateMembership(membership);
