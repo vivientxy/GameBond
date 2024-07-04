@@ -1,12 +1,14 @@
 package tfip.project.repo;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
@@ -33,8 +35,7 @@ public class UserRepository implements SqlQueries {
 
     public User getUserByUsername(String username) {
         try {
-            return template.queryForObject(SQL_GET_USER_BY_USERNAME, BeanPropertyRowMapper.newInstance(User.class),
-                    username);
+            return template.queryForObject(SQL_GET_USER_BY_USERNAME, new UserRowMapper(), username);
         } catch (Exception e) {
             return null;
         }
@@ -42,7 +43,7 @@ public class UserRepository implements SqlQueries {
 
     public User getUserByEmail(String email) {
         try {
-            return template.queryForObject(SQL_GET_USER_BY_EMAIL, BeanPropertyRowMapper.newInstance(User.class), email);
+            return template.queryForObject(SQL_GET_USER_BY_EMAIL, new UserRowMapper(), email);
         } catch (Exception e) {
             return null;
         }
@@ -128,4 +129,21 @@ public class UserRepository implements SqlQueries {
             return null;
         }
     }
+
+    /* HELPER METHODS */
+
+    private class UserRowMapper implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+            user.setFirstName(rs.getString("firstname"));
+            user.setLastName(rs.getString("lastname"));
+            user.setActive(rs.getBoolean("active"));
+            return user;
+        }
+    }
+
 }

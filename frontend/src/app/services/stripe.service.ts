@@ -19,18 +19,17 @@ export class StripeService {
 
   createPaymentSession(tier: number, email: string): Observable<any> {
     const body = { tier: tier, email: email }; 
-    return this.http.post<any>('api/payment/create-session', body)
+    return this.http.post<any>('api/stripe/create-session', body)
       .pipe(result => {return result})
   }
 
-  // redirectToCheckout(sessionId: string): void {
-  //   this.stripe?.redirectToCheckout({sessionId: sessionId})
-  //     .then(resp => {alert(resp.error.message)})
-  // }
+  getMembership(email: string): Observable<any> {
+    return this.http.post<any>('api/stripe/get-current-membership', email)
+      .pipe(result => {return result})
+  }
 
-  upgradeMembership(uuid: string, email: string): Observable<any> {
-    const body = { uuid: uuid, email: email }; 
-    return this.http.post<any>('api/payment/upgrade-membership', body)
+  checkNewMember(email: string): Observable<any> {
+    return this.http.post<any>('api/stripe/check-new-member', email)
       .pipe(result => {return result})
   }
 

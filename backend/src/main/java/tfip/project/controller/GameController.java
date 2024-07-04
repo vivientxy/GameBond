@@ -114,7 +114,6 @@ public class GameController {
 
     @PostMapping("/get-team-members")
     public ResponseEntity<String> getTeamMembers(@RequestBody String hostId) {
-        System.out.println(">>> /api/get-team-members called: " + hostId);
         Map<String, List<String>> teamMap = gameSvc.getPlayersInTeams(hostId);
         JsonObject json = mapToJsonObject(teamMap);
         return new ResponseEntity<String>(json.toString(), HttpStatus.OK);

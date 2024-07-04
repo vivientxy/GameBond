@@ -17,10 +17,8 @@ body, html {
     text-align: center;
 }
 
-.banner {
-    padding: 10px;
-    font-size: larger;
-    font-weight: 300;
+.buttons-area {
+    margin: 30px;
 }
 
 /* membership cards */
@@ -54,7 +52,16 @@ p {
     margin-top: 10px;
 }
 
+button {
+    padding: 30px;
+    font-size: x-large;
+}
 
+/* disabled free tier */
+.mat-button-toggle-appearance-standard.mat-button-toggle-disabled {
+    color: inherit;
+    background-color: inherit;
+}
 
 /* select membership card */
 

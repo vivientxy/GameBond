@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -42,24 +41,6 @@ public class RedisRepository {
     public String getQRLink(String telegramUrl) {
         ValueOperations<String,String> valueOps = redisTemplate.opsForValue();
         return valueOps.get(telegramUrl);
-    }
-
-    // MEMBERSHIP TIER (32 chars UUID without '-')
-    public String saveMembershipTier(Integer tier, String email) {
-        String uuid = UUID.randomUUID().toString().replace("-", "");
-        String tierString = String.valueOf(tier);
-        HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
-        hashOps.put(uuid, email, tierString);
-        redisTemplate.expire(uuid, 1, TimeUnit.DAYS);
-        return uuid;
-    }
-
-    public Integer validateMembershipTier(String uuid, String email) {
-        HashOperations<String,String,String> hashOps = redisTemplate.opsForHash();
-        String tierString = hashOps.get(uuid, email);
-        if (tierString == null)
-            return null;
-        return Integer.parseInt(tierString);
     }
 
     // CHAT DATA -- USERNAME / HOST ID (8 char UUID) / TEAM ID

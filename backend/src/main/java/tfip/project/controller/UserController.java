@@ -9,11 +9,8 @@ import jakarta.json.JsonReader;
 
 import java.io.StringReader;
 
-import tfip.project.model.StripeCheckoutRequest;
-import tfip.project.model.UpgradeMembershipRequest;
 import tfip.project.model.User;
 import tfip.project.service.MailService;
-import tfip.project.service.StripeService;
 import tfip.project.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +32,9 @@ public class UserController {
     @Autowired
 	MailService mailSvc;
 
-    @Autowired
-    private StripeService stripeSvc;
-
     @PostMapping(path = {"/register"})
     public ResponseEntity<String> registerNewUser(@RequestBody String json) {
         User user = jsonToUser(json);
-        System.out.println(">>> register user:" + user);
         try {
             userSvc.registerUser(user);
             return new ResponseEntity<String>(HttpStatus.OK);
@@ -58,7 +51,6 @@ public class UserController {
     public ResponseEntity<String> verifyLogin(@RequestBody String json) {
         User formUser = jsonToUser(json);
         Boolean isLoginSuccess = userSvc.validateLogin(formUser.getUsername(), formUser.getPassword());
-        System.out.println(">>> isLoginSuccess:" + isLoginSuccess);
 
         if (isLoginSuccess == null)
             return new ResponseEntity<String>("Username not found", HttpStatus.NOT_FOUND);
@@ -66,9 +58,7 @@ public class UserController {
             return new ResponseEntity<String>("Wrong password", HttpStatus.UNAUTHORIZED);
 
         User retrievedUser = userSvc.getUserByUsername(formUser.getUsername());
-        retrievedUser.setPassword("");
-        System.out.println(">>> retrievedUser:" + retrievedUser.toJson().toString());
-        
+        retrievedUser.setPassword("");        
         return new ResponseEntity<String>(retrievedUser.toJson().toString(), HttpStatus.OK);
     }
 
@@ -103,31 +93,6 @@ public class UserController {
         boolean updateSuccess = userSvc.updateUser(formUser);
         if (!updateSuccess)
             return new ResponseEntity<String>(HttpStatus.NOT_MODIFIED);
-        return new ResponseEntity<String>(HttpStatus.OK);
-    }
-
-    @PostMapping("/payment/create-session")
-    public ResponseEntity<String> createCheckoutSession(@RequestBody StripeCheckoutRequest req) throws Exception {
-        String url = stripeSvc.createCheckoutSession(req.getTier(), req.getEmail());
-        String uuid = stripeSvc.saveTier(req.getTier(), req.getEmail());
-        JsonObject json = Json.createObjectBuilder()
-            .add("checkoutUrl", url)
-            .add("uuid", uuid)
-            .build();
-        return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
-    }
-
-    @PostMapping("/payment/upgrade-membership")
-    public ResponseEntity<String> upgradeMembership(@RequestBody UpgradeMembershipRequest req) throws Exception {
-        Integer tier = stripeSvc.validateTier(req.getUuid(), req.getEmail());
-        if (tier == null)
-            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
-
-        // UserMembership membership = userSvc.updateUserMembership(req.getEmail(), tier);
-        // if (membership == null)
-        //     return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-
-        // return new ResponseEntity<String>(membership.toJson().toString(), HttpStatus.OK);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
     

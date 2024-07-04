@@ -1,17 +1,13 @@
 <div class="container">
 
-    <h3 style="margin-bottom: 10px;">Upgrade Your Membership</h3>
+    <h3 style="margin-bottom: 10px;">Membership Plans:</h3>
 
     <form [formGroup]="membershipForm" (submit)="upgradeMembership()">
-
-        <div class="banner">
-            Select Membership Tier:
-        </div>
 
         <div class="buttons-area">
             <mat-button-toggle-group formControlName="tier" [hideSingleSelectionIndicator]="true">
 
-                <mat-button-toggle *ngFor="let tier of tiers"  [value]="tier" class="membership-button">
+                <mat-button-toggle *ngFor="let tier of tiers"  [value]="tier" class="membership-button" [disabled]="tier.tier === 0 || !isNewMember">
                     <mat-card class="membership-card">
                         <mat-card-header>
                             <div class="header-container">
@@ -28,15 +24,15 @@
                         <mat-card-footer style="margin-top: 10px; margin-bottom: 10px;">
                             <mat-card-title style="font-size: x-large;">S${{tier.price}}</mat-card-title>
                         </mat-card-footer>
-                        
                     </mat-card>
                 </mat-button-toggle>
 
             </mat-button-toggle-group>
         </div>
 
-        <div class="banner">
-            <button type="submit" mat-flat-button color="primary" [disabled]="membershipForm.invalid" style="padding: 10px;">Upgrade Membership</button>
+        <div>
+            <button *ngIf="isNewMember" type="submit" mat-flat-button color="primary" [disabled]="membershipForm.invalid">Upgrade Membership</button>
+            <button *ngIf="!isNewMember" type="submit" mat-flat-button color="primary">Manage Membership</button>
         </div>
 
     </form>

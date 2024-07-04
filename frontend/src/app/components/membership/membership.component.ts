@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { Membership, MEMBERSHIPS } from '../../models/membership.model';
@@ -21,20 +20,22 @@ export class MembershipComponent {
   private readonly fb = inject(FormBuilder)
   private readonly userSvc = inject(UserService)
   private readonly stripeSvc = inject(StripeService)
-  private readonly router = inject(Router)
   membershipForm!: FormGroup;
   user!: User;
   tiers = MEMBERSHIPS;
+  isNewMember: boolean = true;
 
   ngOnInit(): void {
     let user = this.userSvc.getUser();
-    if (user) {
-      this.user = user
+    if (!user) {
+      return;
     }
-    sessionStorage.removeItem('uuid');
+    this.user = user
+
+    this.stripeSvc.checkNewMember(user.email).subscribe(resp => {this.isNewMember = resp.isNewMember})
 
     this.membershipForm = this.fb.group({
-      tier: this.fb.control(null,[Validators.required]),
+      tier: this.fb.control(0,[Validators.required]),
     })
   }
 
@@ -42,8 +43,6 @@ export class MembershipComponent {
     let membership: Membership = this.membershipForm.controls['tier'].value;
     this.stripeSvc.createPaymentSession(membership.tier, this.user.email)
       .subscribe(resp => {
-        sessionStorage.setItem('uuid', resp.uuid)
-        // this.stripeSvc.redirectToCheckout(resp.sessionId);
         window.location.href = resp.checkoutUrl;
       })
   }
