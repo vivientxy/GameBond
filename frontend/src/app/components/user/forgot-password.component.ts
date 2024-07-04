@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '../../models/user.model';
-import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Title } from '@angular/platform-browser';
@@ -17,7 +16,6 @@ export class ForgotPasswordComponent implements OnInit {
   private readonly router = inject(Router)
   private readonly userSvc = inject(UserService);
   forgotPasswordForm!: FormGroup;
-  private unsubscribe$ = new Subject();
   private lastTouchedField = '';
 
   constructor(private titleService:Title) {
@@ -45,10 +43,7 @@ export class ForgotPasswordComponent implements OnInit {
     else if (this.lastTouchedField === 'email')
       user.username = '';
 
-    this.userSvc.resetPassword(user)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(response => {});
-
+    this.userSvc.resetPassword(user);
     alert("Password reset link will be sent to your registered email")
     this.router.navigate(['/login']);
   }

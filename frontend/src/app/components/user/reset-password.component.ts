@@ -30,15 +30,13 @@ export class ResetPasswordComponent implements OnInit {
       password: this.fb.control<string>('', [Validators.required, Validators.minLength(8), Validators.maxLength(32)]),
       passwordConfirm: this.fb.control<string>('', [Validators.required, Validators.minLength(8), Validators.maxLength(32)])
     })
+
     this.activatedRoute.params.subscribe(params => {
       this.resetId = params['resetId'];
       this.svc.validateResetId(this.resetId)
-        .subscribe({
-          next: response => {this.user = response as User},
-          error: err => {this.isValid = false}
-        });
-    });
-  
+        .then(resp => {this.user = resp as User})
+        .catch(err => {this.isValid = false})
+    })  
   }
 
   processReset() {
@@ -54,7 +52,7 @@ export class ResetPasswordComponent implements OnInit {
     }
 
     this.user.password = p1
-    this.svc.updatePassword(this.user).subscribe(response => {})
+    this.svc.updatePassword(this.user)
     alert("Password has been reset!")
     this.router.navigate(['/login'])
   }

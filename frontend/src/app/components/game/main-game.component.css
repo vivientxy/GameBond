@@ -3,6 +3,12 @@
     padding: 0;
 }
 
+#end-game {
+    position: absolute;
+    top: 3vh;
+    left: 30px;
+}
+
 /* layer 1 */
 
 .container {

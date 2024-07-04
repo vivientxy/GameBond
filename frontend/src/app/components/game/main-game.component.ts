@@ -41,8 +41,9 @@ export class MainGameComponent implements OnInit, OnDestroy {
   }
 
   endGame() {
-    this.gameSvc.endGame(this.game.hostId).subscribe(); // wipe redis data
-    this.router.navigate(['/lobby'])
+    this.gameSvc.endGame(this.game.hostId); // wipe redis data
+    sessionStorage.removeItem('game');
+    this.router.navigate(['/host']);
   }
 
 }

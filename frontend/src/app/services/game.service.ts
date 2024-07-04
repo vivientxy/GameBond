@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { Observable, map } from "rxjs";
+import { firstValueFrom } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { HostGame } from "../models/hostgame.model";
 
@@ -9,22 +9,19 @@ export class GameService {
 
     private http = inject(HttpClient);
 
-    getAllGameDetails(username: string): Observable<any> {
+    getAllGameDetails(username: string): Promise<any> {
         const queryParams = new HttpParams()
             .set('username', username)
-        return this.http.get<any>('/api/get-all-games', {params: queryParams})
-            .pipe(result => {return result})
+        return firstValueFrom(this.http.get<any>('/api/get-all-games', {params: queryParams}))
     }
 
-    checkMonthlyLimit(username: string): Observable<any> {
-        return this.http.post<any>('api/host/check-monthly-limit', username)
-          .pipe(result => {return result})
+    checkMonthlyLimit(username: string): Promise<any> {
+        return firstValueFrom(this.http.post<any>('api/host/check-monthly-limit', username))
     }
 
-    addHostGameToUser(username: string, hostId: string, gameId: string, numOfTeams: number): Observable<any> {
+    addHostGameToUser(username: string, hostId: string, gameId: string, numOfTeams: number): Promise<any> {
         const body = { username: username, hostId: hostId, gameId: gameId, numOfTeams: numOfTeams };
-        return this.http.post<any>('api/host/add-hosted-game', body)
-          .pipe(result => {return result})
+        return firstValueFrom(this.http.post<any>('api/host/add-hosted-game', body))
     }
 
     startLobby(numOfTeams: number, gameId: string): string {
@@ -63,28 +60,23 @@ export class GameService {
         return `https://t.me/gamebond_bot?start=${base64QueryString}`;
     }
 
-    generateQrCode(hostId: string) {
+    generateQrCode(hostId: string): Promise<any> {
         let telegramUrl = this.generateTelegramLink(hostId);
-        return this.http.post('/api/get-QR', telegramUrl)
-            .pipe(result => {return result})
+        return firstValueFrom(this.http.post('/api/get-QR', telegramUrl))
     }
 
-    getGameROM(gameId: string) {
-        return this.http.post<any>('/api/get-rom', gameId)
-            .pipe(result => {return result})
+    getGameROM(gameId: string): Promise<any> {
+        return firstValueFrom(this.http.post<any>('/api/get-rom', gameId))
     }
 
-    addGameROM(form: FormData) {
-        return this.http.post<any>('/api/add-rom', form)
-            .pipe(result => {return result})
+    addGameROM(form: FormData): Promise<any> {
+        return firstValueFrom(this.http.post<any>('/api/add-rom', form))
     }
 
-    /* GAME ENDED */
-
-    endGame(hostId: string) {
+    endGame(hostId: string): Promise<any> {
         const queryParams = new HttpParams()
             .set('hostId', hostId)
-        return this.http.get<any>('/api/end-game', {params: queryParams})
+        return firstValueFrom(this.http.get<any>('/api/end-game', {params: queryParams}))
     }
 
 }

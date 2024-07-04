@@ -51,18 +51,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
 
     this.userSvc.registerUser(user)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: registerSuccess => {this.router.navigate(['/login'])},
-        error: err => {
-          this.registerForm.patchValue(user)
-          if (err.error == "Username already in use")
-            this.registerForm.get('username')?.setErrors({ usernameExists: true });
-          if (err.error == "Email already in use")
-            this.registerForm.get('email')?.setErrors({ emailExists: true });
-          this.markFormControlsAsTouched(this.registerForm)
-          return
-        }
+      .then(registerSuccess => {this.router.navigate(['/login'])})
+      .catch(err => {
+        this.registerForm.patchValue(user)
+        if (err.error == "Username already in use")
+          this.registerForm.get('username')?.setErrors({ usernameExists: true });
+        if (err.error == "Email already in use")
+          this.registerForm.get('email')?.setErrors({ emailExists: true });
+        this.markFormControlsAsTouched(this.registerForm)
+        return
       })
   }
 

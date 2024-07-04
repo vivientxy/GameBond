@@ -17,7 +17,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   private readonly webSocketSvc = inject(WebSocketService)
   private readonly http = inject(HttpClient)
   private readonly router = inject(Router)
-  qr$!: Observable<any>;
+  qr$!: Promise<any>;
   game!: HostGame;
   teams: Map<string,string[]> = new Map();
 
@@ -39,7 +39,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
       .then(resp => {this.teams = this.convertToMap(resp as {[key: string]: string[]})}
     )
 
-    // WEBSOCKET - subscribe to one websocket topic ("hostid") here
     this.webSocketSvc.subscribe(`/topic/${this.game.hostId}`, (): any => {
       console.log('>>> subscribing to websocket:', this.game.hostId);
       this.http.post("/api/get-team-members", this.game.hostId).subscribe(

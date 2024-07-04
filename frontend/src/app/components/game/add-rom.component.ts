@@ -42,17 +42,11 @@ export class AddRomComponent implements OnInit {
       formData.append('username', this.user.username)
 
     this.gameSvc.addGameROM(formData)
-      .subscribe({
-        next: response => {
-          console.log('>>> http response:', response)
-          alert('ROM uploaded successfully!')
-          this.router.navigate(['/host'])
-        },
-        error: err => {
-          console.error('>>> error:', err.error)
-          alert(err.error)
-        }
+      .then(resp => {
+        alert('ROM uploaded successfully!')
+        this.router.navigate(['/host'])
       })
+      .catch(err => {alert(err.error)})
   }
 
   onFileSelectedRom(event: any): void {

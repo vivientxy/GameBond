@@ -38,30 +38,28 @@ export class HostGameComponent implements OnInit {
       game: this.fb.control(null,[Validators.required])
     })
 
-    this.gameSvc.getAllGameDetails(this.user.username).subscribe(resp => {
-      this.gameList = resp;
-    })
+    this.gameSvc.getAllGameDetails(this.user.username)
+      .then(resp => {
+        this.gameList = resp;
+      })
   }
 
   processHostGame() {
     let numOfTeams = this.hostForm.controls['numOfTeams'].value;
     let gameId = this.hostForm.controls['game'].value;
 
-    firstValueFrom(this.gameSvc.checkMonthlyLimit(this.user.username))
+    this.gameSvc.checkMonthlyLimit(this.user.username)
       .then(() => {
-        console.log("in first .then")
         this.gameSvc.startLobby(numOfTeams, gameId);
         let game = sessionStorage.getItem('game');
         let hostgame!: HostGame;
         if (game)
           hostgame = JSON.parse(game) as HostGame
-        return firstValueFrom(this.gameSvc.addHostGameToUser(this.user.username, hostgame.hostId, hostgame.gameId, hostgame.numOfTeams))
+        return this.gameSvc.addHostGameToUser(this.user.username, hostgame.hostId, hostgame.gameId, hostgame.numOfTeams)
       })
       .then(() => {
-        console.log("in second .then")
         this.router.navigate(['/lobby'])})
       .catch(err => {
-        console.log("in first .catch")
         console.error(err.error);
         alert(err.error);
         this.router.navigate(['/membership']);

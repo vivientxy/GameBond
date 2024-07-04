@@ -29,7 +29,7 @@ export class GameScreenDComponent {
     // set up and run gameboy:
     const context = this.gameCanvasD.nativeElement.getContext('2d');
     if (context) {
-      firstValueFrom(this.gameSvc.getGameROM(this.game.gameId))
+      this.gameSvc.getGameROM(this.game.gameId)
         .then(resp => fetch(resp.romUrl))
         .then(file => file.arrayBuffer())
         .then(arrBuffer => {

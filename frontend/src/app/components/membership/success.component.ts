@@ -23,13 +23,9 @@ export class SuccessComponent implements OnInit {
       return;
     this.user = user
 
-    this.stripeSvc.getMembership(user.email).subscribe({
-      next: resp => {
-        console.log('>>> getMembership resp:', resp)
-        this.membership = MEMBERSHIPS.at(resp.tier);
-      },
-      error: err => {console.error('>>> error:', err)}
-    })
+    this.stripeSvc.getMembership(user.email)
+      .then(resp => {this.membership = MEMBERSHIPS.at(resp.tier)})
+      .catch(err => {console.error('>>> error:', err)})
   }
 
 }

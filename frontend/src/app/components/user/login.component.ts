@@ -11,13 +11,12 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
 
   private readonly fb = inject(FormBuilder)
   private readonly userSvc = inject(UserService)
   private readonly router = inject(Router)
   loginForm!: FormGroup;
-  private unsubscribe$ = new Subject();
 
   constructor(private titleService:Title) {
     this.titleService.setTitle("Login | GameBond");
@@ -28,11 +27,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       username: this.fb.control<string>('', [Validators.required]),
       password: this.fb.control<string>('', [Validators.required])
     })
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe$.next(null);
-    this.unsubscribe$.complete();
   }
 
   processLogin() {
@@ -48,22 +42,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     this.userSvc.loginUser(user)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: user => {
-          sessionStorage.setItem('user', JSON.stringify(user))
-          this.userSvc.loggedInSignal.next(true);
-          this.router.navigate(['/']);
-        },
-        error: err => {
-          this.loginForm.patchValue(user)
-          if (err.error == "Username not found")
-            this.loginForm.get('username')?.setErrors({ usernameNotExists: true });
-          if (err.error == "Wrong password")
-            this.loginForm.get('password')?.setErrors({ passwordWrong: true });
-          this.markFormControlsAsTouched(this.loginForm)
-          return
-        }
+      .then(user => {
+        sessionStorage.setItem('user', JSON.stringify(user))
+        this.userSvc.loggedInSignal.next(true);
+        this.router.navigate(['/']);
+      })
+      .catch(err => {
+        this.loginForm.patchValue(user)
+        if (err.error == "Username not found")
+          this.loginForm.get('username')?.setErrors({ usernameNotExists: true });
+        if (err.error == "Wrong password")
+          this.loginForm.get('password')?.setErrors({ passwordWrong: true });
+        this.markFormControlsAsTouched(this.loginForm)
+        return
       })
   }
 

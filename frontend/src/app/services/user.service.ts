@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable()
@@ -8,29 +8,24 @@ export class UserService {
 
   private readonly http = inject(HttpClient);
 
-  registerUser(user: User): Observable<any> {
-    return this.http.post<any>('/api/register', user)
-        .pipe(result => {return result})
+  registerUser(user: User): Promise<any> {
+    return firstValueFrom(this.http.post<any>('/api/register', user))
   }
 
-  loginUser(user: User): Observable<any> {
-    return this.http.post<any>('/api/login', user)
-        .pipe(result => {return result})
+  loginUser(user: User): Promise<any> {
+    return firstValueFrom(this.http.post<any>('/api/login', user))
   }
 
-  resetPassword(user: User): Observable<any> {
-    return this.http.post<any>('/api/reset', user)
-        .pipe(result => {return result})
+  resetPassword(user: User): Promise<any> {
+    return firstValueFrom(this.http.post<any>('/api/reset', user))
   }
 
-  validateResetId(resetId: string): Observable<any> {
-    return this.http.get<any>(`/api/reset/${resetId}`)
-        .pipe(result => {return result})
+  validateResetId(resetId: string): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`/api/reset/${resetId}`))
   }
 
-  updatePassword(user: User): Observable<any> {
-    return this.http.put<any>('/api/reset', user)
-        .pipe(result => {return result})
+  updatePassword(user: User): Promise<any> {
+    return firstValueFrom(this.http.put<any>('/api/reset', user))
   }
 
   loggedInSignal = new Subject<boolean>();

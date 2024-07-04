@@ -32,7 +32,9 @@ export class MembershipComponent {
     }
     this.user = user
 
-    this.stripeSvc.checkNewMember(user.email).subscribe(resp => {this.isNewMember = resp.isNewMember})
+    this.stripeSvc.checkNewMember(user.email)
+      .then(resp => {this.isNewMember = resp.isNewMember}
+    )
 
     this.membershipForm = this.fb.group({
       tier: this.fb.control(0,[Validators.required]),
@@ -42,7 +44,7 @@ export class MembershipComponent {
   upgradeMembership() {
     let membership: Membership = this.membershipForm.controls['tier'].value;
     this.stripeSvc.createPaymentSession(membership.tier, this.user.email)
-      .subscribe(resp => {
+      .then(resp => {
         window.location.href = resp.checkoutUrl;
       })
   }
