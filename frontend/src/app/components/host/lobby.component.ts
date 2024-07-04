@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { Router } from '@angular/router';
-import { Observable, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { WebSocketService } from '../../services/websocket.service';
 import { HttpClient } from '@angular/common/http';
 import { HostGame } from '../../models/hostgame.model';
@@ -59,8 +59,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   remove(team: string, idx: number) {
-      this.teams.get(team)?.splice(idx,1);
+      // let member = this.teams.get(team)?.splice(idx,1).at(0);
+      // console.log(">>> removed person:", member)
       // TODO: SEND TO SPRINGBOOT TOO -- to send msg on telebot
+      // if (member)
+        // this.webSocketSvc.sendMessage(`/topic/${this.game.hostId}`, member)
   }
 
   private convertToMap(response: {[key: string]: string[]}): Map<string, string[]> {
