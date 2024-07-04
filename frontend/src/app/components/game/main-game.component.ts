@@ -31,11 +31,8 @@ export class MainGameComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     let game = this.gameSvc.getGame();
-    if (!game) {
-      this.router.navigate(['/'])
-      return;
-    }
-    this.game = game;
+    if (game)
+      this.game = game;
   }
 
   ngOnDestroy(): void {

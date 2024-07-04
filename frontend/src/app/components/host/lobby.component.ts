@@ -23,11 +23,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     let game = this.gameSvc.getGame();
-    if (!game) {
-      this.router.navigate(['/'])
-      return;
-    }
-    this.game = game;
+    if (game)
+      this.game = game;
+    
     this.qr$ = this.gameSvc.generateQrCode(this.game.hostId);
 
     const teamsList = ['Team A', 'Team B', 'Team C', 'Team D'];

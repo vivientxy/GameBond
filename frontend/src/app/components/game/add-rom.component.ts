@@ -23,9 +23,6 @@ export class AddRomComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.userSvc.getUser()
-    if (!this.user)
-      this.router.navigate(['/']);
-
     this.romForm = this.fb.group({
       romFile: this.fb.control('', [Validators.required]),
       picFile: this.fb.control('')

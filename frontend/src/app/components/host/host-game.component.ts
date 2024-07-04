@@ -30,12 +30,8 @@ export class HostGameComponent implements OnInit {
 
   ngOnInit(): void {
     let user = this.userSvc.getUser();
-    if (user) {
+    if (user)
       this.user = user
-    } else {
-      this.router.navigate(['/login'])
-      return
-    }
 
     this.hostForm = this.fb.group({
       numOfTeams: this.fb.control(null,[Validators.required]),

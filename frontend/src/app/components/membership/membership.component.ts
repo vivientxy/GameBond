@@ -30,9 +30,6 @@ export class MembershipComponent {
     let user = this.userSvc.getUser();
     if (user) {
       this.user = user
-    } else {
-      this.router.navigate(['/login'])
-      return
     }
 
     this.membershipForm = this.fb.group({
