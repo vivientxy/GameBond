@@ -63,7 +63,6 @@ public interface SqlQueries {
         WITH info AS (
             SELECT 
                 username,
-                membership_date,
                 EXTRACT(DAY FROM membership_date) AS mem_day,
                 EXTRACT(MONTH FROM CURRENT_DATE) AS curr_month,
                 EXTRACT(YEAR FROM CURRENT_DATE) AS curr_year,
@@ -74,7 +73,6 @@ public interface SqlQueries {
         calc1 AS (
             SELECT 
                 username,
-                membership_date,
                 CASE WHEN is_curr_smaller_than_mem = 0 
                     THEN DATE(CONCAT(curr_year, '-', LPAD(curr_month, 2, '0'), '-', LPAD(mem_day, 2, '0')))
                     ELSE DATE(CONCAT(curr_year, '-', LPAD(curr_month - 1, 2, '0'), '-', LPAD(mem_day, 2, '0')))
@@ -84,7 +82,6 @@ public interface SqlQueries {
         calc2 AS (
             SELECT
                 username,
-                membership_date,
                 CASE WHEN start IS NULL
                     THEN DATE_ADD(LAST_DAY(DATE_ADD(CURRENT_DATE, INTERVAL -1 month)), INTERVAL 1 day)
                     ELSE start
