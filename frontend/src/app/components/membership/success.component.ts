@@ -1,5 +1,4 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../models/user.model';
 import { StripeService } from '../../services/stripe.service';
 import { UserService } from '../../services/user.service';

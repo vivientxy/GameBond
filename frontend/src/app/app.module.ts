@@ -14,7 +14,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ForgotPasswordComponent } from './components/user/forgot-password.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ResetPasswordComponent } from './components/user/reset-password.component';
-import { MainComponent } from './components/main/main.component';
 import { ChatboxComponent } from './components/game/chatbox.component';
 import { MainGameComponent } from './components/game/main-game.component';
 import { HostGameComponent } from './components/host/host-game.component';
@@ -50,7 +49,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     GameScreenCComponent,
     GameScreenDComponent,
     MainGameComponent,
-    MainComponent,
     ChatboxComponent,
     HostGameComponent,
     LobbyComponent,
