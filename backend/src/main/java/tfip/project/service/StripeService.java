@@ -54,7 +54,7 @@ public class StripeService {
                                 break;
                 }
                 System.out.println(">>> price id selected: " + priceId);
-                System.out.println(">>> success url: " + projectUrl + "/payment/success");
+                System.out.println(">>> success url: " + projectUrl + "/#/payment/success");
 
                 LineItem lineItem = SessionCreateParams.LineItem.builder()
                                 .setQuantity(1L)
@@ -62,8 +62,8 @@ public class StripeService {
                                 .build();
                 SessionCreateParams params = SessionCreateParams.builder()
                                 .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-                                .setSuccessUrl(projectUrl + "/payment/success")
-                                .setCancelUrl(projectUrl + "/membership")
+                                .setSuccessUrl(projectUrl + "/#/payment/success")
+                                .setCancelUrl(projectUrl + "/#/membership")
                                 .setCustomerEmail(email)
                                 .addLineItem(lineItem)
                                 .build();

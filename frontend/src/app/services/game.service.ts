@@ -16,6 +16,17 @@ export class GameService {
             .pipe(result => {return result})
     }
 
+    checkMonthlyLimit(username: string): Observable<any> {
+        return this.http.post<any>('api/host/check-monthly-limit', username)
+          .pipe(result => {return result})
+    }
+
+    addHostGameToUser(username: string, hostId: string, gameId: string, numOfTeams: number): Observable<any> {
+        const body = { username: username, hostId: hostId, gameId: gameId, numOfTeams: numOfTeams };
+        return this.http.post<any>('api/host/add-hosted-game', body)
+          .pipe(result => {return result})
+    }
+
     startLobby(numOfTeams: number, gameId: string): string {
         const hostId = this.generateHostId(numOfTeams);
         const game: HostGame = {hostId: hostId, gameId: gameId, numOfTeams: numOfTeams};

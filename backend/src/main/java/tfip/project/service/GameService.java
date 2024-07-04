@@ -114,6 +114,17 @@ public class GameService {
         return true;
     }
 
+    public boolean isHostLimit(String username) {
+        UserMembership membership = userRepo.getMembership(username);
+        if (membership == null)
+            throw new RuntimeException("Internal error - failed to retrieve user's membership. Please try again later or contact us at business.gamebond@hotmail.com if issue persists.");
+        int currGameCount = userRepo.checkHostedGamesByUser(username);
+        int gameEntitlement = membership.getMonthlyGamesEntitlement();
+        if (currGameCount < gameEntitlement) 
+            return false;
+        return true;
+    }
+
     public GameDetails getGameDetailsByGameId(String gameId) {
         return gameRepo.getGameDetailsByGameId(gameId);
     }
@@ -134,7 +145,7 @@ public class GameService {
             ResponseEntity<byte[]> resp = restTemplate.exchange(req, byte[].class);
             if (resp.getStatusCode().is2xxSuccessful()) {
                 qrCode = "data:image/png;base64," + Base64.getEncoder().encodeToString(resp.getBody());
-                redisRepo.saveQRLink(telegramUrl, qrCode);    
+                redisRepo.saveQRLink(telegramUrl, qrCode);
             } else {
                 throw new Exception("unable to retrieve QR code from API");
             }
@@ -149,6 +160,10 @@ public class GameService {
         for (int i = 0; i < numOfTeams; i++)
             redisRepo.savePlayerByHostId(hostId, teams.get(i), "");
         System.out.println(">>> creating new host. existing players in teams will be wiped.");
+    }
+
+    public boolean saveHostGameDetails(String username, String hostId, String gameId, int numOfTeams) {
+        return gameRepo.saveHostGameDetails(username, hostId, gameId, numOfTeams);
     }
 
     public void savePlayerInfo(String username, String hostId, String teamId) {

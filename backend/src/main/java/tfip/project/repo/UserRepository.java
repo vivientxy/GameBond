@@ -120,4 +120,12 @@ public class UserRepository implements SqlQueries {
         }
     }
 
+    // HOSTED GAMES COUNT
+    public Integer checkHostedGamesByUser(String username) {
+        try {
+            return template.queryForObject(SQL_HOSTED_GAMES_COUNT_BY_USER, Integer.class, username);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

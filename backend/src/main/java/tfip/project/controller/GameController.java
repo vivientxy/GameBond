@@ -1,5 +1,6 @@
 package tfip.project.controller;
 
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
@@ -20,6 +21,7 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonReader;
 import tfip.project.model.GameDetails;
 import tfip.project.service.GameService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,6 +71,41 @@ public class GameController {
             JsonObject jsonObject = Json.createObjectBuilder().add("qr", qrCode).build();
             createNewHostInRedis(telegramUrl);
             return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/host/add-hosted-game")
+    public ResponseEntity<String> addHostedGameToUser(@RequestBody String body) {
+        try {
+            JsonReader jsonReader = Json.createReader(new StringReader(body));
+            JsonObject json = jsonReader.readObject();
+            jsonReader.close();
+
+            String username = json.getString("username");
+            String hostId = json.getString("hostId");
+            String gameId = json.getString("gameId");
+            int numOfTeams = Integer.parseInt(json.getString("numOfTeams"));
+
+            boolean gameSaved = gameSvc.saveHostGameDetails(username, hostId, gameId, numOfTeams);
+            if (gameSaved)
+                return new ResponseEntity<String>(HttpStatus.OK);
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/host/check-monthly-limit")
+    public ResponseEntity<String> checkMonthlyLimit(@RequestBody String username) {
+        try {
+            boolean isHostLimitExceeded = gameSvc.isHostLimit(username);
+            if (isHostLimitExceeded)
+                return new ResponseEntity<String>("User has hit max monthly host game limit allowed for membership tier. Please upgrade membership to host more games.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);

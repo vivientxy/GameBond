@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { Title } from '@angular/platform-browser';
+import { firstValueFrom } from 'rxjs';
+import { HostGame } from '../../models/hostgame.model';
 
 @Component({
   selector: 'app-host-game',
@@ -49,8 +51,27 @@ export class HostGameComponent implements OnInit {
     let numOfTeams = this.hostForm.controls['numOfTeams'].value;
     let gameId = this.hostForm.controls['game'].value;
 
-    this.gameSvc.startLobby(numOfTeams, gameId);
-    this.router.navigate(['/lobby']);
+    firstValueFrom(this.gameSvc.checkMonthlyLimit(this.user.username))
+      .then(() => {
+        console.log("in first .then")
+        this.gameSvc.startLobby(numOfTeams, gameId);
+        let game = sessionStorage.getItem('game');
+        let hostgame!: HostGame;
+        if (game)
+          hostgame = JSON.parse(game) as HostGame
+        return firstValueFrom(this.gameSvc.addHostGameToUser(this.user.username, hostgame.hostId, hostgame.gameId, hostgame.numOfTeams))
+      })
+      .then(() => {
+        console.log("in second .then")
+        this.router.navigate(['/lobby'])})
+      .catch(err => {
+        console.log("in first .catch")
+        console.error(err.error);
+        alert(err.error);
+        this.router.navigate(['/membership']);
+        return;
+      }
+    )
   }
 
 }

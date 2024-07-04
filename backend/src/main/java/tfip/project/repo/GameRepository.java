@@ -87,6 +87,14 @@ public class GameRepository implements SqlQueries {
         }
     }
 
+    public boolean saveHostGameDetails(String username, String hostId, String gameId, int numOfTeams) {
+        try {
+            return template.update(SQL_ADD_HOSTED_GAME, username, hostId, gameId, numOfTeams) > 0 ? true : false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private class GameDetailsRowMapper implements RowMapper<GameDetails> {
         @Override
         public GameDetails mapRow(ResultSet rs, int rowNum) throws SQLException {

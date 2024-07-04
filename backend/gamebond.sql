@@ -41,6 +41,18 @@ CREATE TABLE user_games (
         REFERENCES games(game_id)
 );
 
+CREATE TABLE hosted_games (
+    username VARCHAR(32) NOT NULL,
+    host_id VARCHAR(8) NOT NULL,
+    game_id VARCHAR(8) NOT NULL,
+    num_of_teams INT NOT NULL,
+    game_date DATETIME DEFAULT current_timestamp,
+
+    CONSTRAINT fk_username_hosted_games FOREIGN KEY(username)
+        REFERENCES users(username),
+    CONSTRAINT fk_hosted_game_id FOREIGN KEY(game_id)
+        REFERENCES games(game_id)
+);
 
 -- add fake items
 INSERT INTO users(username, password, email, firstname, lastname) VALUES ('vivientxy','123123123','vivientxy@hotmail.com','Vivien','Tang');
