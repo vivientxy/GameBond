@@ -1,7 +1,7 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
-import { Gameboy } from 'gameboy-emulatorD';
-import { tap, timer } from 'rxjs';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Gameboy } from 'gameboy-emulator';
 import { GameService } from '../../../services/game.service';
+import { tap, timer } from 'rxjs';
 import { WebSocketService } from '../../../services/websocket.service';
 import { HostGame } from '../../../models/hostgame.model';
 import { ChatboxStore } from '../../../stores/chatbox.store';
@@ -9,12 +9,12 @@ import { Chat } from '../../../models/chatbox.model';
 import { GameboyService } from '../../../services/gameboy.service';
 
 @Component({
-  selector: 'app-game-screen-d',
-  templateUrl: './game-screen-d.component.html',
-  styleUrl: './game-screen-d.component.css'
+  selector: 'app-game-screen-a',
+  templateUrl: './game-screen-a.component.html',
+  styleUrl: './game-screen-a.component.css'
 })
-export class GameScreenDComponent {
-  
+export class GameScreenAComponent implements OnInit {
+
   private readonly gameSvc = inject(GameService);
   private readonly gbSvc = inject(GameboyService);
   private readonly webSocketSvc = inject(WebSocketService);
@@ -22,7 +22,7 @@ export class GameScreenDComponent {
   game!: HostGame;
   gameboy = new Gameboy();
   
-  @ViewChild('gameCanvasD', { static: true }) gameCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('gameCanvasA', { static: true }) gameCanvas!: ElementRef<HTMLCanvasElement>;
 
   ngOnInit(): void {
     let game = this.gameSvc.getGame();

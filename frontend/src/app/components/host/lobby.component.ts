@@ -26,12 +26,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
     if (game)
       this.game = game;
     
-    this.qr$ = this.gameSvc.generateQrCode(this.game.hostId);
+    this.qr$ = this.gameSvc.generateQrCode(this.game.hostId)
 
     const teamsList = ['Team A', 'Team B', 'Team C', 'Team D'];
     for (let index = 0; index < this.game.numOfTeams; index++) {
-      const teamList: string[] = []
-      this.teams.set(teamsList[index], teamList)
+      this.teams.set(teamsList[index], [])
     }
 
     // initial call for existing team members if navigated back from main-game screen
@@ -40,18 +39,18 @@ export class LobbyComponent implements OnInit, OnDestroy {
     )
 
     this.webSocketSvc.subscribe(`/topic/${this.game.hostId}`, (): any => {
-      console.log('>>> subscribing to websocket:', this.game.hostId);
+      console.log('>>> subscribing to websocket:', this.game.hostId)
       this.http.post("/api/get-team-members", this.game.hostId).subscribe(
         resp => {
-          this.teams = this.convertToMap(resp as {[key: string]: string[]});
-          console.log('>>> this.teams:', this.teams);
+          this.teams = this.convertToMap(resp as {[key: string]: string[]})
+          console.log('>>> this.teams:', this.teams)
         }
       )
     })
   }
 
   ngOnDestroy(): void {
-    this.webSocketSvc.unsubscribe(`/topic/${this.game.hostId}`);
+    this.webSocketSvc.unsubscribe(`/topic/${this.game.hostId}`)
   }
 
   startGame() {
@@ -63,15 +62,15 @@ export class LobbyComponent implements OnInit, OnDestroy {
       // console.log(">>> removed person:", member)
       // TODO: SEND TO SPRINGBOOT TOO -- to send msg on telebot
       // if (member)
-        // this.webSocketSvc.sendMessage(`/topic/${this.game.hostId}`, member)
+      //   this.webSocketSvc.sendMessage(`/topic/${this.game.hostId}`, member)
   }
 
   private convertToMap(response: {[key: string]: string[]}): Map<string, string[]> {
-    const map = new Map<string, string[]>();
+    const map = new Map<string, string[]>()
     Object.keys(response).forEach(key => {
-      map.set(key, response[key]);
-    });
-    return map;
+      map.set(key, response[key])
+    })
+    return map
   }
 
 }
