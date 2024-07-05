@@ -1,3 +1,14 @@
-@import url('../node_modules/bootstrap/dist/css/bootstrap.css');
-html, body { height: 100%; }
-body { margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import url("../node_modules/bootstrap/dist/css/bootstrap.css");
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-image: url('/assets/background-controller.png');
+  background-size: 50%;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}

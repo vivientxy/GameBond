@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { Gameboy } from 'gameboy-emulatorB';
-import { firstValueFrom, tap, timer } from 'rxjs';
+import { tap, timer } from 'rxjs';
 import { GameService } from '../../../services/game.service';
 import { WebSocketService } from '../../../services/websocket.service';
 import { HostGame } from '../../../models/hostgame.model';
