@@ -22,7 +22,7 @@ import { GameService } from './services/game.service';
 import { LobbyComponent } from './components/host/lobby.component';
 import { JoinGameComponent } from './components/host/join-game.component';
 import { WebSocketService } from './services/websocket.service';
-import { GameScreenAComponent } from './components/game/game-screens/game-screen-a.component';
+import { GameScreenComponent } from './components/game/game-screens/game-screen.component';
 import { GameScreenBComponent } from './components/game/game-screens/game-screen-b.component';
 import { GameScreenCComponent } from './components/game/game-screens/game-screen-c.component';
 import { GameScreenDComponent } from './components/game/game-screens/game-screen-d.component';
@@ -35,7 +35,6 @@ import { FailComponent } from './components/membership/fail.component';
 import { rxStompServiceFactory } from './rx-stomp-service-factory';
 import { RxStompService } from './rx-stomp.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { GameboyService } from './services/gameboy.service';
 
 @NgModule({
   declarations: [
@@ -45,7 +44,7 @@ import { GameboyService } from './services/gameboy.service';
     RegisterComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    GameScreenAComponent,
+    GameScreenComponent,
     GameScreenBComponent,
     GameScreenCComponent,
     GameScreenDComponent,
@@ -81,8 +80,7 @@ import { GameboyService } from './services/gameboy.service';
     },
     WebSocketService,
     ChatboxStore,
-    StripeService,
-    GameboyService
+    StripeService
   ],
   bootstrap: [AppComponent]
 })

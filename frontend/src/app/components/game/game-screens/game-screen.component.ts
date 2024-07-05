@@ -1,33 +1,33 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
-import { Gameboy } from 'gameboy-emulatorC';
-import { firstValueFrom, tap, timer } from 'rxjs';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Gameboy } from 'gameboy-emulator';
 import { GameService } from '../../../services/game.service';
+import { firstValueFrom, tap, timer } from 'rxjs';
 import { WebSocketService } from '../../../services/websocket.service';
 import { HostGame } from '../../../models/hostgame.model';
 import { ChatboxStore } from '../../../stores/chatbox.store';
 import { Chat } from '../../../models/chatbox.model';
 
 @Component({
-  selector: 'app-game-screen-c',
-  templateUrl: './game-screen-c.component.html',
-  styleUrl: './game-screen-c.component.css'
+  selector: 'app-game-screen',
+  templateUrl: './game-screen.component.html',
+  styleUrl: './game-screen.component.css'
 })
-export class GameScreenCComponent {
-  
+export class GameScreenComponent implements OnInit {
+
   private readonly gameSvc = inject(GameService);
   private readonly webSocketSvc = inject(WebSocketService);
   private readonly chatStore = inject(ChatboxStore)
   game!: HostGame;
   gameboy = new Gameboy();
   
-  @ViewChild('gameCanvasC', { static: true }) gameCanvasC!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('gameCanvasA', { static: true }) gameCanvasA!: ElementRef<HTMLCanvasElement>;
 
   ngOnInit(): void {
     let game = this.gameSvc.getGame();
     if (game) this.game = game;
 
     // set up and run gameboy:
-    const context = this.gameCanvasC.nativeElement.getContext('2d');
+    const context = this.gameCanvasA.nativeElement.getContext('2d');
     if (context) {
       this.gameSvc.getGameROM(this.game.gameId)
         .then(resp => fetch(resp.romUrl))
@@ -45,13 +45,13 @@ export class GameScreenCComponent {
     }
 
     // subscribe to websocket topic and inputs:
-    this.webSocketSvc.subscribe(`/topic/${this.game.hostId}/TeamC`, (message: any) => {
+    this.webSocketSvc.subscribe(`/topic/${this.game.hostId}/TeamA`, (message: any) => {
       this.processInput(JSON.parse(message).message);
       const chat: Chat = {
         username: JSON.parse(message).username,
         message: JSON.parse(message).message
       }
-      this.chatStore.addChat({ team: 'TeamC', chat: chat});
+      this.chatStore.addChat({ team: 'TeamA', chat: chat});
     })
 
   }
@@ -100,5 +100,6 @@ export class GameScreenCComponent {
     this.gameboy.input.isPressingStart = false;
     this.gameboy.input.isPressingSelect = false;
   }
+
 
 }
