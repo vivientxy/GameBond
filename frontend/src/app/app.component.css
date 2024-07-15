@@ -10,7 +10,12 @@ html, body {
     padding: 10px;
     align-items: center;
     justify-content: space-between;
+    /* background-image: url('/assets/navbar-gameboys.png');
+    background-size: 40vh;
+    background-repeat: no-repeat;
+    background-position: center; */
 }
+
 
 h1 {
     margin: 0;

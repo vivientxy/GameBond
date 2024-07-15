@@ -12,3 +12,39 @@ body {
   background-repeat: no-repeat;
   background-position: bottom right;
 }
+
+
+/* background animation */
+
+@keyframes animatedBackground {
+	0% { background-position: -20% 98%; }
+	100% { background-position: 120% 98%; }
+}
+@-moz-keyframes animatedBackground {
+	0% { background-position: -20% 98%; }
+	100% { background-position: 120% 98%; }
+}
+@-webkit-keyframes animatedBackground {
+	0% { background-position: -20% 98%; }
+	100% { background-position: 120% 98%; }
+}
+@-ms-keyframes animatedBackground {
+	0% { background-position: -20% 98%; }
+	100% { background-position: 120% 98%; }
+}
+@-o-keyframes animatedBackground {
+	0% { background-position: -20% 98%; }
+	100% { background-position: 120% 98%; }
+}
+
+body { 
+  background-image: url('/assets/pokemon-walk.gif');
+  background-repeat: no-repeat;
+  background-size: 20vh;
+
+	animation: animatedBackground 30s linear infinite;
+	-moz-animation: animatedBackground 30s linear infinite;
+	-webkit-animation: animatedBackground 30s linear infinite;
+	-ms-animation: animatedBackground 30s linear infinite;
+	-o-animation: animatedBackground 30s linear infinite;
+}
