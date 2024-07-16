@@ -36,7 +36,6 @@ GameBond comes with 4 membership tiers:
 | Lite     | S$2.99 |            20            |         8         |
 | Standard | S$5.99 |            50            |         10        |
 | Premium  | S$7.99 |           100            |         15        |
-|
 
 All accounts come with 4 default game ROMs loaded to the account. *(Future development includes ability to remove/disable ROMs from your account)*
 
@@ -59,7 +58,6 @@ For any issues encountered when using GameBond, please contact us at business.ga
     | Websocket     | for real-time communication between Angular and SpringBoot once game commences |
     | BCrypt        | for user passwords |
     | Stripe        | for membership subscriptions |
-    |
 
 - Angular Libraries:
 
@@ -70,7 +68,6 @@ For any issues encountered when using GameBond, please contact us at business.ga
     | Component Store   | for storing player messages when game commences (capped at 30 messages per team) |
     | Ng Materials      | for UI |
     | PWA               | for project requirements |
-    |
 
 - External API calls made to https://goqr.me/api/doc/create-qr-code/
 
