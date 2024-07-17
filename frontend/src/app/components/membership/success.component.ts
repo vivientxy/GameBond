@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { User } from '../../models/user.model';
-import { StripeService } from '../../services/stripe.service';
 import { UserService } from '../../services/user.service';
 import { Membership, MEMBERSHIPS } from '../../models/membership.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-success',
@@ -12,7 +12,7 @@ import { Membership, MEMBERSHIPS } from '../../models/membership.model';
 export class SuccessComponent implements OnInit {
 
   private readonly userSvc = inject(UserService)
-  private readonly stripeSvc = inject(StripeService)
+  private readonly activatedRoute = inject(ActivatedRoute)
   user!: User;
   membership!: Membership | undefined;
 
@@ -22,9 +22,8 @@ export class SuccessComponent implements OnInit {
       return;
     this.user = user
 
-    this.stripeSvc.getMembership(user.email)
-      .then(resp => {this.membership = MEMBERSHIPS.at(resp.tier)})
-      .catch(err => {console.error('>>> error:', err)})
+    let tier = this.activatedRoute.snapshot.params['tier'];
+    this.membership = MEMBERSHIPS.at(tier);
   }
 
 }

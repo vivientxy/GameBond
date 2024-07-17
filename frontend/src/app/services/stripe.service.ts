@@ -22,10 +22,6 @@ export class StripeService {
     return firstValueFrom(this.http.post<any>('api/stripe/create-session', body))
   }
 
-  getMembership(email: string): Promise<any> {
-    return firstValueFrom(this.http.post<any>('api/stripe/get-current-membership', email))
-  }
-
   checkNewMember(email: string): Promise<any> {
     return firstValueFrom(this.http.post<any>('api/stripe/check-new-member', email))
   }

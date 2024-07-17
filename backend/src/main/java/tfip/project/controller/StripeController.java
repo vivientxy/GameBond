@@ -15,7 +15,6 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import tfip.project.model.StripeCheckoutRequest;
 import tfip.project.model.StripePriceId;
-import tfip.project.model.UserMembership;
 import tfip.project.service.MembershipService;
 import tfip.project.service.StripeService;
 
@@ -49,15 +48,6 @@ public class StripeController {
             .add("checkoutUrl", url)
             .build();
         return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
-    }
-
-    @PostMapping("/stripe/get-current-membership")
-    public ResponseEntity<String> getMembership(@RequestBody String email) throws Exception {
-        UserMembership membership = memSvc.getUserMembership(email);
-        if (membership == null)
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-
-        return new ResponseEntity<String>(membership.toJson().toString(), HttpStatus.OK);
     }
 
     @PostMapping("/stripe/check-new-member")

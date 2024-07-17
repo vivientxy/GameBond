@@ -52,7 +52,7 @@ public class StripeService {
                                         .build();
                         SessionCreateParams params = SessionCreateParams.builder()
                                         .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-                                        .setSuccessUrl(projectUrl + "/#/payment/success")
+                                        .setSuccessUrl(projectUrl + "/#/payment/success/" + tier)
                                         .setCancelUrl(projectUrl + "/#/membership")
                                         .setCustomerEmail(email)
                                         .addLineItem(lineItem)

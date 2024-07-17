@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'reset/:resetId', component: ResetPasswordComponent },
   { path: 'reset', component: ForgotPasswordComponent },
   { path: 'membership', component: MembershipComponent, canActivate: [loginGuard] },
-  { path: 'payment/success', component: SuccessComponent, canActivate: [loginGuard] },
+  { path: 'payment/success/:tier', component: SuccessComponent, canActivate: [loginGuard] },
   { path: 'upgrade/fail', component: FailComponent, canActivate: [loginGuard] },
   { path: 'join', component: JoinGameComponent },
   { path: 'host', component: HostGameComponent, canActivate: [loginGuard] },
